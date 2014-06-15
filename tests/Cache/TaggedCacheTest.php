@@ -29,7 +29,7 @@ class TaggedCacheTest extends BaseCacheTest
 
 	public function testGetStaleFromWrappedSoftInvalidatables()
 	{
-		$this->cache = new Geek\Cache\SoftExpiringCache( $this->cache, $this->cache );
+		$this->cache = new Geek\Cache\SoftExpiringCache( $this->cache, null, $this->cache );
 
 		$this->cache->put( static::KEY, static::VALUE, 1 );
 		$this->tagset->hash = 'bar';

@@ -2,6 +2,7 @@
 class SoftExpiringTest extends BaseCacheTest
 {
 	private $arraycache;
+	const HARDTTL = 10;
 
 	public function setUp()
 	{
@@ -40,6 +41,27 @@ class SoftExpiringTest extends BaseCacheTest
 		$this->cache->put( self::KEY, self::VALUE, -1 );
 		$this->assertEquals( self::VALUE, $this->cache->getStale( self::KEY ) );
 	}
+
+	public function testPassesHardTtlToParent()
+	{
+		$parentcache = new ArrayCacheTtlSpy();
+		$this->cache = new Geek\Cache\SoftExpiringCache( $parentcache,  self::HARDTTL );
+		$this->cache->put( self::KEY, self::VALUE, 1 );
+
+		$this->assertEquals( self::HARDTTL, $parentcache->ttl );
+	}
+}
+
+class ArrayCacheTtlSpy extends Geek\Cache\ArrayCache
+{
+	public $ttl;
+
+	public function put( $key, $value, $ttl = null )
+	{
+		$this->ttl = $ttl;
+		parent::put( $key, $value, $ttl );
+	}
 	
+
 }
 

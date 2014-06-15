@@ -4,11 +4,19 @@ namespace Geek\Cache;
 class SoftExpiringCache extends SoftInvalidatableCacheDecorator
 {
 	private $ttl;
+	private $hardttl;
+
+	public function __construct( Cache $cache, $hardttl = null, SoftInvalidatable $softCache = null )
+	{
+		$this->hardttl = $hardttl;
+		parent::__construct( $cache, $softCache );
+	}
+	
 
 	public function put( $key, $value, $ttl = null )
 	{
 		$this->ttl = $ttl;
-		parent::put( $key, $value );
+		parent::put( $key, $value, $this->hardttl );
 	}
 
 	protected function resultIsCurrent()
