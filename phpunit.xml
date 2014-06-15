@@ -1,0 +1,18 @@
+<phpunit
+    boostrap="phpunit.php"
+    colors="true"
+    convertErrorsToExceptions="true"
+    convertNoticesToExceptions="true"
+    convertWarningsToExceptions="true"
+    >
+    <testsuites>
+        <testsuite name="GeekCache test suite">
+            <directory>./tests/</directory>
+        </testsuite>
+    </testsuites>
+    <groups>
+        <exclude>
+            <group>slowTests</group>
+        </exclude>
+    </groups>
+</phpunit>
