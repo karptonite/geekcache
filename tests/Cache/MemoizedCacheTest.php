@@ -1,5 +1,5 @@
 <?php
-class BufferedCacheTest extends BaseCacheTest
+class MemoizedCacheTest extends BaseCacheTest
 {
 	private $parentcache;
 
@@ -8,23 +8,23 @@ class BufferedCacheTest extends BaseCacheTest
 		parent::setUp();
 		$this->primarycache = new Geek\Cache\ArrayCache;
 		$this->memoizedcache = new Geek\Cache\ArrayCache;
-		$this->cache = new Geek\Cache\BufferedCache( $this->primarycache, $this->memoizedcache );
+		$this->cache = new Geek\Cache\MemoizedCache( $this->primarycache, $this->memoizedcache );
 	}
 
-	public function testBufferedCacheWritesToThePrimary()
+	public function testMemoizedCacheWritesToThePrimary()
 	{
 		$this->cache->put( self::KEY, self::VALUE );
 		$this->assertEquals( self::VALUE, $this->primarycache->get( self::KEY ) ); 
 	}
 
-	public function testBufferedCacheReadsFromMemoizedFirst()
+	public function testMemoizedCacheReadsFromMemoizedFirst()
 	{
 		$this->cache->put( self::KEY, self::VALUE );
 		$this->memoizedcache->put( self::KEY, self::VALUE2 );
 		$this->assertEquals( self::VALUE2, $this->cache->get( self::KEY ) );
 	}
 
-	public function testBufferedCacheWritesToTheMemoizedOnRead()
+	public function testMemoizedCacheWritesToTheMemoizedOnRead()
 	{
 		$this->cache->put( self::KEY, self::VALUE );
 		$this->cache->get( self::KEY );
@@ -32,7 +32,7 @@ class BufferedCacheTest extends BaseCacheTest
 		$this->assertEquals( self::VALUE, $this->cache->get( self::KEY ) );
 	}
 
-	public function testBufferedCacheDeletesFromMemoizedOnDelete()
+	public function testMemoizedCacheDeletesFromMemoizedOnDelete()
 	{
 		$this->cache->put( self::KEY, self::VALUE );
 		$this->cache->get( self::KEY );
@@ -40,7 +40,7 @@ class BufferedCacheTest extends BaseCacheTest
 		$this->assertFalse( $this->cache->get( self::KEY ) );
 	}
 
-	public function testBufferedCacheReturnsCurrentDataAfterOverwrite()
+	public function testMemoizedCacheReturnsCurrentDataAfterOverwrite()
 	{
 		$this->cache->put( self::KEY, self::VALUE );
 		$this->cache->get( self::KEY );
