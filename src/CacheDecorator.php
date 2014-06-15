@@ -3,26 +3,26 @@ namespace Geek\Cache;
 
 abstract class CacheDecorator implements Cache
 {
-	private $_cache;
+	private $cache;
 
 	public function __construct( Cache $cache )
 	{
-		$this->_cache = $cache;
+		$this->cache = $cache;
 	}
 
 	public function get( $key )
 	{
-		return $this->_cache->get( $key );
+		return $this->cache->get( $key );
 	}
 
 	public function put( $key, $value, $ttl = null )
 	{
-		return $this->_cache->put( $key, $value, $ttl );
+		return $this->cache->put( $key, $value, $ttl );
 	}
 
 	public function delete( $key )
 	{
-		return $this->_cache->delete( $key );
+		return $this->cache->delete( $key );
 	}
 }	
 
