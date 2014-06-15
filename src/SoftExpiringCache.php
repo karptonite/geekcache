@@ -11,7 +11,6 @@ class SoftExpiringCache extends SoftInvalidatableCacheDecorator
 		$this->hardttl = $hardttl;
 		parent::__construct( $cache, $softCache );
 	}
-	
 
 	public function put( $key, $value, $ttl = null )
 	{
