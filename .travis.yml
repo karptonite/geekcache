@@ -10,5 +10,6 @@ php:
 before_script:
   - composer self-update
   - composer install --prefer-source --no-interaction --dev
+  - phpenv config-add travisconfig.ini
 
 script: vendor/bin/phpunit
