@@ -8,13 +8,15 @@ namespace Geek\Cache;
  * It's intended use is memoizing data retrieved over the course of a single
  * HTTP request.
  */
-class MemoizedCache extends CacheDecorator
+class MemoizedCache extends CacheDecorator implements IncrementableCache
 {
 	private $memocache;
+	private $primarycache;
 
-	public function __construct( Cache $primaryCache, Cache $memocache )
+	public function __construct( IncrementableCache $primaryCache, IncrementableCache $memocache )
 	{
 		parent::__construct( $primaryCache );
+		$this->primarycache = $primaryCache;
 		$this->memocache = $memocache;
 	}
 
@@ -40,5 +42,11 @@ class MemoizedCache extends CacheDecorator
 	{
 		parent::delete( $key );
 		$this->memocache->delete( $key );
+	}
+
+	public function increment( $key, $value = 1 )
+	{
+		$this->primarycache->increment( $key, $value );
+		return $this->getAndBuffer( $key );
 	}
 }

@@ -15,4 +15,9 @@ class NullCacheTest extends PHPUnit_Framework_TestCase
 		$this->cache->put( self::KEY, self::VALUE );
 		$this->assertFalse( $this->cache->get( self::KEY ) );
 	}
+
+	public function testIncrement()
+	{
+		$this->cache->increment( self::KEY, 2 );
+	}
 }

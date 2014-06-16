@@ -27,7 +27,7 @@ class TaggedCacheTest extends BaseCacheTest
 		$this->assertEquals( static::VALUE, $this->cache->getStale( static::KEY ) );
 	}
 
-	public function testGetStaleFromWrappedSoftInvalidatables()
+	public function testGetStaleFromWrappedSoftInvalidatable()
 	{
 		$this->cache = new Geek\Cache\SoftExpiringCache( $this->cache, null, $this->cache );
 
@@ -41,7 +41,7 @@ class TaggedCacheTest extends BaseCacheTest
 		$this->AssertEquals( static::VALUE, $stalevalue );
 	}
 
-	public function testGetStaleFromWralledSoftInvalidatablesReverse()
+	public function testGetStaleFromWrappedSoftInvalidatableReverse()
 	{
 		$this->cache = new Geek\Cache\SoftExpiringCache( $this->parentcache );
 		$this->cache = new Geek\Cache\TaggedCache( $this->cache, $this->tagset, $this->cache );
@@ -55,10 +55,6 @@ class TaggedCacheTest extends BaseCacheTest
 		$this->assertFalse( $value );
 		$this->AssertEquals( static::VALUE, $stalevalue );
 	}
-	
-	
-	
-	
 }
 
 class TagSetStub implements Geek\Cache\TagSet

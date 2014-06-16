@@ -47,6 +47,4 @@ class MemoizedCacheTest extends BaseCacheTest
 		$this->cache->put( self::KEY, self::VALUE2 );
 		$this->assertEquals( self::VALUE2, $this->cache->get( self::KEY ) );
 	}
-	
-	
 }

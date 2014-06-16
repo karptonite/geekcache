@@ -25,7 +25,6 @@ abstract class BaseCacheTest extends PHPUnit_Framework_TestCase
 		$this->assertCacheDeletes( $this->cache );
 	}
 
-
 	public function assertCachePutsAndGets( $cache )
 	{
 		$cache->put( self::KEY, self::VALUE );
@@ -49,4 +48,6 @@ abstract class BaseCacheTest extends PHPUnit_Framework_TestCase
 	{
 		$this->assertFalse( $cache->get( self::KEY ) );
 	}
+
+	
 }

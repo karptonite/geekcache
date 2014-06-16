@@ -1,7 +1,7 @@
 <?php
 namespace Geek\Cache;
 
-class NullCache implements Cache
+class NullCache implements IncrementableCache
 {
 	public function get( $key )
 	{
@@ -14,6 +14,11 @@ class NullCache implements Cache
 	}
 
 	public function delete( $key )
+	{
+		return null;
+	}
+
+	public function increment( $key, $value = 1 )
 	{
 		return null;
 	}
