@@ -10,4 +10,15 @@ class MemcacheCacheLiveTest extends BaseCacheTest
 		$memcache->flush();
 		$this->cache = new Geek\Cache\MemcacheCache( $memcache );
 	}
+
+	/**
+	 * @group slowTests
+	 */
+	public function testTtlInteger()
+	{
+		$this->cache->put( self::KEY, self::VALUE, 1 );
+		$this->assertEquals( self::VALUE, $this->cache->get( self::KEY ) );
+		usleep( 2100000 );
+		$this->assertFalse( $this->cache->get( self::KEY ) );
+	}
 }
