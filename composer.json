@@ -1,5 +1,5 @@
 {
-    "name": "geek/cache",
+    "name": "geekcache/geekcache",
     "description": "A wrapper for key/value storage with soft invalidation and tags",
     "license": "MIT",
     "authors": [
