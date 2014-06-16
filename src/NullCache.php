@@ -1,7 +1,7 @@
 <?php
 namespace Geek\Cache;
 
-class NullCache implements IncrementableCache
+class NullCache implements Cache, Counter
 {
 	public function get( $key )
 	{

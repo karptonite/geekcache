@@ -1,7 +1,7 @@
 <?php
 namespace Geek\Cache;
 
-class ArrayCache implements IncrementableCache
+class ArrayCache implements Cache, Counter
 {
 	private $cache = array();
 	private $maxputs;
