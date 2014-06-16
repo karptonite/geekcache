@@ -14,7 +14,7 @@ class TagSetImpl implements TagSet
 		$this->tags = $tags;
 	}
 	
-	public function getHash()
+	public function getSignature()
 	{
 		$versions = array();
 

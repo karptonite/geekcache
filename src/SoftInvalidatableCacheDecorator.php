@@ -4,7 +4,7 @@ namespace Geek\Cache;
 abstract class SoftInvalidatableCacheDecorator extends CacheDecorator implements SoftInvalidatable
 {
 	private $softCache;
-	protected $result;
+	private $result;
 
 	public function __construct( Cache $cache, SoftInvalidatable $softCache = null )
 	{
@@ -16,7 +16,7 @@ abstract class SoftInvalidatableCacheDecorator extends CacheDecorator implements
 	{
 		$newvalue = array( 
 			'value'     => $value,
-			'validator' => $this->getValidator()
+			'metadata'  => $this->createMetadata()
 		);
 
 		parent::put( $key, $newvalue, $ttl );
@@ -32,6 +32,11 @@ abstract class SoftInvalidatableCacheDecorator extends CacheDecorator implements
 	{
 		$this->result = $this->softCache ? $this->softCache->getStale( $key ) : parent::get( $key );
 		return $this->getValue();
+	}
+
+	protected function getMetadata()
+	{
+		return isset( $this->result['metadata'] ) ? $this->result['metadata'] : null;
 	}
 	
 	private function getValue()

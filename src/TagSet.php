@@ -3,5 +3,5 @@ namespace Geek\Cache;
 
 interface TagSet
 {
-	public function getHash();
+	public function getSignature();
 }

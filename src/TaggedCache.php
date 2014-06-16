@@ -13,11 +13,12 @@ class TaggedCache extends SoftInvalidatableCacheDecorator
 
 	protected function resultIsCurrent()
 	{
-		return is_array( $this->result ) && $this->result['validator'] == $this->tagset->getHash();
+		$metadata = $this->getMetadata();
+		return isset( $metadata['signature'] ) && $metadata['signature'] == $this->tagset->getSignature();
 	}
 
-	protected function getValidator()
+	protected function createMetadata()
 	{
-		return $this->tagset->getHash();
+		return array( 'signature' => $this->tagset->getSignature() );
 	}
 }

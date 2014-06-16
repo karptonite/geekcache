@@ -20,11 +20,13 @@ class SoftExpiringCache extends SoftInvalidatableCacheDecorator
 
 	protected function resultIsCurrent()
 	{
-		return is_array( $this->result ) && ( !$this->result['validator'] || $this->result['validator'] > microtime( true ) );
+		$metadata = $this->getMetadata();
+		return isset( $metadata['ttl'] ) && ( !$metadata['ttl'] || $metadata['ttl'] > microtime( true ) );
 	}
 
-	protected function getValidator()
+	protected function createMetadata()
 	{
-		return $this->ttl ? microtime( true ) + $this->ttl : null;
+		$ttl = $this->ttl ? microtime( true ) + $this->ttl : 0;
+		return array( 'ttl' => $ttl );
 	}
 }	

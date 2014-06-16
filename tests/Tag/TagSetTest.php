@@ -26,10 +26,10 @@ class TagSetTest extends PHPUnit_Framework_TestCase
 
 	public function testTagSetReturnsConsistentHash()
 	{
-		$hash = $this->tagset->getHash();
+		$hash = $this->tagset->getSignature();
 		$tagset2 = $this->getNewTagSet();
 		$this->assertNotNull( $hash );
-		$this->assertEquals( $hash, $tagset2->getHash() );
+		$this->assertEquals( $hash, $tagset2->getSignature() );
 	}
 
 	/**
@@ -44,24 +44,24 @@ class TagSetTest extends PHPUnit_Framework_TestCase
 
 	public function testTagSetHashChangesWhenTagIsCleared()
 	{
-		$hash = $this->tagset->getHash();
+		$hash = $this->tagset->getSignature();
 		$this->tags[0]->clear();
-		$this->assertNotEquals( $hash, $this->tagset->getHash() );
+		$this->assertNotEquals( $hash, $this->tagset->getSignature() );
 	}
 
 	public function testTagSetHashChangesWhenAnyTagIsCleared()
 	{
-		$hash = $this->tagset->getHash();
+		$hash = $this->tagset->getSignature();
 		$this->tags[1]->clear();
-		$this->assertNotEquals( $hash, $this->tagset->getHash() );
+		$this->assertNotEquals( $hash, $this->tagset->getSignature() );
 	}
 
 	public function testHashesAreConsistentLength()
 	{
-		$hash = $this->tagset->getHash();
+		$hash = $this->tagset->getSignature();
 		$tags2 = $this->getArrayOfTags( 3 );
 		$tagset = new Geek\Cache\TagSetImpl( $tags2 );
-		$hash2 = $tagset->getHash();
+		$hash2 = $tagset->getSignature();
 		$this->assertNotEquals( $hash, $hash2 );
 		$this->assertEquals( strlen( $hash ), strlen( $hash2 ) );
 	}

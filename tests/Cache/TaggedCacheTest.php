@@ -60,7 +60,7 @@ class TaggedCacheTest extends BaseCacheTest
 class TagSetStub implements Geek\Cache\TagSet
 {
 	public $hash = 'foo';
-	public function getHash()
+	public function getSignature()
 	{
 		return $this->hash;
 	}
