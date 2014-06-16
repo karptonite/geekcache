@@ -5,9 +5,9 @@ class MemoizedCounter extends MemoizedCache implements Counter
 {
 	private $primarycounter;
 
-	public function __construct( Counter $primarycounter, Counter $memocounter )
+	public function __construct( Counter $primarycounter, Cache $memocache )
 	{
-		parent::__construct( $primarycounter, $memocounter );
+		parent::__construct( $primarycounter, $memocache );
 		$this->primarycounter = $primarycounter;
 	}
 

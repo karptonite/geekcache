@@ -45,6 +45,21 @@ abstract class BaseCounterTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals( 2, $this->counter->get( static::KEY ) );
 	}
 
+	public function testIncrementDoesNotGoNegative()
+	{
+		$this->counter->put( static::KEY, 2 );
+		$this->counter->increment( static::KEY, -4 );
+		$this->assertEquals( 0, $this->counter->get( static::KEY ) );
+	}
+
+	public function testIncrementDoesNotCreateRecordForNegativeValue()
+	{
+		$result = $this->counter->increment( static::KEY, -4 );
+		$this->assertFalse( $this->counter->get( static::KEY ) );
+		$this->assertFalse( $result );
+	}
+	
+
 	public function testIncrementIncrementsFloatCache()
 	{
 		$this->counter->put( static::KEY, 4.5 );
