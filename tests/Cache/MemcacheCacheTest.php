@@ -31,7 +31,7 @@ class MemcacheCacheTest extends PHPUnit_Framework_TestCase
 	public function testDelete()
 	{
 		$this->mock->shouldReceive( 'delete' )
-			->with( self::KEY )
+			->with( self::KEY, 0 )
 			->once()
 			->andReturn( true );
 

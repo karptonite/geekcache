@@ -22,7 +22,8 @@ class MemcacheCache implements Cache
 
 	public function delete( $key )
 	{
-		return $this->cache->delete( $key );
+		//passing an explicit 0 for timeout because of this issue:
+		//http://stackoverflow.com/questions/4745345/how-do-i-stop-phpmemcachedelete-from-producing-a-client-error
+		return $this->cache->delete( $key, 0 );
 	}
 }
-	
