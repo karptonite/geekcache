@@ -14,6 +14,6 @@ class MemoizedCounter extends MemoizedCache implements Counter
 	public function increment( $key, $value = 1 )
 	{
 		$this->primarycounter->increment( $key, $value );
-		return $this->getAndBuffer( $key );
+		return $this->getAndMemoize( $key );
 	}
 }

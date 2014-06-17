@@ -20,7 +20,7 @@ class MemoizedCache extends CacheDecorator
 
 	public function get( $key )
 	{
-		return $this->memocache->get( $key )?: $this->getAndBuffer( $key );
+		return $this->memocache->get( $key )?: $this->getAndMemoize( $key );
 	}
 
 	public function put( $key, $value, $ttl = null )
@@ -29,7 +29,7 @@ class MemoizedCache extends CacheDecorator
 		$this->memocache->put( $key, $value );
 	}
 	
-	protected function getAndBuffer( $key )
+	protected function getAndMemoize( $key )
 	{
 		$value = parent::get( $key );
 		$this->memocache->put( $key, $value );
