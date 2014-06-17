@@ -15,6 +15,11 @@ class TaggedCacheTest extends BaseCacheTest
 		$this->cache = new Geek\Cache\TaggedCache( $this->parentcache, $this->tagset );
 	}
 
+	public function tearDown()
+	{
+		m::close();
+	}
+
 	public function testCacheInvalidatesWhenHashChanges()
 	{
 		$this->cache->put( static::KEY, static::VALUE );

@@ -22,7 +22,6 @@ class SoftExpiringCache extends SoftInvalidatableCacheDecorator
 	{
 		return $ttl && $this->gracePeriod ? $ttl + $this->gracePeriod : null;
 	}
-	
 
 	protected function resultIsCurrent()
 	{
