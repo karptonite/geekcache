@@ -2,7 +2,7 @@
 class SoftExpiringTest extends BaseCacheTest
 {
 	private $arraycache;
-	const HARDTTL = 10;
+	const GRACEPERIOD = 10;
 
 	public function setUp()
 	{
@@ -16,8 +16,8 @@ class SoftExpiringTest extends BaseCacheTest
 	 */
 	public function testTtlInteger()
 	{
-		$this->cache = new Geek\Cache\SoftExpiringCache( $this->parentcache, 1 );
-		$this->cache->put( self::KEY, self::VALUE );
+		$this->cache = new Geek\Cache\SoftExpiringCache( $this->parentcache );
+		$this->cache->put( self::KEY, self::VALUE, 1 );
 		$this->assertEquals( self::VALUE, $this->cache->get( self::KEY ) );
 		usleep( 1100000 );
 		$this->assertFalse( $this->cache->get( self::KEY ) );
@@ -25,8 +25,8 @@ class SoftExpiringTest extends BaseCacheTest
 
 	public function testTtl()
 	{
-		$this->cache = new Geek\Cache\SoftExpiringCache( $this->parentcache, 0.01 );
-		$this->cache->put( self::KEY, self::VALUE );
+		$this->cache = new Geek\Cache\SoftExpiringCache( $this->parentcache  );
+		$this->cache->put( self::KEY, self::VALUE, 0.01 );
 		$this->assertEquals( self::VALUE, $this->cache->get( self::KEY ) );
 		usleep( 11000 );
 		$this->assertFalse( $this->cache->get( self::KEY ) );
@@ -34,25 +34,25 @@ class SoftExpiringTest extends BaseCacheTest
 
 	public function testTtlNegative()
 	{
-		$this->cache = new Geek\Cache\SoftExpiringCache( $this->parentcache, -1 );
-		$this->cache->put( self::KEY, self::VALUE );
+		$this->cache = new Geek\Cache\SoftExpiringCache( $this->parentcache );
+		$this->cache->put( self::KEY, self::VALUE, -1 );
 		$this->assertFalse( $this->cache->get( self::KEY ) );
 	}
 
 	public function testSoftExpriration()
 	{
-		$this->cache = new Geek\Cache\SoftExpiringCache( $this->parentcache, -1 );
-		$this->cache->put( self::KEY, self::VALUE );
+		$this->cache = new Geek\Cache\SoftExpiringCache( $this->parentcache, 0 );
+		$this->cache->put( self::KEY, self::VALUE, -1 );
 		$this->assertEquals( self::VALUE, $this->cache->getStale( self::KEY ) );
 	}
 
 	public function testPassesHardTtlToParent()
 	{
 		$parentcache = new ArrayCacheTtlSpy();
-		$this->cache = new Geek\Cache\SoftExpiringCache( $parentcache, 1 );
-		$this->cache->put( self::KEY, self::VALUE, self::HARDTTL );
+		$this->cache = new Geek\Cache\SoftExpiringCache( $parentcache, self::GRACEPERIOD );
+		$this->cache->put( self::KEY, self::VALUE, 1 );
 
-		$this->assertEquals( self::HARDTTL, $parentcache->ttl );
+		$this->assertEquals( self::GRACEPERIOD + 1, $parentcache->ttl );
 	}
 }
 
