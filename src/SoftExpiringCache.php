@@ -3,30 +3,22 @@ namespace Geek\Cache;
 
 class SoftExpiringCache extends SoftInvalidatableCacheDecorator
 {
-	private $ttl;
-	private $hardttl;
+	private $expiry;
 
-	public function __construct( Cache $cache, $hardttl = null, SoftInvalidatable $softCache = null )
+	public function __construct( Cache $cache, $softTtl = null, SoftInvalidatable $softCache = null )
 	{
-		$this->hardttl = $hardttl;
+		$this->expiry = $softTtl ? microtime( true ) + $softTtl : 0;
 		parent::__construct( $cache, $softCache );
-	}
-
-	public function put( $key, $value, $ttl = null )
-	{
-		$this->ttl = $ttl;
-		parent::put( $key, $value, $this->hardttl );
 	}
 
 	protected function resultIsCurrent()
 	{
 		$metadata = $this->getMetadata();
-		return isset( $metadata['ttl'] ) && ( !$metadata['ttl'] || $metadata['ttl'] > microtime( true ) );
+		return isset( $metadata['expiry'] ) && ( !$metadata['expiry'] || $metadata['expiry'] > microtime( true ) );
 	}
 
 	protected function createMetadata()
 	{
-		$ttl = $this->ttl ? microtime( true ) + $this->ttl : 0;
-		return array( 'ttl' => $ttl );
+		return array( 'expiry' => $this->expiry );
 	}
 }	

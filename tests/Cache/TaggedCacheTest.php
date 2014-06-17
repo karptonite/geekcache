@@ -50,9 +50,9 @@ class TaggedCacheTest extends BaseCacheTest
 
 	public function testGetStaleFromWrappedSoftInvalidatableReverse()
 	{
-		$this->cache = new Geek\Cache\SoftExpiringCache( $this->parentcache );
+		$this->cache = new Geek\Cache\SoftExpiringCache( $this->parentcache, 0.01 );
 		$this->cache = new Geek\Cache\TaggedCache( $this->cache, $this->tagset, $this->cache );
-		$this->cache->put( static::KEY, static::VALUE, 0.01 );
+		$this->cache->put( static::KEY, static::VALUE );
 		$this->assertEquals( static::VALUE, $this->cache->get( static::KEY ) );
 		usleep( 11000 );
 		
