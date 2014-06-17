@@ -14,11 +14,7 @@ abstract class SoftInvalidatableCacheDecorator extends CacheDecorator implements
 
 	public function put( $key, $value, $ttl = null )
 	{
-		$newvalue = array( 
-			'value'     => $value,
-			'metadata'  => $this->createMetadata()
-		);
-
+		$newvalue = new CacheData( $value, $this->createMetadata() );
 		parent::put( $key, $newvalue, $ttl );
 	}
 	
@@ -36,11 +32,11 @@ abstract class SoftInvalidatableCacheDecorator extends CacheDecorator implements
 
 	protected function getMetadata()
 	{
-		return isset( $this->result['metadata'] ) ? $this->result['metadata'] : null;
+		return ( $this->result instanceof CacheData ) ? $this->result->getMetadata() : null;
 	}
 	
 	private function getValue()
 	{
-		return is_array( $this->result ) ? $this->result['value'] : false;
+		return ( $this->result instanceof CacheData ) ? $this->result->getValue() : null;
 	}
 }
