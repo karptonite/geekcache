@@ -1,7 +1,7 @@
 <?php
 namespace Geek\Cache;
 
-class TaggedValidator
+class TaggedFreshnessPolicy implements FreshnessPolicy
 {
 	private $tagset;
 
@@ -10,7 +10,7 @@ class TaggedValidator
 		$this->tagset = $tagset;
 	}
 
-	public function packValue( $value, $ttl )
+	public function packValueWithPolicy( $value, $ttl )
 	{
 		return new CacheData( $value, $this->createMetadata() );
 	}
@@ -28,8 +28,7 @@ class TaggedValidator
 		return $ttl;
 	}
 	
-
-	public function resultIsCurrent( $result )
+	public function resultIsFresh( $result )
 	{
 		if( !( $result instanceof CacheData ) )
 			return false;

@@ -1,7 +1,7 @@
 <?php
 namespace Geek\Cache;
 
-class GracePeriodValidator
+class GracePeriodFreshnessPolicy implements FreshnessPolicy
 {
 	private $gracePeriod;
 	private $expiry;
@@ -11,7 +11,7 @@ class GracePeriodValidator
 		$this->gracePeriod = $gracePeriod;
 	}
 
-	public function packValue( $value, $ttl = null )
+	public function packValueWithPolicy( $value, $ttl = null )
 	{
 		return new CacheData( $value, $this->createMetadata( $ttl ) );
 	}
@@ -29,7 +29,7 @@ class GracePeriodValidator
 		return $ttl && $this->gracePeriod ? $ttl + $this->gracePeriod : null;
 	}
 
-	public function resultIsCurrent( $result )
+	public function resultIsFresh( $result )
 	{
 		if( !( $result instanceof CacheData ) )
 			return false;

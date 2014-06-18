@@ -59,7 +59,6 @@ abstract class BaseCounterTest extends PHPUnit_Framework_TestCase
 		$this->assertFalse( $result );
 	}
 	
-
 	public function testIncrementIncrementsFloatCache()
 	{
 		$this->counter->put( static::KEY, 4.5 );

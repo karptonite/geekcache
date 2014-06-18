@@ -12,8 +12,8 @@ class TaggedCacheTest extends BaseCacheTest
 		$this->tagset->shouldReceive( 'getSignature' )
 			->andReturn( 'foo' )
 			->byDefault();
-		$taggedInvalidator = new Geek\Cache\TaggedValidator( $this->tagset );
-		$this->cache = new Geek\Cache\SoftInvalidatableCache( $this->parentcache, $taggedInvalidator );
+		$policy = new Geek\Cache\TaggedFreshnessPolicy( $this->tagset );
+		$this->cache = new Geek\Cache\SoftInvalidatableCache( $this->parentcache, $policy );
 	}
 
 	public function tearDown()
@@ -41,8 +41,8 @@ class TaggedCacheTest extends BaseCacheTest
 
 	public function testGetStaleFromWrappedSoftInvalidatable()
 	{
-		$validator = new Geek\Cache\GracePeriodValidator();
-		$cache = new Geek\Cache\SoftInvalidatableCache( $this->cache, $validator, $this->cache );
+		$policy = new Geek\Cache\GracePeriodFreshnessPolicy();
+		$cache = new Geek\Cache\SoftInvalidatableCache( $this->cache, $policy, $this->cache );
 
 		$this->cache->put( static::KEY, static::VALUE, 1 );
 		$this->tagset->shouldReceive( 'getSignature' )
@@ -57,10 +57,10 @@ class TaggedCacheTest extends BaseCacheTest
 
 	public function testGetStaleFromWrappedSoftInvalidatableReverse()
 	{
-		$validator = new Geek\Cache\GracePeriodValidator();
-		$this->cache = new Geek\Cache\SoftInvalidatableCache( $this->parentcache, $validator  );
-		$taggedValidator = new Geek\Cache\TaggedValidator( $this->tagset );
-		$this->cache = new Geek\Cache\SoftInvalidatableCache( $this->cache, $taggedValidator, $this->cache );
+		$policy = new Geek\Cache\GracePeriodFreshnessPolicy();
+		$this->cache = new Geek\Cache\SoftInvalidatableCache( $this->parentcache, $policy  );
+		$taggedPolicy = new Geek\Cache\TaggedFreshnessPolicy( $this->tagset );
+		$this->cache = new Geek\Cache\SoftInvalidatableCache( $this->cache, $taggedPolicy, $this->cache );
 		$this->cache->put( static::KEY, static::VALUE, 0.01 );
 		$this->assertEquals( static::VALUE, $this->cache->get( static::KEY ) );
 		usleep( 11000 );

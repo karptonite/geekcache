@@ -4,29 +4,29 @@ namespace Geek\Cache;
 class SoftInvalidatableCache extends CacheDecorator implements SoftInvalidatable
 {
 	private $softCache;
-	private $validator;
+	private $policy;
 
-	public function __construct( Cache $cache, $validator, SoftInvalidatable $softCache = null )
+	public function __construct( Cache $cache, FreshnessPolicy $policy, SoftInvalidatable $softCache = null )
 	{
 		parent::__construct( $cache );
 		$this->softCache = $softCache;
-		$this->validator = $validator;
+		$this->policy = $policy;
 	}
 
 	public function put( $key, $value, $ttl = null )
 	{
-		parent::put( $key, $this->validator->packValue( $value, $ttl ), $this->validator->computeTtl( $ttl ) );
+		parent::put( $key, $this->policy->packValueWithPolicy( $value, $ttl ), $this->policy->computeTtl( $ttl ) );
 	}
 	
 	public function get( $key )
 	{
 		$result = parent::get( $key );
-		return $this->validator->resultIsCurrent( $result ) ? $this->validator->unpackValue( $result ) : false;
+		return $this->policy->resultIsFresh( $result ) ? $this->policy->unpackValue( $result ) : false;
 	}
 	
 	public function getStale( $key )
 	{
 		$result = $this->softCache ? $this->softCache->getStale( $key ) : parent::get( $key );
-		return $this->validator->unpackValue( $result );
+		return $this->policy->unpackValue( $result );
 	}
 }
