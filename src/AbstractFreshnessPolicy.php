@@ -5,7 +5,7 @@ abstract class AbstractFreshnessPolicy implements FreshnessPolicy
 {
 	public function packValueWithPolicy( $value, $ttl = null )
 	{
-		return new CacheData( $value, $this->createMetadata( $ttl ) );
+		return new CacheData( $value, $this->createFreshnessData( $ttl ) );
 	}
 
 	public function unpackValue( $result )
@@ -21,7 +21,7 @@ abstract class AbstractFreshnessPolicy implements FreshnessPolicy
 		if( !( $result instanceof CacheData ) )
 			return false;
 
-		$metadata = $result->getMetadata();
-		return $this->isFresh( $metadata );
+		$freshnessData = $result->getFreshnessData();
+		return $this->isFresh( $freshnessData );
 	}
 }	

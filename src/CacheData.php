@@ -8,12 +8,12 @@ namespace Geek\Cache;
 class CacheData
 {
 	private $value;
-	private $metadata;
+	private $freshnessData;
 
-	public function __construct( $value, $metadata )
+	public function __construct( $value, $freshnessData )
 	{
 		$this->value    = $value;
-		$this->metadata = $metadata;
+		$this->freshnessData = $freshnessData;
 	}
 
 	public function getValue()
@@ -21,8 +21,8 @@ class CacheData
 		return $this->value;
 	}
 
-	public function getMetadata()
+	public function getFreshnessData()
 	{
-		return $this->metadata;
+		return $this->freshnessData;
 	}
 }

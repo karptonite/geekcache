@@ -16,12 +16,12 @@ class GracePeriodFreshnessPolicy extends AbstractFreshnessPolicy
 		return $ttl && $this->gracePeriod ? $ttl + $this->gracePeriod : null;
 	}
 
-	protected function isFresh( $metadata )
+	protected function isFresh( $freshnessData )
 	{
-		return isset( $metadata['expiry'] ) && ( !$metadata['expiry'] || $metadata['expiry'] > microtime( true ) );
+		return isset( $freshnessData['expiry'] ) && ( !$freshnessData['expiry'] || $freshnessData['expiry'] > microtime( true ) );
 	}
 
-	protected function createMetadata( $ttl )
+	protected function createFreshnessData( $ttl )
 	{
 		$expiry = $ttl ? microtime( true ) + $ttl : 0;
 		return array( 'expiry' =>  $expiry );

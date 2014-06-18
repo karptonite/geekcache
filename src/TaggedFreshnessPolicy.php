@@ -15,12 +15,12 @@ class TaggedFreshnessPolicy extends AbstractFreshnessPolicy
 		return $ttl;
 	}
 	
-	protected function isFresh( $metadata )
+	protected function isFresh( $freshnessData )
 	{
-		return isset( $metadata['signature'] ) && $metadata['signature'] == $this->tagset->getSignature();
+		return isset( $freshnessData['signature'] ) && $freshnessData['signature'] == $this->tagset->getSignature();
 	}
 
-	protected function createMetadata( $ttl )
+	protected function createFreshnessData( $ttl )
 	{
 		return array( 'signature' => $this->tagset->getSignature() );
 	}
