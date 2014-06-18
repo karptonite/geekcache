@@ -8,7 +8,8 @@ class SoftExpiringTest extends BaseCacheTest
 	{
 		parent::setUp();
 		$this->parentcache = new Geek\Cache\ArrayCache;
-		$this->cache = new Geek\Cache\SoftExpiringCache( $this->parentcache );
+		$gracePeriodValidator = new Geek\Cache\GracePeriodValidator;
+		$this->cache = new Geek\Cache\SoftInvalidatableCache( $this->parentcache, $gracePeriodValidator );
 	}
 	
 	/**
@@ -16,7 +17,6 @@ class SoftExpiringTest extends BaseCacheTest
 	 */
 	public function testTtlInteger()
 	{
-		$this->cache = new Geek\Cache\SoftExpiringCache( $this->parentcache );
 		$this->cache->put( self::KEY, self::VALUE, 1 );
 		$this->assertEquals( self::VALUE, $this->cache->get( self::KEY ) );
 		usleep( 1100000 );
@@ -25,7 +25,6 @@ class SoftExpiringTest extends BaseCacheTest
 
 	public function testTtl()
 	{
-		$this->cache = new Geek\Cache\SoftExpiringCache( $this->parentcache  );
 		$this->cache->put( self::KEY, self::VALUE, 0.01 );
 		$this->assertEquals( self::VALUE, $this->cache->get( self::KEY ) );
 		usleep( 11000 );
@@ -34,14 +33,12 @@ class SoftExpiringTest extends BaseCacheTest
 
 	public function testTtlNegative()
 	{
-		$this->cache = new Geek\Cache\SoftExpiringCache( $this->parentcache );
 		$this->cache->put( self::KEY, self::VALUE, -1 );
 		$this->assertFalse( $this->cache->get( self::KEY ) );
 	}
 
 	public function testSoftExpriration()
 	{
-		$this->cache = new Geek\Cache\SoftExpiringCache( $this->parentcache, 0 );
 		$this->cache->put( self::KEY, self::VALUE, -1 );
 		$this->assertEquals( self::VALUE, $this->cache->getStale( self::KEY ) );
 	}
@@ -49,7 +46,8 @@ class SoftExpiringTest extends BaseCacheTest
 	public function testPassesHardTtlToParent()
 	{
 		$parentcache = new ArrayCacheTtlSpy();
-		$this->cache = new Geek\Cache\SoftExpiringCache( $parentcache, self::GRACEPERIOD );
+		$gracePeriodValidator = new Geek\Cache\GracePeriodValidator( self::GRACEPERIOD );
+		$this->cache = new Geek\Cache\SoftInvalidatableCache( $parentcache, $gracePeriodValidator );
 		$this->cache->put( self::KEY, self::VALUE, 1 );
 
 		$this->assertEquals( self::GRACEPERIOD + 1, $parentcache->ttl );
