@@ -1,7 +1,7 @@
 <?php
 namespace Geek\Cache;
 
-class GracePeriodFreshnessPolicy implements FreshnessPolicy
+class GracePeriodFreshnessPolicy extends AbstractFreshnessPolicy
 {
 	private $gracePeriod;
 	private $expiry;
@@ -11,30 +11,13 @@ class GracePeriodFreshnessPolicy implements FreshnessPolicy
 		$this->gracePeriod = $gracePeriod;
 	}
 
-	public function packValueWithPolicy( $value, $ttl = null )
-	{
-		return new CacheData( $value, $this->createMetadata( $ttl ) );
-	}
-
-	public function unpackValue( $result )
-	{
-		if( !( $result instanceof CacheData ) )
-			return false;
-
-		return $result->getValue();
-	}
-
 	public function computeTtl( $ttl )
 	{
 		return $ttl && $this->gracePeriod ? $ttl + $this->gracePeriod : null;
 	}
 
-	public function resultIsFresh( $result )
+	protected function isFresh( $metadata )
 	{
-		if( !( $result instanceof CacheData ) )
-			return false;
-
-		$metadata = $result->getMetadata();
 		return isset( $metadata['expiry'] ) && ( !$metadata['expiry'] || $metadata['expiry'] > microtime( true ) );
 	}
 
