@@ -88,7 +88,8 @@ class CacheBuilderTest extends PHPUnit_Framework_TestCase
 		$this->cache->shouldReceive( 'put' )->once()->with( 'foo', m::any(), 5 )->andReturnUsing( function( $arg1, $arg2, $arg3 ) use( &$spy ){$spy = $arg2;} );
 
 		$result = $cache->put( 'foo', 'bar', 5 );
-		$this->assertEquals( 'signature', $spy->getFreshnessData()['signature'] );
+		$freshnessData = $spy->getFreshnessData();
+		$this->assertEquals( 'signature', $freshnessData['signature'] );
 	}
 
 	/**

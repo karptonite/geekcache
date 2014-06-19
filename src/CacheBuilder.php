@@ -68,5 +68,4 @@ class CacheBuilder
 		$factory = $this->getSoftInvalidatableFactory( $policy );
 		return $this->addToStack( $factory );
 	}
-	
 }
