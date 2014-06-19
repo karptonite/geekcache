@@ -25,7 +25,8 @@ class CacheBuilder
 		return $cache;
 	}
 
-	private function addToStack( callable $factory )
+	//NOTE if we move to php 5.4, we can hint on callable
+	private function addToStack( $factory )
 	{
 		$stack = $this->stack;
 		$stack[] = $factory;
