@@ -22,12 +22,6 @@ class CacheBuilderTest extends PHPUnit_Framework_TestCase
 		$this->builder = new Geek\Cache\CacheBuilder( $this->cache, $this->memocache, $this->tagsetfactory );
 	}
 	
-	
-	public function tearDown()
-	{
-		m::close();
-	}
-	
 	public function testBuildBasic()
 	{
 		$this->prepareFullMockBuilder();

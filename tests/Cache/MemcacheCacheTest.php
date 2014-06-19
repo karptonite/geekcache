@@ -13,11 +13,6 @@ class MemcacheCacheTest extends PHPUnit_Framework_TestCase
 		$this->cache = new Geek\Cache\MemcacheCache( $this->mock );
 	}
 	
-	public function tearDown()
-	{
-		m::close();
-	}
-
 	public function testGet()
 	{
 		$this->mock->shouldReceive( 'get' )

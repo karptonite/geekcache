@@ -5,6 +5,9 @@
     convertNoticesToExceptions="true"
     convertWarningsToExceptions="true"
     >
+    <listeners>
+        <listener class="\Mockery\Adapter\Phpunit\TestListener"></listener>
+    </listeners>
     <testsuites>
         <testsuite name="GeekCache test suite">
             <directory>./tests/</directory>

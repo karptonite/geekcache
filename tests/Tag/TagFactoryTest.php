@@ -11,11 +11,6 @@ class TagFactoryTest extends PHPUnit_Framework_TestCase
 		$this->factory = new Geek\Cache\TagFactory( $this->cache );
 	}
 
-	public function tearDown()
-	{
-		m::close();
-	}
-
 	public function testTagFactoryReturnsTag()
 	{
 		$tag = $this->factory->makeTag( static::TAG );
