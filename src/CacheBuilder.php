@@ -54,10 +54,10 @@ class CacheBuilder
 		};
 	}
 
-	public function addTags( array $tags )
+	public function addTags( $names )
 	{
 		$tagsetfactory = $this->tagsetfactory;
-		$tagset        = $tagsetfactory->makeTagSet( $tags );
+		$tagset        = $tagsetfactory->makeTagSet( $names );
 		$policy        = new TaggedFreshnessPolicy( $tagset );
 		$factory       = $this->getSoftInvalidatableFactory( $policy );
 		return $this->addToStack( $factory );

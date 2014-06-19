@@ -10,12 +10,13 @@ class TagSetFactory
 		$this->tagFactory = $tagFactory;
 	}
 
-	public function makeTagSet( array $keys )
+	public function makeTagSet( $names )
 	{
 		$tags = array();
+		$names = is_array( $names ) ? $names : func_get_args();
 
-		foreach( $keys as $key )
-			$tags[] = $this->tagFactory->makeTag( $key );
+		foreach( $names as $name )
+			$tags[] = $this->tagFactory->makeTag( $name );
 
 		return new TagSet( $tags );
 	}

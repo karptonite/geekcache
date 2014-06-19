@@ -9,7 +9,7 @@ class TagSet
 	{
 		foreach( $tags as $tag )
 			if ( !( $tag instanceof Tag ) )
-				throw new \InvalidArgumentException( "tags must be instances of Tag" );
+				throw new \InvalidArgumentException( "tags must contain instances of Tag" );
 
 		$this->tags = $tags;
 	}
