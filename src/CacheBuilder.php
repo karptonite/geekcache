@@ -57,7 +57,7 @@ class CacheBuilder
 	public function addTags( $names )
 	{
 		$tagsetfactory = $this->tagsetfactory;
-		$tagset        = $tagsetfactory->makeTagSet( $names );
+		$tagset        = $tagsetfactory->makeTagSet( is_array( $names ) ? $names: func_get_args() );
 		$policy        = new TaggedFreshnessPolicy( $tagset );
 		$factory       = $this->getSoftInvalidatableFactory( $policy );
 		return $this->addToStack( $factory );

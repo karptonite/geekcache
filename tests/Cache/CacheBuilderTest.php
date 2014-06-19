@@ -70,10 +70,10 @@ class CacheBuilderTest extends PHPUnit_Framework_TestCase
 		$tagset = m::mock( 'Geek\Cache\TagSet' );
 		$this->tagsetfactory->shouldReceive( 'makeTagSet' )
 			->once()
-			->with( array( 'foo', 'bar' ) )
+			->with( array( 'footag', 'bartag' ) )
 			->andReturn( $tagset );
 
-		$cache = $this->builder->addTags( array( 'foo', 'bar' ) )->make();
+		$cache = $this->builder->addTags( array( 'footag', 'bartag' ) )->make();
 		$this->assertInstanceOf( 'Geek\Cache\SoftInvalidatableCache', $cache );
 		$cache->get( 'foo' );
 
@@ -85,6 +85,19 @@ class CacheBuilderTest extends PHPUnit_Framework_TestCase
 		$freshnessData = $spy->getFreshnessData();
 		$this->assertEquals( 'signature', $freshnessData['signature'] );
 	}
+
+	public function testAlternateAddTagsInterface()
+	{
+		$this->prepareFullMockBuilder();
+		$tagset = m::mock( 'Geek\Cache\TagSet' );
+		$this->tagsetfactory->shouldReceive( 'makeTagSet' )
+			->once()
+			->with( array( 'footag', 'bartag' ) )
+			->andReturn( $tagset );
+
+		$cache = $this->builder->addTags( 'footag', 'bartag' )->make();
+	}
+	
 
 	/**
 	 * @group slowTests
