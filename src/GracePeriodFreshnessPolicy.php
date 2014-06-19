@@ -4,7 +4,6 @@ namespace Geek\Cache;
 class GracePeriodFreshnessPolicy extends AbstractFreshnessPolicy
 {
 	private $gracePeriod;
-	private $expiry;
 
 	public function __construct( $gracePeriod = null )
 	{
