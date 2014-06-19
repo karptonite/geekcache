@@ -23,4 +23,10 @@ class TagSet
 
 		return sha1( implode( $versions ) );
 	}
+
+	public function clearAll()
+	{
+		array_walk( $this->tags, function( $tag ){ $tag->clear(); } );
+	}
+	
 }
