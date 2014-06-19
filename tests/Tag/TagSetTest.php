@@ -1,4 +1,5 @@
 <?php
+use Mockery as m;
 class TagSetTest extends PHPUnit_Framework_TestCase
 {
 	const KEY = 'theTag';
@@ -65,4 +66,20 @@ class TagSetTest extends PHPUnit_Framework_TestCase
 		$this->assertNotEquals( $hash, $hash2 );
 		$this->assertEquals( strlen( $hash ), strlen( $hash2 ) );
 	}
+
+	public function testClearAll()
+	{
+		$tags = array();
+		for( $i = 0; $i < 2; $i++ )
+		{
+			$tag = m::mock( 'Geek\Cache\Tag' );
+			$tag->shouldReceive( 'clear' )->once();
+			$tags[] = $tag;
+		}
+
+		$tagset = new Geek\Cache\TagSet( $tags );
+		$tagset->clearAll();
+
+	}
+	
 }
