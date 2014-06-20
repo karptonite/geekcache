@@ -17,6 +17,10 @@
         "illuminate/container": "~4.1",
         "pimple/pimple": "~1.1"
     },
+    "suggest":{
+        "illuminate/container": "geekcache requires either the illuminate container or pimple 1.x if you wish to use the included service provider",
+        "pimple/pimple": "geekcache requires either the illuminate container or pimple 1.x if you wish to use the included service provider"
+    },
     "autoload" :{
         "psr-4": {
             "Geek\\Cache\\": "src/"
