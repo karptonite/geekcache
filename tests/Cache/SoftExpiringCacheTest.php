@@ -7,9 +7,9 @@ class SoftExpiringTest extends BaseCacheTest
 	public function setUp()
 	{
 		parent::setUp();
-		$this->parentcache = new Geek\Cache\ArrayCache;
-		$policy = new Geek\Cache\GracePeriodFreshnessPolicy;
-		$this->cache = new Geek\Cache\SoftInvalidatableCache( $this->parentcache, $policy );
+		$this->parentcache = new GeekCache\Cache\ArrayCache;
+		$policy = new GeekCache\Cache\GracePeriodFreshnessPolicy;
+		$this->cache = new GeekCache\Cache\SoftInvalidatableCache( $this->parentcache, $policy );
 	}
 	
 	/**
@@ -46,15 +46,15 @@ class SoftExpiringTest extends BaseCacheTest
 	public function testPassesHardTtlToParent()
 	{
 		$parentcache = new ArrayCacheTtlSpy();
-		$policy = new Geek\Cache\GracePeriodFreshnessPolicy( self::GRACEPERIOD );
-		$this->cache = new Geek\Cache\SoftInvalidatableCache( $parentcache, $policy );
+		$policy = new GeekCache\Cache\GracePeriodFreshnessPolicy( self::GRACEPERIOD );
+		$this->cache = new GeekCache\Cache\SoftInvalidatableCache( $parentcache, $policy );
 		$this->cache->put( self::KEY, self::VALUE, 1 );
 
 		$this->assertEquals( self::GRACEPERIOD + 1, $parentcache->ttl );
 	}
 }
 
-class ArrayCacheTtlSpy extends Geek\Cache\ArrayCache
+class ArrayCacheTtlSpy extends GeekCache\Cache\ArrayCache
 {
 	public $ttl;
 

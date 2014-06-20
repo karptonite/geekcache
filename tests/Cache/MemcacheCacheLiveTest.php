@@ -8,7 +8,7 @@ class MemcacheCacheLiveTest extends BaseCacheTest
 		$memcache = new Memcache();
 		$memcache->connect('localhost', 11211);
 		$memcache->flush();
-		$this->cache = new Geek\Cache\MemcacheCache( $memcache );
+		$this->cache = new GeekCache\Cache\MemcacheCache( $memcache );
 	}
 
 	/**

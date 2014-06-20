@@ -5,8 +5,8 @@ abstract class CacheServiceProviderTest extends PHPUnit_Framework_TestCase
 	{
 		parent::setUp();
 		$this->container = $this->getContainer();
-		$this->sp = new Geek\Cache\CacheServiceProvider( $this->container );
-		$this->msp = new Geek\Cache\MemcacheServiceProvider( $this->container );
+		$this->sp = new GeekCache\Cache\CacheServiceProvider( $this->container );
+		$this->msp = new GeekCache\Cache\MemcacheServiceProvider( $this->container );
 		$this->sp->register();
 		$this->msp->register();
 	}
@@ -33,7 +33,7 @@ abstract class CacheServiceProviderTest extends PHPUnit_Framework_TestCase
 	{
 		$cache = $this->container['geekcache.local.memos'];
 		$cache2 = $this->container['geekcache.local.memos'];
-		$this->assertInstanceOf( 'Geek\Cache\ArrayCache', $cache );
+		$this->assertInstanceOf( 'GeekCache\Cache\ArrayCache', $cache );
 		$this->assertSame( $cache, $cache2 );
 	}
 
@@ -41,7 +41,7 @@ abstract class CacheServiceProviderTest extends PHPUnit_Framework_TestCase
 	{
 		$this->container['geekcache.nolocalcache'] = true;
 		$cache = $this->container['geekcache.local.memos'];
-		$this->assertInstanceOf( 'Geek\Cache\NullCache', $cache );
+		$this->assertInstanceOf( 'GeekCache\Cache\NullCache', $cache );
 	}
 
 	public function testLocalCachesRespectMaxSetting()
@@ -61,7 +61,7 @@ abstract class CacheServiceProviderTest extends PHPUnit_Framework_TestCase
 		$memcachecounter1 = $this->container['geekcache.persistentcounter'];
 		$memcachecounter2 = $this->container['geekcache.persistentcounter'];
 		$this->assertSame( $memcachecounter1, $memcachecounter2 );
-		$this->assertInstanceOf( 'Geek\Cache\MemcacheCounter', $memcachecounter1 );
+		$this->assertInstanceOf( 'GeekCache\Cache\MemcacheCounter', $memcachecounter1 );
 	}
 	
 
@@ -70,7 +70,7 @@ abstract class CacheServiceProviderTest extends PHPUnit_Framework_TestCase
 		$tagfactory1 = $this->container['geekcache.tagfactory'];
 		$tagfactory2 = $this->container['geekcache.tagfactory'];
 		$this->assertSame( $tagfactory1, $tagfactory2 );
-		$this->assertInstanceOf( 'Geek\Cache\TagFactory', $tagfactory1 );
+		$this->assertInstanceOf( 'GeekCache\Cache\TagFactory', $tagfactory1 );
 	}
 	
 	public function testTagSetFactoryRegistered()
@@ -78,7 +78,7 @@ abstract class CacheServiceProviderTest extends PHPUnit_Framework_TestCase
 		$tagsetfactory1 = $this->container['geekcache.tagsetfactory'];
 		$tagsetfactory2 = $this->container['geekcache.tagsetfactory'];
 		$this->assertSame( $tagsetfactory1, $tagsetfactory2 );
-		$this->assertInstanceOf( 'Geek\Cache\TagSetfactory', $tagsetfactory1 );
+		$this->assertInstanceOf( 'GeekCache\Cache\TagSetfactory', $tagsetfactory1 );
 	}
 
 	public function testCacheBuilderRegistered()
@@ -86,7 +86,7 @@ abstract class CacheServiceProviderTest extends PHPUnit_Framework_TestCase
 		$cachebuilder1 = $this->container['cachebuilder'];
 		$cachebuilder2 = $this->container['cachebuilder'];
 		$this->assertSame( $cachebuilder1, $cachebuilder2 );
-		$this->assertInstanceOf( 'Geek\Cache\CacheBuilder', $cachebuilder1 );
+		$this->assertInstanceOf( 'GeekCache\Cache\CacheBuilder', $cachebuilder1 );
 	}
 
 	public function testLocalCounter()
@@ -94,7 +94,7 @@ abstract class CacheServiceProviderTest extends PHPUnit_Framework_TestCase
 		$counter1 = $this->container['geekcache.local.counter'];
 		$counter2 = $this->container['geekcache.local.counter'];
 		$this->assertSame( $counter1, $counter2 );
-		$this->assertInstanceOf( 'Geek\Cache\ArrayCounter', $counter1 );
+		$this->assertInstanceOf( 'GeekCache\Cache\ArrayCounter', $counter1 );
 	}
 	
 	public function testLocalCounterNullWhenNoLocalcacheIsSet()
@@ -103,7 +103,7 @@ abstract class CacheServiceProviderTest extends PHPUnit_Framework_TestCase
 		$counter1 = $this->container['geekcache.local.counter'];
 		$counter2 = $this->container['geekcache.local.counter'];
 		$this->assertSame( $counter1, $counter2 );
-		$this->assertInstanceOf( 'Geek\Cache\NullCache', $counter1 );
+		$this->assertInstanceOf( 'GeekCache\Cache\NullCache', $counter1 );
 	}
 
 	public function testCounterRegistered()
@@ -111,8 +111,8 @@ abstract class CacheServiceProviderTest extends PHPUnit_Framework_TestCase
 		$counter1 = $this->container['geekcache.counter'];
 		$counter2 = $this->container['geekcache.counter'];
 		$this->assertNotSame( $counter1, $counter2 );
-		$this->assertInstanceOf( 'Geek\Cache\MemoizedCounter', $counter1 );
-		$this->assertInstanceOf( 'Geek\Cache\MemoizedCounter', $counter2 );
+		$this->assertInstanceOf( 'GeekCache\Cache\MemoizedCounter', $counter1 );
+		$this->assertInstanceOf( 'GeekCache\Cache\MemoizedCounter', $counter2 );
 	}
 	
 	

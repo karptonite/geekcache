@@ -23,7 +23,7 @@
     },
     "autoload" :{
         "psr-4": {
-            "Geek\\Cache\\": "src/"
+            "GeekCache\\Cache\\": "src/"
         }
     },
     "autoload-dev": {

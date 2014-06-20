@@ -7,13 +7,13 @@ class TaggedCacheTest extends BaseCacheTest
 	public function setUp()
 	{
 		parent::setUp();
-		$this->parentcache = new Geek\Cache\ArrayCache;
-		$this->tagset = m::mock( 'Geek\\Cache\\TagSet' );
+		$this->parentcache = new GeekCache\Cache\ArrayCache;
+		$this->tagset = m::mock( 'GeekCache\\Cache\\TagSet' );
 		$this->tagset->shouldReceive( 'getSignature' )
 			->andReturn( 'foo' )
 			->byDefault();
-		$policy = new Geek\Cache\TaggedFreshnessPolicy( $this->tagset );
-		$this->cache = new Geek\Cache\SoftInvalidatableCache( $this->parentcache, $policy );
+		$policy = new GeekCache\Cache\TaggedFreshnessPolicy( $this->tagset );
+		$this->cache = new GeekCache\Cache\SoftInvalidatableCache( $this->parentcache, $policy );
 	}
 
 	public function testCacheInvalidatesWhenHashChanges()
@@ -36,8 +36,8 @@ class TaggedCacheTest extends BaseCacheTest
 
 	public function testGetStaleFromWrappedSoftInvalidatable()
 	{
-		$policy = new Geek\Cache\GracePeriodFreshnessPolicy();
-		$cache = new Geek\Cache\SoftInvalidatableCache( $this->cache, $policy, $this->cache );
+		$policy = new GeekCache\Cache\GracePeriodFreshnessPolicy();
+		$cache = new GeekCache\Cache\SoftInvalidatableCache( $this->cache, $policy, $this->cache );
 
 		$this->cache->put( static::KEY, static::VALUE, 1 );
 		$this->tagset->shouldReceive( 'getSignature' )
@@ -52,10 +52,10 @@ class TaggedCacheTest extends BaseCacheTest
 
 	public function testGetStaleFromWrappedSoftInvalidatableReverse()
 	{
-		$policy = new Geek\Cache\GracePeriodFreshnessPolicy();
-		$this->cache = new Geek\Cache\SoftInvalidatableCache( $this->parentcache, $policy  );
-		$taggedPolicy = new Geek\Cache\TaggedFreshnessPolicy( $this->tagset );
-		$this->cache = new Geek\Cache\SoftInvalidatableCache( $this->cache, $taggedPolicy, $this->cache );
+		$policy = new GeekCache\Cache\GracePeriodFreshnessPolicy();
+		$this->cache = new GeekCache\Cache\SoftInvalidatableCache( $this->parentcache, $policy  );
+		$taggedPolicy = new GeekCache\Cache\TaggedFreshnessPolicy( $this->tagset );
+		$this->cache = new GeekCache\Cache\SoftInvalidatableCache( $this->cache, $taggedPolicy, $this->cache );
 		$this->cache->put( static::KEY, static::VALUE, 0.01 );
 		$this->assertEquals( static::VALUE, $this->cache->get( static::KEY ) );
 		usleep( 11000 );

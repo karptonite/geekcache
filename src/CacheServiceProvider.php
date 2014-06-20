@@ -1,5 +1,5 @@
 <?php
-namespace Geek\Cache;
+namespace GeekCache\Cache;
 class CacheServiceProvider
 {
 	static $default_maxlocal = array( 

@@ -6,9 +6,9 @@ class MemoizedCacheTest extends BaseCacheTest
 	public function setUp()
 	{
 		parent::setUp();
-		$this->primarycache = new Geek\Cache\ArrayCache;
-		$this->memoizedcache = new Geek\Cache\ArrayCache;
-		$this->cache = new Geek\Cache\MemoizedCache( $this->primarycache, $this->memoizedcache );
+		$this->primarycache = new GeekCache\Cache\ArrayCache;
+		$this->memoizedcache = new GeekCache\Cache\ArrayCache;
+		$this->cache = new GeekCache\Cache\MemoizedCache( $this->primarycache, $this->memoizedcache );
 	}
 
 	public function testMemoizedCacheWritesToThePrimary()

@@ -7,7 +7,7 @@ class NullCacheTest extends PHPUnit_Framework_TestCase
 
 	public function setUp()
 	{
-		$this->cache = new Geek\Cache\NullCache;
+		$this->cache = new GeekCache\Cache\NullCache;
 	}
 
 	public function testPutAndGet()

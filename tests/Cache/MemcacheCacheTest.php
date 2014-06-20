@@ -10,7 +10,7 @@ class MemcacheCacheTest extends PHPUnit_Framework_TestCase
 	{
 		parent::setUp();
 		$this->mock = m::mock( 'Memcache' );
-		$this->cache = new Geek\Cache\MemcacheCache( $this->mock );
+		$this->cache = new GeekCache\Cache\MemcacheCache( $this->mock );
 	}
 	
 	public function testGet()

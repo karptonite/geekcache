@@ -7,7 +7,7 @@ class MemcacheCounterTest extends BaseCounterTest
 		$memcache = new Memcache();
 		$memcache->connect('localhost', 11211);
 		$memcache->flush();
-		$this->counter = new Geek\Cache\MemcacheCounter( $memcache );
+		$this->counter = new GeekCache\Cache\MemcacheCounter( $memcache );
 	}
 }
 

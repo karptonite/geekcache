@@ -5,21 +5,21 @@ class CacheBuilderTest extends PHPUnit_Framework_TestCase
 {
 	public function prepareFullMockBuilder()
 	{
-		$this->cache         = m::mock( 'Geek\Cache\Cache' );
-		$this->memocache     = m::mock( 'Geek\Cache\Cache' );
-		$this->tagsetfactory = m::mock( 'Geek\Cache\TagSetFactory' );
+		$this->cache         = m::mock( 'GeekCache\Cache\Cache' );
+		$this->memocache     = m::mock( 'GeekCache\Cache\Cache' );
+		$this->tagsetfactory = m::mock( 'GeekCache\Cache\TagSetFactory' );
 		
-		$this->builder = new Geek\Cache\CacheBuilder( $this->cache, $this->memocache, $this->tagsetfactory );
+		$this->builder = new GeekCache\Cache\CacheBuilder( $this->cache, $this->memocache, $this->tagsetfactory );
 	}
 
 	public function prepareArrayBuilder()
 	{
-		$this->cache = new Geek\Cache\ArrayCache();
-		$this->memocache = new Geek\Cache\ArrayCache();
-		$this->tagcache = new Geek\Cache\Arraycache();
-		$this->tagfactory = new Geek\Cache\TagFactory( $this->tagcache );
-		$this->tagsetfactory = new Geek\Cache\TagSetFactory( $this->tagfactory );
-		$this->builder = new Geek\Cache\CacheBuilder( $this->cache, $this->memocache, $this->tagsetfactory );
+		$this->cache = new GeekCache\Cache\ArrayCache();
+		$this->memocache = new GeekCache\Cache\ArrayCache();
+		$this->tagcache = new GeekCache\Cache\Arraycache();
+		$this->tagfactory = new GeekCache\Cache\TagFactory( $this->tagcache );
+		$this->tagsetfactory = new GeekCache\Cache\TagSetFactory( $this->tagfactory );
+		$this->builder = new GeekCache\Cache\CacheBuilder( $this->cache, $this->memocache, $this->tagsetfactory );
 	}
 	
 	public function testBuildBasic()
@@ -37,7 +37,7 @@ class CacheBuilderTest extends PHPUnit_Framework_TestCase
 		$this->memocache->shouldReceive( 'put' )->with( 'foo', 'bar' )->once();
 		$this->cache->shouldReceive( 'get' )->with( 'foo' )->once()->andReturn( 'bar' );
 		$cache = $this->builder->memoize()->make();
-		$this->assertInstanceOf( 'Geek\Cache\MemoizedCache', $cache );
+		$this->assertInstanceOf( 'GeekCache\Cache\MemoizedCache', $cache );
 		$cache->get( 'foo' );
 	}
 
@@ -48,7 +48,7 @@ class CacheBuilderTest extends PHPUnit_Framework_TestCase
 		$this->memocache->shouldReceive( 'put' )->with( 'foo', 'bar' )->twice();
 		$this->cache->shouldReceive( 'get' )->with( 'foo' )->once()->andReturn( 'bar' );
 		$cache = $this->builder->memoize()->memoize()->make();
-		$this->assertInstanceOf( 'Geek\Cache\MemoizedCache', $cache );
+		$this->assertInstanceOf( 'GeekCache\Cache\MemoizedCache', $cache );
 		$cache->get( 'foo' );
 	}
 
@@ -59,7 +59,7 @@ class CacheBuilderTest extends PHPUnit_Framework_TestCase
 		$this->memocache->shouldReceive( 'put' )->with( 'foo', 'bar' )->times( 3 );
 		$this->cache->shouldReceive( 'get' )->with( 'foo' )->once()->andReturn( 'bar' );
 		$cache = $this->builder->memoize()->memoize()->memoize()->make();
-		$this->assertInstanceOf( 'Geek\Cache\MemoizedCache', $cache );
+		$this->assertInstanceOf( 'GeekCache\Cache\MemoizedCache', $cache );
 		$cache->get( 'foo' );
 	}
 
@@ -67,14 +67,14 @@ class CacheBuilderTest extends PHPUnit_Framework_TestCase
 	{
 		$this->prepareFullMockBuilder();
 		$this->cache->shouldReceive( 'get' )->with( 'foo' )->andReturnNull();
-		$tagset = m::mock( 'Geek\Cache\TagSet' );
+		$tagset = m::mock( 'GeekCache\Cache\TagSet' );
 		$this->tagsetfactory->shouldReceive( 'makeTagSet' )
 			->once()
 			->with( array( 'footag', 'bartag' ) )
 			->andReturn( $tagset );
 
 		$cache = $this->builder->addTags( array( 'footag', 'bartag' ) )->make();
-		$this->assertInstanceOf( 'Geek\Cache\SoftInvalidatableCache', $cache );
+		$this->assertInstanceOf( 'GeekCache\Cache\SoftInvalidatableCache', $cache );
 		$cache->get( 'foo' );
 
 		$tagset->shouldReceive( 'getSignature' )->once()->andReturn( 'signature' );
@@ -89,7 +89,7 @@ class CacheBuilderTest extends PHPUnit_Framework_TestCase
 	public function testAlternateAddTagsInterface()
 	{
 		$this->prepareFullMockBuilder();
-		$tagset = m::mock( 'Geek\Cache\TagSet' );
+		$tagset = m::mock( 'GeekCache\Cache\TagSet' );
 		$this->tagsetfactory->shouldReceive( 'makeTagSet' )
 			->once()
 			->with( array( 'footag', 'bartag' ) )

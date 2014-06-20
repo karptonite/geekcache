@@ -6,9 +6,9 @@ class MemoizedCounterTest extends BaseCounterTest
 	public function setUp()
 	{
 		parent::setUp();
-		$this->primarycounter  = new Geek\Cache\ArrayCounter;
-		$this->memoizedcache   = new Geek\Cache\ArrayCache;
-		$this->counter         = new Geek\Cache\MemoizedCounter( $this->primarycounter, $this->memoizedcache );
+		$this->primarycounter  = new GeekCache\Cache\ArrayCounter;
+		$this->memoizedcache   = new GeekCache\Cache\ArrayCache;
+		$this->counter         = new GeekCache\Cache\MemoizedCounter( $this->primarycounter, $this->memoizedcache );
 	}
 
 	public function testMemoizedCounterIncrementsThePrimary()

@@ -4,12 +4,12 @@ class ArrayCacheTest extends BaseCacheTest
 	public function setUp()
 	{
 		parent::setUp();
-		$this->cache = new Geek\Cache\ArrayCache;
+		$this->cache = new GeekCache\Cache\ArrayCache;
 	}
 
 	public function testCacheSizeLimit()
 	{
-		$cache = new Geek\Cache\ArrayCache( 2 );
+		$cache = new GeekCache\Cache\ArrayCache( 2 );
 		$cache->put( self::KEY, self::VALUE );
 		$cache->put( self::KEY2, self::VALUE2 );
 		$cache->put( self::KEY3, self::VALUE3 );

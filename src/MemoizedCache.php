@@ -1,5 +1,5 @@
 <?php
-namespace Geek\Cache;
+namespace GeekCache\Cache;
 
 /**
  * A memoized cache should not be long-lived. It does not respect TTL, 

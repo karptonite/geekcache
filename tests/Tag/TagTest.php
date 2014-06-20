@@ -5,8 +5,8 @@ class TagTest extends PHPUnit_Framework_TestCase
 
 	public function setUp()
 	{
-		$this->cache = new Geek\Cache\ArrayCache;
-		$this->tag = new Geek\Cache\Tag( $this->cache, self::KEY );
+		$this->cache = new GeekCache\Cache\ArrayCache;
+		$this->tag = new GeekCache\Cache\Tag( $this->cache, self::KEY );
 	}
 
 	public function testGetVersionReturnsVersion()
@@ -29,14 +29,14 @@ class TagTest extends PHPUnit_Framework_TestCase
 
 	public function testTagsConsistent()
 	{
-		$tag2 = new Geek\Cache\Tag( $this->cache, self::KEY );
+		$tag2 = new GeekCache\Cache\Tag( $this->cache, self::KEY );
 		$this->tag->clear();
 		$this->assertEquals( $this->tag->getVersion(), $tag2->getVersion() );
 	}
 	
 	public function testKeysTrackedSeparately()
 	{
-		$tag2 = new Geek\Cache\Tag( $this->cache, 'anotherKey' );
+		$tag2 = new GeekCache\Cache\Tag( $this->cache, 'anotherKey' );
 		$this->assertNotEquals( $this->tag->getVersion(), $tag2->getVersion() );
 	}
 }

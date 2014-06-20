@@ -8,8 +8,8 @@ class TagFactoryTest extends PHPUnit_Framework_TestCase
 
 	public function setUp()
 	{
-		$this->cache = new Geek\Cache\ArrayCache();
-		$this->factory = new Geek\Cache\TagFactory( $this->cache );
+		$this->cache = new GeekCache\Cache\ArrayCache();
+		$this->factory = new GeekCache\Cache\TagFactory( $this->cache );
 	}
 
 	public function testTagFactoryReturnsTag()
@@ -19,7 +19,7 @@ class TagFactoryTest extends PHPUnit_Framework_TestCase
 	
 	public function testTagFactoryReturnsTagWithCorrectProperties()
 	{
-		$cache = m::mock( 'Geek\Cache\Cache' );
+		$cache = m::mock( 'GeekCache\Cache\Cache' );
 		$cache->shouldReceive( 'get' )
 			->with( static::TAGKEY )
 			->once()
@@ -29,7 +29,7 @@ class TagFactoryTest extends PHPUnit_Framework_TestCase
 			->with( static::TAGKEY, m::any() )
 			->once();
 		
-		$factory = new Geek\Cache\TagFactory( $cache );
+		$factory = new GeekCache\Cache\TagFactory( $cache );
 		
 		$tag = $factory->makeTag( static::TAGNAME );
 		$tag->getVersion();

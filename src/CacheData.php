@@ -1,5 +1,5 @@
 <?php
-namespace Geek\Cache;
+namespace GeekCache\Cache;
 
 /**
  * If PHP supported it, this would be a private class for SoftInvalidatableCacheDecorator.

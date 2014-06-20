@@ -1,5 +1,5 @@
 <?php
-namespace Geek\Cache;
+namespace GeekCache\Cache;
 class MemcacheServiceProvider
 {
 	function __construct( $container )

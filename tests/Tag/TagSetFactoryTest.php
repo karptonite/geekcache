@@ -5,15 +5,15 @@ class TagSetFactoryTest extends PHPUnit_Framework_TestCase
 {
 	public function setUp()
 	{
-		$this->cache      = new Geek\Cache\ArrayCache();
-		$tagFactory = new Geek\Cache\TagFactory( $this->cache );
-		$this->factory    = new Geek\Cache\TagSetFactory( $tagFactory );
+		$this->cache      = new GeekCache\Cache\ArrayCache();
+		$tagFactory = new GeekCache\Cache\TagFactory( $this->cache );
+		$this->factory    = new GeekCache\Cache\TagSetFactory( $tagFactory );
 	}
 	
 	public function testTagSetFactoryMakesTagSet()
 	{
 		$tagset = $this->factory->makeTagSet( array( 'foo', 'bar' ) );
-		$this->assertInstanceOf( 'Geek\Cache\TagSet', $tagset );
+		$this->assertInstanceOf( 'GeekCache\Cache\TagSet', $tagset );
 		
 		$this->assertFalse( $this->cache->get( 'tag_foo' ) );
 		$tagset->getSignature();
