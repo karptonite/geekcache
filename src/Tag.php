@@ -6,10 +6,10 @@ class Tag
 	private $key;
 	private $cache;
 
-	public function __construct( Cache $cache, $key )
+	public function __construct( Cache $cache, $name )
 	{
 		$this->cache = $cache;
-		$this->key = $key;
+		$this->key = 'tag_' . $name;
 	}
 	
 	public function getVersion()

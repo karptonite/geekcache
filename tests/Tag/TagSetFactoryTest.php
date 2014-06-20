@@ -13,17 +13,12 @@ class TagSetFactoryTest extends PHPUnit_Framework_TestCase
 	public function testTagSetFactoryMakesTagSet()
 	{
 		$tagset = $this->factory->makeTagSet( array( 'foo', 'bar' ) );
-		$this->assertTagSetMade( $tagset );
-	}
-
-	public function assertTagSetMade( $tagset )
-	{
 		$this->assertInstanceOf( 'Geek\Cache\TagSet', $tagset );
 		
-		$this->assertFalse( $this->cache->get( 'foo' ) );
+		$this->assertFalse( $this->cache->get( 'tag_foo' ) );
 		$tagset->getSignature();
-		$this->assertNotEmpty( $this->cache->get( 'foo' ) );
-		$this->assertNotEmpty( $this->cache->get( 'bar' ) );
+		$this->assertNotEmpty( $this->cache->get( 'tag_foo' ) );
+		$this->assertNotEmpty( $this->cache->get( 'tag_bar' ) );
 	}
 	
 	public function testAlternateMakeInterface()
