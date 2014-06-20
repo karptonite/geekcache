@@ -17,6 +17,14 @@ class CacheServiceProvider
 		$this->registerLocalCache( 'memos' );
 		$this->registerLocalCache( 'tags' );
 
+		$this->container['geekcache.local.counter'] = $this->container->share( function( $c ){
+			return !empty( $c['geekcache.nolocalcache'] ) ? new NullCache : new ArrayCounter();
+		} );
+
+		$this->container['geekcache.counter'] = function( $c ){
+			return new MemoizedCounter( $c['geekcache.persistentcounter'], $c['geekcache.local.counter'] );
+		};
+
 		$this->container['geekcache.tagfactory'] = $this->container->share( function($c){
 			$cache = new MemoizedCache( $c['geekcache.persistentcache'], $c['geekcache.local.tags'] );
 			return new TagFactory( $cache );

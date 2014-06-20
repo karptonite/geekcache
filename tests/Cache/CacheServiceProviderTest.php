@@ -56,6 +56,15 @@ abstract class CacheServiceProviderTest extends PHPUnit_Framework_TestCase
 		$this->assertFalse( $cache->get( 'foo3' ) );
 	}
 
+	public function testMecacheCounterRegistered()
+	{
+		$memcachecounter1 = $this->container['geekcache.persistentcounter'];
+		$memcachecounter2 = $this->container['geekcache.persistentcounter'];
+		$this->assertSame( $memcachecounter1, $memcachecounter2 );
+		$this->assertInstanceOf( 'Geek\Cache\MemcacheCounter', $memcachecounter1 );
+	}
+	
+
 	public function testTagFactoryRegistered()
 	{
 		$tagfactory1 = $this->container['geekcache.tagfactory'];
@@ -79,6 +88,33 @@ abstract class CacheServiceProviderTest extends PHPUnit_Framework_TestCase
 		$this->assertSame( $cachebuilder1, $cachebuilder2 );
 		$this->assertInstanceOf( 'Geek\Cache\CacheBuilder', $cachebuilder1 );
 	}
+
+	public function testLocalCounter()
+	{
+		$counter1 = $this->container['geekcache.local.counter'];
+		$counter2 = $this->container['geekcache.local.counter'];
+		$this->assertSame( $counter1, $counter2 );
+		$this->assertInstanceOf( 'Geek\Cache\ArrayCounter', $counter1 );
+	}
+	
+	public function testLocalCounterNullWhenNoLocalcacheIsSet()
+	{
+		$this->container['geekcache.nolocalcache'] = true;
+		$counter1 = $this->container['geekcache.local.counter'];
+		$counter2 = $this->container['geekcache.local.counter'];
+		$this->assertSame( $counter1, $counter2 );
+		$this->assertInstanceOf( 'Geek\Cache\NullCache', $counter1 );
+	}
+
+	public function testCounterRegistered()
+	{
+		$counter1 = $this->container['geekcache.counter'];
+		$counter2 = $this->container['geekcache.counter'];
+		$this->assertNotSame( $counter1, $counter2 );
+		$this->assertInstanceOf( 'Geek\Cache\MemoizedCounter', $counter1 );
+		$this->assertInstanceOf( 'Geek\Cache\MemoizedCounter', $counter2 );
+	}
+	
 	
 }
 

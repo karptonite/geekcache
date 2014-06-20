@@ -28,6 +28,10 @@ class MemcacheServiceProvider
 			return $memcache;
 		});
 
+		$this->container['geekcache.persistentcounter'] = $this->container->share( function( $c ){
+			return new MemcacheCounter( $c['geekcache.memcache'] );
+		} );
+
 		$this->container['geekcache.persistentcache'] = $this->container->share( function( $c ){
 			return new MemcacheCache( $c['geekcache.memcache'] );
 		} );
