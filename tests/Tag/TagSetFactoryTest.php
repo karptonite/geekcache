@@ -20,6 +20,18 @@ class TagSetFactoryTest extends PHPUnit_Framework_TestCase
 		$this->assertNotEmpty( $this->cache->get( 'tag_foo' ) );
 		$this->assertNotEmpty( $this->cache->get( 'tag_bar' ) );
 	}
+
+	public function testTagSetFactoryCollapsesDuplicates()
+	{
+		$tagmock = m::mock( 'GeekCache\Cache\Tag' );
+		$tagFactoryMock = m::mock( 'GeekCache\Cache\TagFactory' );
+		$tagFactoryMock->shouldReceive( 'makeTag' )->with( 'foo' )->once()->andReturn( $tagmock );
+		$tagFactoryMock->shouldReceive( 'makeTag' )->with( 'bar' )->once()->andReturn( $tagmock );
+
+		$factory = new GeekCache\Cache\TagSetFactory( $tagFactoryMock );
+		$factory->makeTagSet( 'foo', 'bar', 'foo' );
+	}
+	
 	
 	public function testAlternateMakeInterface()
 	{
