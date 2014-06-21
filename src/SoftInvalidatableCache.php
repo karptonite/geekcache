@@ -23,6 +23,11 @@ class SoftInvalidatableCache extends CacheDecorator implements SoftInvalidatable
 		$result = parent::get( $key );
 		return $this->policy->resultIsFresh( $result ) ? $this->policy->unpackValue( $result ) : false;
 	}
+
+	public function clear()
+	{
+		return parent::clear();
+	}
 	
 	public function getStale( $key )
 	{

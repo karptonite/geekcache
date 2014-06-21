@@ -26,4 +26,9 @@ class MemcacheCache implements Cache
 		//http://stackoverflow.com/questions/4745345/how-do-i-stop-phpmemcachedelete-from-producing-a-client-error
 		return $this->cache->delete( $key, 0 );
 	}
+
+	public function clear()
+	{
+		return $this->cache->flush();
+	}
 }

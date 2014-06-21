@@ -41,4 +41,10 @@ class MemoizedCache extends CacheDecorator
 		parent::delete( $key );
 		$this->memocache->delete( $key );
 	}
+
+	public function clear()
+	{
+		parent::clear();
+		return $this->memocache->clear();
+	}
 }

@@ -40,4 +40,10 @@ class ArrayCache implements Cache
 	{
 		unset( $this->cache[$key] );
 	}
+
+	public function clear()
+	{
+		$this->cache = array();
+		return true;
+	}
 }

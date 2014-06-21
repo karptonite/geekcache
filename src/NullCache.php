@@ -18,6 +18,11 @@ class NullCache implements Cache, Counter
 		return null;
 	}
 
+	public function clear()
+	{
+		return true;
+	}
+
 	public function increment( $key, $value = 1 )
 	{
 		return null;
