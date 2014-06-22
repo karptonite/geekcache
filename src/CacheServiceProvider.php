@@ -21,10 +21,6 @@ class CacheServiceProvider
 			return !empty( $c['geekcache.nolocalcache'] ) ? new NullCache : new ArrayCounter();
 		} );
 
-		$this->container['geekcache.counter'] = function( $c ){
-			return new MemoizedCounter( $c['geekcache.persistentcounter'], $c['geekcache.local.counter'] );
-		};
-
 		$this->container['geekcache.tagfactory'] = $this->container->share( function($c){
 			$cache = new MemoizedCache( $c['geekcache.persistentcache'], $c['geekcache.local.tags'] );
 			return new TagFactory( $cache );
@@ -36,6 +32,10 @@ class CacheServiceProvider
 
 		$this->container['cachebuilder'] = $this->container->share( function($c){
 			return new CacheBuilder( $c['geekcache.persistentcache'], $c['geekcache.local.memos'], $c['geekcache.tagsetfactory'] );
+		} );
+	
+		$this->container['geekcache.counterbuilder'] = $this->container->share( function( $c ){
+			return new CounterBuilder( $c['geekcache.persistentcounter'], $c['geekcache.local.counter'] );
 		} );
 	}
 

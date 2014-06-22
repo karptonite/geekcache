@@ -106,13 +106,13 @@ abstract class CacheServiceProviderTest extends PHPUnit_Framework_TestCase
 		$this->assertInstanceOf( 'GeekCache\Cache\NullCache', $counter1 );
 	}
 
-	public function testCounterRegistered()
+	public function testCounterBuilderRegistered()
 	{
-		$counter1 = $this->container['geekcache.counter'];
-		$counter2 = $this->container['geekcache.counter'];
-		$this->assertNotSame( $counter1, $counter2 );
-		$this->assertInstanceOf( 'GeekCache\Cache\MemoizedCounter', $counter1 );
-		$this->assertInstanceOf( 'GeekCache\Cache\MemoizedCounter', $counter2 );
+		$builder1 = $this->container['geekcache.counterbuilder'];
+		$builder2 = $this->container['geekcache.counterbuilder'];
+		$this->assertSame( $builder1, $builder2 );
+		$this->assertInstanceOf( 'GeekCache\Cache\CounterBuilder', $builder1 );
+		$this->assertInstanceOf( 'GeekCache\Cache\CounterBuilder', $builder2 );
 	}
 	
 	
