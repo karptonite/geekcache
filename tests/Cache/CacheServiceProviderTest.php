@@ -56,7 +56,7 @@ abstract class CacheServiceProviderTest extends PHPUnit_Framework_TestCase
 		$this->assertFalse( $cache->get( 'foo3' ) );
 	}
 
-	public function testMecacheCounterRegistered()
+	public function testMemcacheCounterRegistered()
 	{
 		$memcachecounter1 = $this->container['geekcache.persistentcounter'];
 		$memcachecounter2 = $this->container['geekcache.persistentcounter'];
@@ -64,7 +64,6 @@ abstract class CacheServiceProviderTest extends PHPUnit_Framework_TestCase
 		$this->assertInstanceOf( 'GeekCache\Cache\MemcacheCounter', $memcachecounter1 );
 	}
 	
-
 	public function testTagFactoryRegistered()
 	{
 		$tagfactory1 = $this->container['geekcache.tagfactory'];
@@ -115,6 +114,16 @@ abstract class CacheServiceProviderTest extends PHPUnit_Framework_TestCase
 		$this->assertInstanceOf( 'GeekCache\Cache\CounterBuilder', $builder2 );
 	}
 	
+	public function testNamespaceAddedToCacheIfSet()
+	{
+		$this->container['geekcache.namespace'] = 'foo';
+		$this->assertInstanceOf( 'GeekCache\Cache\NamespacedCache', $this->container['geekcache.persistentcache'] );
+	}
 	
+	public function testNamespaceAddedToCounterIfSet()
+	{
+		$this->container['geekcache.namespace'] = 'foo';
+		$this->assertInstanceOf( 'GeekCache\Cache\NamespacedCounter', $this->container['geekcache.persistentcounter'] );
+	}
 }
 

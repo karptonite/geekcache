@@ -17,6 +17,18 @@ class CacheServiceProvider
 		$this->registerLocalCache( 'memos' );
 		$this->registerLocalCache( 'tags' );
 
+		$this->container['geekcache.persistentcache'] = $this->container->share( function( $c ){
+			return !empty( $c['geekcache.namespace'] )
+				? new NamespacedCache( $c['geekcache.persistentcache.unnamespaced'], $c['geekcache.namespace'] )
+				: $c['geekcache.persistentcache.unnamespaced'];
+		} );
+
+		$this->container['geekcache.persistentcounter'] = $this->container->share( function( $c ){
+			return !empty( $c['geekcache.namespace'] )
+				? new NamespacedCounter( $c['geekcache.persistentcounter.unnamespaced'], $c['geekcache.namespace'] )
+				: $c['geekcache.persistentcounter.unnamespaced'];
+		} );
+
 		$this->container['geekcache.local.counter'] = $this->container->share( function( $c ){
 			return !empty( $c['geekcache.nolocalcache'] ) ? new NullCache : new ArrayCounter();
 		} );
