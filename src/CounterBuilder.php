@@ -12,7 +12,7 @@ class CounterBuilder
 		$this->stack = $stack ?: array( function() use( $cache ){ return $cache; } );
 	}
 	
-	public function make()
+	public function make( $key, $ttl = null )
 	{
 		$stack = $this->stack;
 		$cache = $this->cache;
@@ -20,7 +20,7 @@ class CounterBuilder
 		while( $factory = array_shift( $stack ) )
 			$cache = $factory( $cache );
 
-		return $cache;
+		return new NormalCounter( $cache, $key, $ttl );
 	}
 
 	private function addToStack( $factory )
