@@ -58,10 +58,10 @@ abstract class CacheServiceProviderTest extends PHPUnit_Framework_TestCase
 
 	public function testMemcacheCounterRegistered()
 	{
-		$memcachecounter1 = $this->container['geekcache.persistentcounter'];
-		$memcachecounter2 = $this->container['geekcache.persistentcounter'];
-		$this->assertSame( $memcachecounter1, $memcachecounter2 );
-		$this->assertInstanceOf( 'GeekCache\Cache\MemcacheCounter', $memcachecounter1 );
+		$memcacheincrementablecache1 = $this->container['geekcache.persistentincrementablecache'];
+		$memcacheincrementablecache2 = $this->container['geekcache.persistentincrementablecache'];
+		$this->assertSame( $memcacheincrementablecache1, $memcacheincrementablecache2 );
+		$this->assertInstanceOf( 'GeekCache\Cache\MemcacheIncrementableCache', $memcacheincrementablecache1 );
 	}
 	
 	public function testTagFactoryRegistered()
@@ -88,21 +88,21 @@ abstract class CacheServiceProviderTest extends PHPUnit_Framework_TestCase
 		$this->assertInstanceOf( 'GeekCache\Cache\CacheBuilder', $cachebuilder1 );
 	}
 
-	public function testLocalCounter()
+	public function testLocalIncrementableCache()
 	{
-		$counter1 = $this->container['geekcache.local.counter'];
-		$counter2 = $this->container['geekcache.local.counter'];
-		$this->assertSame( $counter1, $counter2 );
-		$this->assertInstanceOf( 'GeekCache\Cache\ArrayCounter', $counter1 );
+		$incrementablecache1 = $this->container['geekcache.local.incrementablecache'];
+		$incrementablecache2 = $this->container['geekcache.local.incrementablecache'];
+		$this->assertSame( $incrementablecache1, $incrementablecache2 );
+		$this->assertInstanceOf( 'GeekCache\Cache\ArrayIncrementableCache', $incrementablecache1 );
 	}
 	
-	public function testLocalCounterNullWhenNoLocalcacheIsSet()
+	public function testLocalIncrementableCacheNullWhenNoLocalcacheIsSet()
 	{
 		$this->container['geekcache.nolocalcache'] = true;
-		$counter1 = $this->container['geekcache.local.counter'];
-		$counter2 = $this->container['geekcache.local.counter'];
-		$this->assertSame( $counter1, $counter2 );
-		$this->assertInstanceOf( 'GeekCache\Cache\NullCache', $counter1 );
+		$cache1 = $this->container['geekcache.local.incrementablecache'];
+		$cache2 = $this->container['geekcache.local.incrementablecache'];
+		$this->assertSame( $cache1, $cache2 );
+		$this->assertInstanceOf( 'GeekCache\Cache\NullCache', $cache1 );
 	}
 
 	public function testCounterBuilderRegistered()
@@ -123,7 +123,7 @@ abstract class CacheServiceProviderTest extends PHPUnit_Framework_TestCase
 	public function testNamespaceAddedToCounterIfSet()
 	{
 		$this->container['geekcache.namespace'] = 'foo';
-		$this->assertInstanceOf( 'GeekCache\Cache\NamespacedCounter', $this->container['geekcache.persistentcounter'] );
+		$this->assertInstanceOf( 'GeekCache\Cache\NamespacedIncrementableCache', $this->container['geekcache.persistentincrementablecache'] );
 	}
 }
 

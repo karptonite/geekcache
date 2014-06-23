@@ -23,14 +23,14 @@ class CacheServiceProvider
 				: $c['geekcache.persistentcache.unnamespaced'];
 		} );
 
-		$this->container['geekcache.persistentcounter'] = $this->container->share( function( $c ){
+		$this->container['geekcache.persistentincrementablecache'] = $this->container->share( function( $c ){
 			return !empty( $c['geekcache.namespace'] )
-				? new NamespacedCounter( $c['geekcache.persistentcounter.unnamespaced'], $c['geekcache.namespace'] )
-				: $c['geekcache.persistentcounter.unnamespaced'];
+				? new NamespacedIncrementableCache( $c['geekcache.persistentincrementablecache.unnamespaced'], $c['geekcache.namespace'] )
+				: $c['geekcache.persistentincrementablecache.unnamespaced'];
 		} );
 
-		$this->container['geekcache.local.counter'] = $this->container->share( function( $c ){
-			return !empty( $c['geekcache.nolocalcache'] ) ? new NullCache : new ArrayCounter();
+		$this->container['geekcache.local.incrementablecache'] = $this->container->share( function( $c ){
+			return !empty( $c['geekcache.nolocalcache'] ) ? new NullCache : new ArrayIncrementableCache();
 		} );
 
 		$this->container['geekcache.tagfactory'] = $this->container->share( function($c){
@@ -47,7 +47,7 @@ class CacheServiceProvider
 		} );
 	
 		$this->container['geekcache.counterbuilder'] = $this->container->share( function( $c ){
-			return new CounterBuilder( $c['geekcache.persistentcounter'], $c['geekcache.local.counter'] );
+			return new CounterBuilder( $c['geekcache.persistentincrementablecache'], $c['geekcache.local.incrementablecache'] );
 		} );
 	}
 

@@ -1,5 +1,5 @@
 <?php
-class MemcacheCounterTest extends BaseCounterTest
+class MemcacheIncrementableCacheTest extends BaseIncrementableCacheTest
 {
 	public function setUp()
 	{
@@ -7,7 +7,7 @@ class MemcacheCounterTest extends BaseCounterTest
 		$memcache = new Memcache();
 		$memcache->connect('localhost', 11211);
 		$memcache->flush();
-		$this->counter = new GeekCache\Cache\MemcacheCounter( $memcache );
+		$this->cache = new GeekCache\Cache\MemcacheIncrementableCache( $memcache );
 	}
 }
 
