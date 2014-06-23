@@ -3,6 +3,8 @@ use Mockery as m;
 
 class CacheBuilderTest extends PHPUnit_Framework_TestCase
 {
+	const KEY = 'TheKey';
+
 	public function prepareFullMockBuilder()
 	{
 		$this->cache         = m::mock( 'GeekCache\Cache\Cache' );
@@ -26,8 +28,8 @@ class CacheBuilderTest extends PHPUnit_Framework_TestCase
 	{
 		$this->prepareFullMockBuilder();
 		$this->cache->shouldReceive( 'get' )->with( 'foo' )->once();
-		$cache = $this->builder->make();
-		$cache->get('foo');
+		$cacheitem = $this->builder->make( 'foo' );
+		$cacheitem->get();
 	}
 
 	public function testMemoizeBuild()
@@ -36,10 +38,19 @@ class CacheBuilderTest extends PHPUnit_Framework_TestCase
 		$this->memocache->shouldReceive( 'get' )->with( 'foo' )->once()->andReturn( false );
 		$this->memocache->shouldReceive( 'put' )->with( 'foo', 'bar' )->once();
 		$this->cache->shouldReceive( 'get' )->with( 'foo' )->once()->andReturn( 'bar' );
-		$cache = $this->builder->memoize()->make();
-		$this->assertInstanceOf( 'GeekCache\Cache\MemoizedCache', $cache );
-		$cache->get( 'foo' );
+		$cacheitem = $this->builder->memoize()->make( 'foo' );
+		$this->assertItemCacheInstanceOf( 'GeekCache\Cache\MemoizedCache', $cacheitem );
+		$cacheitem->get();
 	}
+
+	private function assertItemCacheInstanceOf( $type, GeekCache\Cache\CacheItem $cacheitem )
+	{
+		$class = new ReflectionClass( 'GeekCache\Cache\NormalCacheItem' );
+		$property = $class->getProperty( 'cache' );
+		$property->setAccessible( true );
+		$this->assertInstanceOf( $type, $property->getValue( $cacheitem ) );
+	}
+	
 
 	public function testDoubleDecorate()
 	{
@@ -47,9 +58,9 @@ class CacheBuilderTest extends PHPUnit_Framework_TestCase
 		$this->memocache->shouldReceive( 'get' )->with( 'foo' )->twice()->andReturn( false );
 		$this->memocache->shouldReceive( 'put' )->with( 'foo', 'bar' )->twice();
 		$this->cache->shouldReceive( 'get' )->with( 'foo' )->once()->andReturn( 'bar' );
-		$cache = $this->builder->memoize()->memoize()->make();
-		$this->assertInstanceOf( 'GeekCache\Cache\MemoizedCache', $cache );
-		$cache->get( 'foo' );
+		$itemcache = $this->builder->memoize()->memoize()->make( 'foo' );
+		$this->assertItemCacheInstanceOf( 'GeekCache\Cache\MemoizedCache', $itemcache );
+		$itemcache->get();
 	}
 
 	public function testTripleDecorate()
@@ -58,9 +69,9 @@ class CacheBuilderTest extends PHPUnit_Framework_TestCase
 		$this->memocache->shouldReceive( 'get' )->with( 'foo' )->times( 3 )->andReturn( false );
 		$this->memocache->shouldReceive( 'put' )->with( 'foo', 'bar' )->times( 3 );
 		$this->cache->shouldReceive( 'get' )->with( 'foo' )->once()->andReturn( 'bar' );
-		$cache = $this->builder->memoize()->memoize()->memoize()->make();
-		$this->assertInstanceOf( 'GeekCache\Cache\MemoizedCache', $cache );
-		$cache->get( 'foo' );
+		$itemcache = $this->builder->memoize()->memoize()->memoize()->make( 'foo' );
+		$this->assertItemCacheInstanceOf( 'GeekCache\Cache\MemoizedCache', $itemcache );
+		$itemcache->get();
 	}
 
 	public function testTaggedBuild()
@@ -73,15 +84,15 @@ class CacheBuilderTest extends PHPUnit_Framework_TestCase
 			->with( array( 'footag', 'bartag' ) )
 			->andReturn( $tagset );
 
-		$cache = $this->builder->addTags( array( 'footag', 'bartag' ) )->make();
-		$this->assertInstanceOf( 'GeekCache\Cache\SoftInvalidatableCache', $cache );
-		$cache->get( 'foo' );
+		$itemcache = $this->builder->addTags( array( 'footag', 'bartag' ) )->make( 'foo', 5 );
+		$this->assertItemCacheInstanceOf( 'GeekCache\Cache\SoftInvalidatableCache', $itemcache );
+		$itemcache->get();
 
 		$tagset->shouldReceive( 'getSignature' )->once()->andReturn( 'signature' );
 		$spy = null;
 		$this->cache->shouldReceive( 'put' )->once()->with( 'foo', m::any(), 5 )->andReturnUsing( function( $arg1, $arg2, $arg3 ) use( &$spy ){$spy = $arg2;} );
 
-		$result = $cache->put( 'foo', 'bar', 5 );
+		$result = $itemcache->put( 'foo', 'bar' );
 		$freshnessData = $spy->getFreshnessData();
 		$this->assertEquals( 'signature', $freshnessData['signature'] );
 	}
@@ -95,31 +106,30 @@ class CacheBuilderTest extends PHPUnit_Framework_TestCase
 			->with( array( 'footag', 'bartag' ) )
 			->andReturn( $tagset );
 
-		$cache = $this->builder->addTags( 'footag', 'bartag' )->make();
+		$cache = $this->builder->addTags( 'footag', 'bartag' )->make( 'foo' );
 	}
 	
-
 	/**
 	 * @group slowTests
 	 */
 	public function testGracePeriod()
 	{
 		$this->prepareArrayBuilder();
-		$cache = $this->builder->addGracePeriod( 0 )->make();
-		$cache->put( 'foo', 'bar', 1 );
-		$this->assertEquals( 'bar', $cache->get( 'foo' ) );
+		$itemcache = $this->builder->addGracePeriod( 0 )->make( 'foo', 1 );
+		$itemcache->put( 'bar' );
+		$this->assertEquals( 'bar', $itemcache->get( 'foo' ) );
 		usleep( 2100000 );
-		$this->assertFalse( $cache->get( 'foo' ) );
-		$this->assertEquals( 'bar', $cache->getStale( 'foo' ) );
+		$this->assertFalse( $itemcache->get( 'foo' ) );
+		$this->assertEquals( 'bar', $itemcache->getStale( 'foo' ) );
 	}
 
 	public function testCombinedCache()
 	{
 		$this->prepareArrayBuilder();
-		$cache = $this->builder->addTags( array( 'footag', 'bartag' ))->addGracePeriod( 0 )->make();
-		$cache->put( 'foo', 'bar', 1 );
+		$cache = $this->builder->addTags( array( 'footag', 'bartag' ))->addGracePeriod( 0 )->make( 'foo', 1 );
+		$cache->put( 'bar' );
 		$this->tagfactory->makeTag( 'bartag' )->clear();
-		$this->assertFalse( $cache->get( 'foo' ) );
-		$this->assertEquals( 'bar', $cache->getStale( 'foo' ) );
+		$this->assertFalse( $cache->get() );
+		$this->assertEquals( 'bar', $cache->getStale() );
 	}
 }

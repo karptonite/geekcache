@@ -14,7 +14,7 @@ class CacheBuilder
 		$this->stack = $stack ?: array( function() use( $cache ){ return $cache; } );
 	}
 	
-	public function make()
+	public function make( $key, $ttl = null )
 	{
 		$stack = $this->stack;
 		$cache = $this->cache;
@@ -22,7 +22,10 @@ class CacheBuilder
 		while( $factory = array_shift( $stack ) )
 			$cache = $factory( $cache );
 
-		return $cache;
+		if( $cache instanceof SoftInvalidatable )
+			return new SoftInvalidatableCacheItem( $cache, $key, $ttl );
+		else
+			return new NormalCacheItem( $cache, $key, $ttl );
 	}
 
 	//NOTE if we move to php 5.4, we can hint on callable

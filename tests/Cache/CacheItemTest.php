@@ -15,8 +15,8 @@ class CacheItemTest extends PHPUnit_Framework_TestCase
 	{
 		parent::setUp();
 		$this->cache = new GeekCache\Cache\ArrayCache;
-		$this->cacheitem = new GeekCache\Cache\CacheItem( $this->cache, self::KEY, self::TTL );
-		$this->cacheitem2 = new GeekCache\Cache\CacheItem( $this->cache, self::KEY2, self::TTL );
+		$this->cacheitem = new GeekCache\Cache\NormalCacheItem( $this->cache, self::KEY, self::TTL );
+		$this->cacheitem2 = new GeekCache\Cache\NormalCacheItem( $this->cache, self::KEY2, self::TTL );
 	}
 
 	public function testCacheItemPutsAndGets()
@@ -54,7 +54,7 @@ class CacheItemTest extends PHPUnit_Framework_TestCase
 			->with( self::KEY, self::VALUE, self::TTL )
 			->once();
 
-		$cacheitem = new GeekCache\Cache\CacheItem( $cache, self::KEY, self::TTL );
+		$cacheitem = new GeekCache\Cache\NormalCacheItem( $cache, self::KEY, self::TTL );
 		$cacheitem->put( self::VALUE );
 	}
 }
