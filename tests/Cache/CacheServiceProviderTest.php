@@ -82,8 +82,8 @@ abstract class CacheServiceProviderTest extends PHPUnit_Framework_TestCase
 
 	public function testCacheBuilderRegistered()
 	{
-		$cachebuilder1 = $this->container['cachebuilder'];
-		$cachebuilder2 = $this->container['cachebuilder'];
+		$cachebuilder1 = $this->container['geekcache.cachebuilder'];
+		$cachebuilder2 = $this->container['geekcache.cachebuilder'];
 		$this->assertSame( $cachebuilder1, $cachebuilder2 );
 		$this->assertInstanceOf( 'GeekCache\Cache\CacheBuilder', $cachebuilder1 );
 	}

@@ -42,7 +42,7 @@ class CacheServiceProvider
 			return new TagSetFactory( $c['geekcache.tagfactory'] );
 		} );
 
-		$this->container['cachebuilder'] = $this->container->share( function($c){
+		$this->container['geekcache.cachebuilder'] = $this->container->share( function($c){
 			return new CacheBuilder( $c['geekcache.persistentcache'], $c['geekcache.local.memos'], $c['geekcache.tagsetfactory'] );
 		} );
 	
