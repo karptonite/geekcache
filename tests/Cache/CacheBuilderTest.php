@@ -50,7 +50,6 @@ class CacheBuilderTest extends PHPUnit_Framework_TestCase
 		$property->setAccessible( true );
 		$this->assertInstanceOf( $type, $property->getValue( $cacheitem ) );
 	}
-	
 
 	public function testDoubleDecorate()
 	{

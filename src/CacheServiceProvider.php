@@ -60,6 +60,5 @@ class CacheServiceProvider
 			//to avoid keeping a potentially stale local cache.
 			return !empty( $c['geekcache.nolocalcache'] ) ? new NullCache : new ArrayCache( $max );
 		} );
-
 	}
 }

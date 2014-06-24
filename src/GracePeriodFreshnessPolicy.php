@@ -12,6 +12,8 @@ class GracePeriodFreshnessPolicy extends AbstractFreshnessPolicy
 
 	public function computeTtl( $ttl )
 	{
+		//if there is no $ttl, the cache lives forever, period.
+		//if the graceperiod is zero, we still live forever, because we can always get the stale data.
 		return $ttl && $this->gracePeriod ? $ttl + $this->gracePeriod : null;
 	}
 
