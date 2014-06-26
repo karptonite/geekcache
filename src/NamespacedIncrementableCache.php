@@ -3,18 +3,18 @@ namespace GeekCache\Cache;
 
 class NamespacedIncrementableCache extends NamespacedCache implements IncrementableCache 
 {
-	private $incrementablecache;
+    private $incrementablecache;
 
-	public function __construct( IncrementableCache $incrementablecache, $namespace )
-	{
-		parent::__construct( $incrementablecache, $namespace );
-		$this->incrementablecache = $incrementablecache;
-	}
-	
-	public function increment( $key, $value = 1 )
-	{
-		return $this->incrementablecache->increment( $this->reviseKey( $key ), $value );
-	}
+    public function __construct( IncrementableCache $incrementablecache, $namespace )
+    {
+        parent::__construct( $incrementablecache, $namespace );
+        $this->incrementablecache = $incrementablecache;
+    }
+    
+    public function increment( $key, $value = 1 )
+    {
+        return $this->incrementablecache->increment( $this->reviseKey( $key ), $value );
+    }
 }
 
 

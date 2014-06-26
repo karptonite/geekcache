@@ -3,22 +3,23 @@ namespace GeekCache\Cache;
 
 class TagSetFactory
 {
-	private $tagFactory;
+    private $tagFactory;
 
-	public function __construct( TagFactory $tagFactory )
-	{
-		$this->tagFactory = $tagFactory;
-	}
+    public function __construct(TagFactory $tagFactory)
+    {
+        $this->tagFactory = $tagFactory;
+    }
 
-	public function makeTagSet( $names )
-	{
-		$tags = array();
-		$names = is_array( $names ) ? $names : func_get_args();
-		$names = array_unique( $names );
+    public function makeTagSet($names)
+    {
+        $tags = array();
+        $names = is_array($names) ? $names : func_get_args();
+        $names = array_unique($names);
 
-		foreach( $names as $name )
-			$tags[] = $this->tagFactory->makeTag( $name );
+        foreach ($names as $name) {
+            $tags[] = $this->tagFactory->makeTag($name);
+        }
 
-		return new TagSet( $tags );
-	}
+        return new TagSet($tags);
+    }
 }

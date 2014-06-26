@@ -7,22 +7,22 @@ namespace GeekCache\Cache;
  */
 class CacheData
 {
-	private $value;
-	private $freshnessData;
+    private $value;
+    private $freshnessData;
 
-	public function __construct( $value, $freshnessData )
-	{
-		$this->value    = $value;
-		$this->freshnessData = $freshnessData;
-	}
+    public function __construct( $value, $freshnessData )
+    {
+        $this->value    = $value;
+        $this->freshnessData = $freshnessData;
+    }
 
-	public function getValue()
-	{
-		return $this->value;
-	}
+    public function getValue()
+    {
+        return $this->value;
+    }
 
-	public function getFreshnessData()
-	{
-		return $this->freshnessData;
-	}
+    public function getFreshnessData()
+    {
+        return $this->freshnessData;
+    }
 }

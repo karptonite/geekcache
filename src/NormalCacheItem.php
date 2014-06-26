@@ -3,29 +3,29 @@ namespace GeekCache\Cache;
 
 class NormalCacheItem implements CacheItem
 {
-	private $cache;
-	protected $key;
-	private $ttl;
+    private $cache;
+    protected $key;
+    private $ttl;
 
-	public function __construct( Cache $cache, $key, $ttl = null )
-	{
-		$this->cache = $cache;
-		$this->key = $key;
-		$this->ttl = $ttl;
-	}
-	
-	public function get()
-	{
-		return $this->cache->get( $this->key );
-	}
+    public function __construct( Cache $cache, $key, $ttl = null )
+    {
+        $this->cache = $cache;
+        $this->key = $key;
+        $this->ttl = $ttl;
+    }
+    
+    public function get()
+    {
+        return $this->cache->get( $this->key );
+    }
 
-	public function put( $value )
-	{
-		return $this->cache->put( $this->key, $value, $this->ttl );
-	}
-	
-	public function delete()
-	{
-		return $this->cache->delete( $this->key );
-	}
+    public function put( $value )
+    {
+        return $this->cache->put( $this->key, $value, $this->ttl );
+    }
+    
+    public function delete()
+    {
+        return $this->cache->delete( $this->key );
+    }
 }

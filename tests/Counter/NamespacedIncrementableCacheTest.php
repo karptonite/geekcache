@@ -1,16 +1,16 @@
 <?php
 class NamespacedIncrementableCacheTest extends BaseIncrementableCacheTest
 {
-	private $primarycache;
+    private $primarycache;
 
-	const CACHE_NAMESPACE = 'ns';
+    const CACHE_NAMESPACE = 'ns';
 
-	public function setUp()
-	{
-		parent::setUp();
-		$this->primarycache  = new GeekCache\Cache\ArrayIncrementableCache;
-		$this->cache         = new GeekCache\Cache\NamespacedIncrementableCache( $this->primarycache, self::CACHE_NAMESPACE );
-	}
+    public function setUp()
+    {
+        parent::setUp();
+        $this->primarycache  = new GeekCache\Cache\ArrayIncrementableCache;
+        $this->cache         = new GeekCache\Cache\NamespacedIncrementableCache( $this->primarycache, self::CACHE_NAMESPACE );
+    }
 
 }
 

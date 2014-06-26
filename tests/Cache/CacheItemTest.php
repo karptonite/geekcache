@@ -2,59 +2,59 @@
 use Mockery as m;
 class CacheItemTest extends PHPUnit_Framework_TestCase
 {
-	const KEY   = 'thekey';
-	const VALUE = 'foobar';
-	const KEY2   = 'thekey2';
-	const VALUE2 = 'foobar2';
-	const TTL = 5;
+    const KEY   = 'thekey';
+    const VALUE = 'foobar';
+    const KEY2   = 'thekey2';
+    const VALUE2 = 'foobar2';
+    const TTL = 5;
 
-	private $cache;
+    private $cache;
 
 
-	public function setUp()
-	{
-		parent::setUp();
-		$this->cache = new GeekCache\Cache\ArrayCache;
-		$this->cacheitem = new GeekCache\Cache\NormalCacheItem( $this->cache, self::KEY, self::TTL );
-		$this->cacheitem2 = new GeekCache\Cache\NormalCacheItem( $this->cache, self::KEY2, self::TTL );
-	}
+    public function setUp()
+    {
+        parent::setUp();
+        $this->cache = new GeekCache\Cache\ArrayCache;
+        $this->cacheitem = new GeekCache\Cache\NormalCacheItem( $this->cache, self::KEY, self::TTL );
+        $this->cacheitem2 = new GeekCache\Cache\NormalCacheItem( $this->cache, self::KEY2, self::TTL );
+    }
 
-	public function testCacheItemPutsAndGets()
-	{
-		$this->cacheitem->put( self::VALUE );
-		$this->cacheitem2->put( self::VALUE2 );
+    public function testCacheItemPutsAndGets()
+    {
+        $this->cacheitem->put( self::VALUE );
+        $this->cacheitem2->put( self::VALUE2 );
 
-		$this->assertEquals( self::VALUE, $this->cache->get( self::KEY ) );
-		$this->assertEquals( self::VALUE2, $this->cache->get( self::KEY2 ) );
-		$this->assertEquals( self::VALUE, $this->cacheitem->get() );
-		$this->assertEquals( self::VALUE2, $this->cacheitem2->get() );
-	}
-	
-	public function testCacheItemDeletes()
-	{
-		$this->cacheitem->put(  self::VALUE );
-		$this->cacheitem2->put(  self::VALUE2 );
-		$this->cacheitem->delete();
+        $this->assertEquals( self::VALUE, $this->cache->get( self::KEY ) );
+        $this->assertEquals( self::VALUE2, $this->cache->get( self::KEY2 ) );
+        $this->assertEquals( self::VALUE, $this->cacheitem->get() );
+        $this->assertEquals( self::VALUE2, $this->cacheitem2->get() );
+    }
+    
+    public function testCacheItemDeletes()
+    {
+        $this->cacheitem->put(  self::VALUE );
+        $this->cacheitem2->put(  self::VALUE2 );
+        $this->cacheitem->delete();
 
-		$this->assertFalse( $this->cache->get( self::KEY ) );
-		$this->assertEquals( self::VALUE2, $this->cache->get( self::KEY2 ) );
-		$this->assertFalse( $this->cacheitem->get() );
-		$this->assertEquals( self::VALUE2, $this->cacheitem2->get() );
-	}
-	
-	public function testCacheItemReturnsFalseOnCacheMiss()
-	{
-		$this->assertFalse( $this->cacheitem->get() );
-	}
+        $this->assertFalse( $this->cache->get( self::KEY ) );
+        $this->assertEquals( self::VALUE2, $this->cache->get( self::KEY2 ) );
+        $this->assertFalse( $this->cacheitem->get() );
+        $this->assertEquals( self::VALUE2, $this->cacheitem2->get() );
+    }
+    
+    public function testCacheItemReturnsFalseOnCacheMiss()
+    {
+        $this->assertFalse( $this->cacheitem->get() );
+    }
 
-	public function testCacheItemPassesTtlOnPut()
-	{
-		$cache = m::mock( 'GeekCache\Cache\Cache' );
-		$cache->shouldReceive( 'put' )
-			->with( self::KEY, self::VALUE, self::TTL )
-			->once();
+    public function testCacheItemPassesTtlOnPut()
+    {
+        $cache = m::mock( 'GeekCache\Cache\Cache' );
+        $cache->shouldReceive( 'put' )
+            ->with( self::KEY, self::VALUE, self::TTL )
+            ->once();
 
-		$cacheitem = new GeekCache\Cache\NormalCacheItem( $cache, self::KEY, self::TTL );
-		$cacheitem->put( self::VALUE );
-	}
+        $cacheitem = new GeekCache\Cache\NormalCacheItem( $cache, self::KEY, self::TTL );
+        $cacheitem->put( self::VALUE );
+    }
 }
