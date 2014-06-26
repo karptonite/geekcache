@@ -45,4 +45,3 @@ class CounterBuilderTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf($type, $property->getValue($counter));
     }
 }
-
