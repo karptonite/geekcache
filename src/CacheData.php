@@ -10,9 +10,9 @@ class CacheData
     private $value;
     private $freshnessData;
 
-    public function __construct( $value, $freshnessData )
+    public function __construct($value, $freshnessData)
     {
-        $this->value    = $value;
+        $this->value = $value;
         $this->freshnessData = $freshnessData;
     }
 

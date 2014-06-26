@@ -4,25 +4,27 @@ namespace GeekCache\Cache;
 abstract class AbstractFreshnessPolicy implements FreshnessPolicy
 {
 
-    public function packValueWithPolicy( $value, $ttl = null )
+    public function packValueWithPolicy($value, $ttl = null)
     {
-        return new CacheData( $value, $this->createFreshnessData( $ttl ) );
+        return new CacheData($value, $this->createFreshnessData($ttl));
     }
 
-    public function unpackValue( $result )
+    public function unpackValue($result)
     {
-        if( !( $result instanceof CacheData ) )
+        if (!($result instanceof CacheData)) {
             return false;
+        }
 
         return $result->getValue();
     }
 
-    public function resultIsFresh( $result )
+    public function resultIsFresh($result)
     {
-        if( !( $result instanceof CacheData ) )
+        if (!($result instanceof CacheData)) {
             return false;
+        }
 
         $freshnessData = $result->getFreshnessData();
-        return $this->isFresh( $freshnessData );
+        return $this->isFresh($freshnessData);
     }
-}   
+}

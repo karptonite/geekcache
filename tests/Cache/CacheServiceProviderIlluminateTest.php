@@ -5,6 +5,4 @@ class CacheServiceProviderIlluminateTest extends CacheServiceProviderTest
     {
         return new Illuminate\Container\Container;
     }
-    
 }
- 

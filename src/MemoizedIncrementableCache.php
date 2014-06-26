@@ -5,15 +5,15 @@ class MemoizedIncrementableCache extends MemoizedCache implements IncrementableC
 {
     private $incrementablecache;
 
-    public function __construct( IncrementableCache $incrementablecache, Cache $memocache )
+    public function __construct(IncrementableCache $incrementablecache, Cache $memocache)
     {
-        parent::__construct( $incrementablecache, $memocache );
+        parent::__construct($incrementablecache, $memocache);
         $this->incrementablecache = $incrementablecache;
     }
 
-    public function increment( $key, $value = 1 )
+    public function increment($key, $value = 1)
     {
-        $this->incrementablecache->increment( $key, $value );
-        return $this->getAndMemoize( $key );
+        $this->incrementablecache->increment($key, $value);
+        return $this->getAndMemoize($key);
     }
 }

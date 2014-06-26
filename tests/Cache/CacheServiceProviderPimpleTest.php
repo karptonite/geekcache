@@ -6,6 +6,4 @@ class CacheServiceProviderPimpleTest extends CacheServiceProviderTest
     {
         return new Pimple;
     }
-    
 }
- 

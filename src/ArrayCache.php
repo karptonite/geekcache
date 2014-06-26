@@ -7,38 +7,37 @@ class ArrayCache implements Cache
     private $maxputs;
     private $putcount = 0;
 
-    public function __construct( $maxputs = null )
+    public function __construct($maxputs = null)
     {
         $this->maxputs = (int)$maxputs;
     }
 
-    public function get( $key )
+    public function get($key)
     {
-        return $this->cacheExists( $key ) ? $this->cache[$key] : false;
+        return $this->cacheExists($key) ? $this->cache[$key] : false;
     }
 
-    protected function cacheExists( $key )
+    protected function cacheExists($key)
     {
-        return array_key_exists( $key, $this->cache );
+        return array_key_exists($key, $this->cache);
     }
 
-    public function put( $key, $value, $ttl = null )
+    public function put($key, $value, $ttl = null)
     {
-        if( $this->putIsPermitted( $key ) )
-        {
+        if ($this->putIsPermitted($key)) {
             $this->cache[$key] = $value;
             $this->putcount++;
         }
     }
 
-    private function putIsPermitted( $key )
+    private function putIsPermitted($key)
     {
-        return !$this->maxputs || $this->putcount < $this->maxputs || $this->cacheExists( $key );
+        return !$this->maxputs || $this->putcount < $this->maxputs || $this->cacheExists($key);
     }
 
-    public function delete( $key )
+    public function delete($key)
     {
-        unset( $this->cache[$key] );
+        unset($this->cache[$key]);
     }
 
     public function clear()

@@ -5,25 +5,25 @@ class NamespacedCache extends CacheDecorator
 {
     private $namespace;
 
-    public function __construct( Cache $cache, $namespace )
+    public function __construct(Cache $cache, $namespace)
     {
-        parent::__construct( $cache );
+        parent::__construct($cache);
         $this->namespace = $namespace;
     }
 
-    public function get( $key )
+    public function get($key)
     {
-        return parent::get( $this->reviseKey( $key ) );
+        return parent::get($this->reviseKey($key));
     }
 
-    public function put( $key, $value, $ttl = null )
+    public function put($key, $value, $ttl = null)
     {
-        return parent::put( $this->reviseKey( $key ), $value, $ttl );
+        return parent::put($this->reviseKey($key), $value, $ttl);
     }
-    
-    public function delete( $key )
+
+    public function delete($key)
     {
-        return parent::delete( $this->reviseKey( $key ) );
+        return parent::delete($this->reviseKey($key));
     }
 
     public function clear()
@@ -31,7 +31,7 @@ class NamespacedCache extends CacheDecorator
         return parent::clear();
     }
 
-    protected function reviseKey( $key )
+    protected function reviseKey($key)
     {
         return $this->namespace . '_' . $key;
     }

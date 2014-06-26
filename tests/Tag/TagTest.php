@@ -6,37 +6,37 @@ class TagTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->cache = new GeekCache\Cache\ArrayCache;
-        $this->tag = new GeekCache\Cache\Tag( $this->cache, self::KEY );
+        $this->tag = new GeekCache\Cache\Tag($this->cache, self::KEY);
     }
 
     public function testGetVersionReturnsVersion()
     {
         $version = $this->tag->getVersion();
-        $this->assertNotNull( $version );
+        $this->assertNotNull($version);
     }
 
     public function testClearReturnsVersion()
     {
         $version = $this->tag->clear();
-        $this->assertEquals( $version, $this->tag->getVersion() );
+        $this->assertEquals($version, $this->tag->getVersion());
     }
 
     public function testClearClears()
     {
         $version = $this->tag->getVersion();
-        $this->assertNotEquals( $version, $this->tag->clear() );
+        $this->assertNotEquals($version, $this->tag->clear());
     }
 
     public function testTagsConsistent()
     {
-        $tag2 = new GeekCache\Cache\Tag( $this->cache, self::KEY );
+        $tag2 = new GeekCache\Cache\Tag($this->cache, self::KEY);
         $this->tag->clear();
-        $this->assertEquals( $this->tag->getVersion(), $tag2->getVersion() );
+        $this->assertEquals($this->tag->getVersion(), $tag2->getVersion());
     }
-    
+
     public function testKeysTrackedSeparately()
     {
-        $tag2 = new GeekCache\Cache\Tag( $this->cache, 'anotherKey' );
-        $this->assertNotEquals( $this->tag->getVersion(), $tag2->getVersion() );
+        $tag2 = new GeekCache\Cache\Tag($this->cache, 'anotherKey');
+        $this->assertNotEquals($this->tag->getVersion(), $tag2->getVersion());
     }
 }
