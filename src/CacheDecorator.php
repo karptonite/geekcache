@@ -24,4 +24,9 @@ abstract class CacheDecorator implements Cache
     {
         return $this->cache->delete($key);
     }
+
+    public function clear()
+    {
+        return $this->cache->clear();
+    }
 }

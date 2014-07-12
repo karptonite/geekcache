@@ -27,13 +27,12 @@ abstract class BaseCacheTest extends PHPUnit_Framework_TestCase
 
     public function testClear()
     {
-        return null;
-        $cache->put(self::KEY, self::VALUE);
-        $cache->put(self::KEY2, self::VALUE2);
-        $cache->clear();
+        $this->cache->put(self::KEY, self::VALUE);
+        $this->cache->put(self::KEY2, self::VALUE2);
+        $this->cache->clear();
 
-        $this->assertFalse($cache->get(self::KEY));
-        $this->assertFalse($cache->get(self::KEY2));
+        $this->assertFalse($this->cache->get(self::KEY));
+        $this->assertFalse($this->cache->get(self::KEY2));
     }
 
     public function assertCachePutsAndGets($cache)
