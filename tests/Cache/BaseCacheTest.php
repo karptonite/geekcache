@@ -23,7 +23,7 @@ abstract class BaseCacheTest extends PHPUnit_Framework_TestCase
     public function testPutAndGetZero()
     {
         $this->cache->put(self::KEY, 0);
-        $this->assertSame(0, $this->cache->get(self::KEY));
+        $this->assertEquals(0, $this->cache->get(self::KEY));
     }
 
     public function testDelete()
