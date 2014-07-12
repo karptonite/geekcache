@@ -35,6 +35,56 @@ abstract class BaseCacheTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($this->cache->get(self::KEY2));
     }
 
+    public function testGetCacheCallsRegeneratorWhenCacheIsEmpty()
+    {
+        $called = 0;
+        $regenerator = function () use (&$called) {
+            $called += 1;
+            return 'foo';
+        };
+
+        $this->cache->get(self::KEY, $regenerator);
+
+        $this->assertEquals(1, $called);
+    }
+
+    public function testGetDoesNotCallRegeneratorWhenCacheIsFull()
+    {
+        $called = false;
+        $regenerator = function () use (&$called) {
+            $called = true;
+        };
+
+        $this->cache->put(self::KEY, self::VALUE);
+        $this->cache->get(self::KEY, $regenerator);
+
+        $this->assertFalse($called);
+    }
+
+    public function testCacheGetsDataFromRegenertorAndReturnsIt()
+    {
+        $value = self::VALUE;
+        $regenerator = function () use ($value) {
+            return $value;
+        };
+
+        $result = $this->cache->get(self::KEY, $regenerator);
+        $this->assertEquals(self::VALUE, $result);
+    }
+
+    public function testCacheCachesRegeneratedData()
+    {
+        $value = self::VALUE;
+        $regenerator = function () use ($value) {
+            return $value;
+        };
+
+        $regenResult = $this->cache->get(self::KEY, $regenerator);
+        $result = $this->cache->get(self::KEY);
+        $this->assertEquals(self::VALUE, $regenResult);
+        $this->assertEquals(self::VALUE, $result);
+    }
+
     public function assertCachePutsAndGets($cache)
     {
         $cache->put(self::KEY, self::VALUE);

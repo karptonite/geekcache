@@ -3,7 +3,7 @@ namespace GeekCache\Cache;
 
 class NullCache implements Cache, IncrementableCache
 {
-    public function get($key)
+    public function get($key, callable $regenerator = null, $ttl = null)
     {
         return false;
     }

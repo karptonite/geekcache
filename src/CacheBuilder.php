@@ -26,15 +26,10 @@ class CacheBuilder
             $cache = $factory($cache);
         }
 
-        if ($cache instanceof SoftInvalidatable) {
-            return new SoftInvalidatableCacheItem($cache, $key, $ttl);
-        } else {
-            return new NormalCacheItem($cache, $key, $ttl);
-        }
+        return new NormalCacheItem($cache, $key, $ttl);
     }
 
-    //NOTE if we move to php 5.4, we can hint on callable
-    private function addToStack($factory)
+    private function addToStack(callable $factory)
     {
         $stack = $this->stack;
         $stack[] = $factory;
@@ -55,11 +50,7 @@ class CacheBuilder
     private function getSoftInvalidatableFactory($policy)
     {
         return function ($cache) use ($policy) {
-            if ($cache instanceof SoftInvalidatable) {
-                return new SoftInvalidatableCache($cache, $policy, $cache);
-            } else {
-                return new SoftInvalidatableCache($cache, $policy);
-            }
+            return new SoftInvalidatableCache($cache, $policy);
         };
     }
 

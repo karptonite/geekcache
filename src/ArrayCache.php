@@ -1,7 +1,7 @@
 <?php
 namespace GeekCache\Cache;
 
-class ArrayCache implements Cache
+class ArrayCache extends AbstractBaseCache implements Cache
 {
     private $cache = array();
     private $maxputs;
@@ -12,9 +12,9 @@ class ArrayCache implements Cache
         $this->maxputs = (int)$maxputs;
     }
 
-    public function get($key)
+    public function get($key, callable $regenerator = null, $ttl = null)
     {
-        return $this->cacheExists($key) ? $this->cache[$key] : false;
+        return $this->cacheExists($key) ? $this->cache[$key] : $this->regenerate($key, $regenerator, $ttl);
     }
 
     protected function cacheExists($key)

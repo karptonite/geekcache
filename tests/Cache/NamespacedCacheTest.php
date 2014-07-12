@@ -6,6 +6,7 @@ class NamespacedCacheTest extends BaseCacheTest
     private $arraycache;
 
     const CACHE_NAMESPACE = "ns";
+    const TTL = 5;
 
     public function setUp()
     {
@@ -18,5 +19,23 @@ class NamespacedCacheTest extends BaseCacheTest
     {
         $this->cache->put('foo', 'bar');
         $this->assertEquals('bar', $this->parentcache->get(self::CACHE_NAMESPACE . '_foo'));
+    }
+
+    public function testPassesTTLWithRegenerator()
+    {
+        $parentCache = m::mock('GeekCache\Cache\Cache');
+
+        $regenerator = function () {
+            return false;
+        };
+
+        $nskey = self::CACHE_NAMESPACE . '_' . self::KEY;
+        $parentCache->shouldReceive('get')
+            ->with($nskey, $regenerator, self::TTL)
+            ->once();
+
+        $cache = new GeekCache\Cache\NamespacedCache($parentCache, self::CACHE_NAMESPACE);
+
+        $cache->get(self::KEY, $regenerator, self::TTL);
     }
 }

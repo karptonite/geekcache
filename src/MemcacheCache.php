@@ -1,7 +1,7 @@
 <?php
 namespace GeekCache\Cache;
 
-class MemcacheCache implements Cache
+class MemcacheCache extends AbstractBaseCache implements Cache
 {
     private $cache;
 
@@ -10,9 +10,9 @@ class MemcacheCache implements Cache
         $this->cache = $cache;
     }
 
-    public function get($key)
+    public function get($key, callable $regenerator = null, $ttl = null)
     {
-        return $this->cache->get($key);
+        return $this->cache->get($key) ?: $this->regenerate($key, $regenerator, $ttl);
     }
 
     public function put($key, $value, $ttl = null)

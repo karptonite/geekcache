@@ -27,7 +27,7 @@ class CounterBuilder
         return new NormalCounter($cache, $key, $ttl);
     }
 
-    private function addToStack($factory)
+    private function addToStack(callable $factory)
     {
         $stack = $this->stack;
         $stack[] = $factory;

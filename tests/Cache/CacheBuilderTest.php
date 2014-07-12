@@ -27,7 +27,7 @@ class CacheBuilderTest extends PHPUnit_Framework_TestCase
     public function testBuildBasic()
     {
         $this->prepareFullMockBuilder();
-        $this->cache->shouldReceive('get')->with('foo')->once();
+        $this->cache->shouldReceive('get')->with('foo', null, null)->once();
         $cacheitem = $this->builder->make('foo');
         $cacheitem->get();
     }
@@ -37,7 +37,7 @@ class CacheBuilderTest extends PHPUnit_Framework_TestCase
         $this->prepareFullMockBuilder();
         $this->memocache->shouldReceive('get')->with('foo')->once()->andReturn(false);
         $this->memocache->shouldReceive('put')->with('foo', 'bar')->once();
-        $this->cache->shouldReceive('get')->with('foo')->once()->andReturn('bar');
+        $this->cache->shouldReceive('get')->with('foo', null, null)->once()->andReturn('bar');
         $cacheitem = $this->builder->memoize()->make('foo');
         $this->assertItemCacheInstanceOf('GeekCache\Cache\MemoizedCache', $cacheitem);
         $cacheitem->get();
@@ -56,7 +56,7 @@ class CacheBuilderTest extends PHPUnit_Framework_TestCase
         $this->prepareFullMockBuilder();
         $this->memocache->shouldReceive('get')->with('foo')->twice()->andReturn(false);
         $this->memocache->shouldReceive('put')->with('foo', 'bar')->twice();
-        $this->cache->shouldReceive('get')->with('foo')->once()->andReturn('bar');
+        $this->cache->shouldReceive('get')->with('foo', null, null)->once()->andReturn('bar');
         $itemcache = $this->builder->memoize()->memoize()->make('foo');
         $this->assertItemCacheInstanceOf('GeekCache\Cache\MemoizedCache', $itemcache);
         $itemcache->get();
@@ -67,7 +67,7 @@ class CacheBuilderTest extends PHPUnit_Framework_TestCase
         $this->prepareFullMockBuilder();
         $this->memocache->shouldReceive('get')->with('foo')->times(3)->andReturn(false);
         $this->memocache->shouldReceive('put')->with('foo', 'bar')->times(3);
-        $this->cache->shouldReceive('get')->with('foo')->once()->andReturn('bar');
+        $this->cache->shouldReceive('get')->with('foo', null, null)->once()->andReturn('bar');
         $itemcache = $this->builder->memoize()->memoize()->memoize()->make('foo');
         $this->assertItemCacheInstanceOf('GeekCache\Cache\MemoizedCache', $itemcache);
         $itemcache->get();
@@ -76,7 +76,7 @@ class CacheBuilderTest extends PHPUnit_Framework_TestCase
     public function testTaggedBuild()
     {
         $this->prepareFullMockBuilder();
-        $this->cache->shouldReceive('get')->with('foo')->andReturnNull();
+        $this->cache->shouldReceive('get')->with('foo', null, 5)->andReturnNull();
         $tagset = m::mock('GeekCache\Cache\TagSet');
         $this->tagsetfactory->shouldReceive('makeTagSet')
             ->once()
@@ -121,10 +121,23 @@ class CacheBuilderTest extends PHPUnit_Framework_TestCase
         $this->prepareArrayBuilder();
         $itemcache = $this->builder->addGracePeriod(0)->make('foo', 1);
         $itemcache->put('bar');
-        $this->assertEquals('bar', $itemcache->get('foo'));
+        $this->assertEquals('bar', $itemcache->get());
         usleep(2100000);
-        $this->assertFalse($itemcache->get('foo'));
-        $this->assertEquals('bar', $itemcache->getStale('foo'));
+        $this->assertFalse($itemcache->get());
+        $regenerator = function () {
+            return false;
+        };
+        $this->assertEquals('bar', $itemcache->get($regenerator));
+    }
+
+    public function testCombinedCacheCallsRegeneratorOnce()
+    {
+        $this->prepareArrayBuilder();
+        $cache = $this->builder->addTags(array('footag', 'bartag'))->addGracePeriod(0)->make('foo', 1);
+
+        $regenMock = m::mock('stdClass');
+        $regenMock->shouldReceive('regenerate')->once()->andReturn(false);
+        $cache->get([$regenMock, 'regenerate']);
     }
 
     public function testCombinedCache()
@@ -134,6 +147,10 @@ class CacheBuilderTest extends PHPUnit_Framework_TestCase
         $cache->put('bar');
         $this->tagfactory->makeTag('bartag')->clear();
         $this->assertFalse($cache->get());
-        $this->assertEquals('bar', $cache->getStale());
+        $regenerator = function () {
+            return false;
+        };
+
+        $this->assertEquals('bar', $cache->get($regenerator));
     }
 }

@@ -24,6 +24,26 @@ class MemcacheCacheTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(self::VALUE, $this->cache->get(self::KEY));
     }
 
+    public function testGetRegenerates()
+    {
+        $this->mock->shouldReceive('get')
+            ->with(self::KEY)
+            ->once()
+            ->andReturn(false);
+
+        $this->mock->shouldReceive('set')
+            ->with(self::KEY, self::VALUE, MEMCACHE_COMPRESSED, self::TTL)
+            ->once()
+            ->andReturn(true);
+
+        $value = self::VALUE;
+        $regenerator = function () use ($value) {
+            return $value;
+        };
+
+        $this->assertEquals(self::VALUE, $this->cache->get(self::KEY, $regenerator, self::TTL));
+    }
+
     public function testDelete()
     {
         $this->mock->shouldReceive('delete')

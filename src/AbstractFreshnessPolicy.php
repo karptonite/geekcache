@@ -3,7 +3,6 @@ namespace GeekCache\Cache;
 
 abstract class AbstractFreshnessPolicy implements FreshnessPolicy
 {
-
     public function packValueWithPolicy($value, $ttl = null)
     {
         return new CacheData($value, $this->createFreshnessData($ttl));

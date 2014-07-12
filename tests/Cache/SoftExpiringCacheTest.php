@@ -40,7 +40,12 @@ class SoftExpiringTest extends BaseCacheTest
     public function testSoftExpriration()
     {
         $this->cache->put(self::KEY, self::VALUE, -1);
-        $this->assertEquals(self::VALUE, $this->cache->getStale(self::KEY));
+
+        $regenerator = function () {
+            return false;
+        };
+
+        $this->assertEquals(self::VALUE, $this->cache->get(self::KEY, $regenerator));
     }
 
     public function testPassesHardTtlToParent()

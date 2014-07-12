@@ -58,4 +58,20 @@ class CacheItemTest extends PHPUnit_Framework_TestCase
         $cacheitem = new GeekCache\Cache\NormalCacheItem($cache, self::KEY, self::TTL);
         $cacheitem->put(self::VALUE);
     }
+
+    public function testCacheItemPassesRegenerator()
+    {
+        $regenerator = function() {
+            return false;
+        };
+
+        $cache = m::mock('GeekCache\Cache\Cache');
+
+        $cache->shouldReceive('get')
+            ->with(self::KEY, $regenerator, self::TTL)
+            ->once();
+
+        $cacheitem = new GeekCache\Cache\NormalCacheItem($cache, self::KEY, self::TTL);
+        $cacheitem->get($regenerator);
+    }
 }

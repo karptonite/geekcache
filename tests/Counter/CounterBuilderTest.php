@@ -21,7 +21,7 @@ class CounterBuilderTest extends PHPUnit_Framework_TestCase
     public function testBuildBasic()
     {
         $this->prepareFullMockBuilder();
-        $this->cache->shouldReceive('get')->with('foo')->once();
+        $this->cache->shouldReceive('get')->with('foo', null, null)->once();
         $cache = $this->builder->make('foo');
         $cache->get();
     }
@@ -31,7 +31,7 @@ class CounterBuilderTest extends PHPUnit_Framework_TestCase
         $this->prepareFullMockBuilder();
         $this->memocache->shouldReceive('get')->with('foo')->once()->andReturn(false);
         $this->memocache->shouldReceive('put')->with('foo', 2)->once();
-        $this->cache->shouldReceive('get')->with('foo')->once()->andReturn(2);
+        $this->cache->shouldReceive('get')->with('foo', null, null)->once()->andReturn(2);
         $counter = $this->builder->memoize()->make('foo');
         $this->assertItemCacheInstanceOf('GeekCache\Cache\MemoizedIncrementableCache', $counter);
         $counter->get();

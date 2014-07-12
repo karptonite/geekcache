@@ -14,9 +14,9 @@ class NormalCacheItem implements CacheItem
         $this->ttl = $ttl;
     }
 
-    public function get()
+    public function get($regenerator = null)
     {
-        return $this->cache->get($this->key);
+        return $this->cache->get($this->key, $regenerator, $this->ttl);
     }
 
     public function put($value)
