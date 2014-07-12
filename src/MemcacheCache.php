@@ -12,12 +12,14 @@ class MemcacheCache extends AbstractBaseCache implements Cache
 
     public function get($key, callable $regenerator = null, $ttl = null)
     {
-        return $this->cache->get($key) ?: $this->regenerate($key, $regenerator, $ttl);
+        $result = $this->cache->get($key);
+        return $result !== false ? $result : $this->regenerate($key, $regenerator, $ttl);
     }
 
     public function put($key, $value, $ttl = null)
     {
-        return $this->cache->set($key, $value, MEMCACHE_COMPRESSED, (int)$ttl);
+        $compressed = is_int($value) ? null : MEMCACHE_COMPRESSED;
+        return $this->cache->set($key, $value, $compressed, (int)$ttl);
     }
 
     public function delete($key)

@@ -17,6 +17,12 @@ abstract class BaseIncrementableCacheTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(2, $this->cache->get(static::KEY));
     }
 
+    public function testPutAndGetZero()
+    {
+        $this->cache->put(static::KEY, 0);
+        $this->assertEquals(0, $this->cache->get(static::KEY));
+    }
+
     public function testIncrementIncrementsIntegerCache()
     {
         $this->cache->put(static::KEY, 4);

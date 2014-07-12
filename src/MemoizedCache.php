@@ -20,7 +20,8 @@ class MemoizedCache extends CacheDecorator
 
     public function get($key, callable $regenerator = null, $ttl = null)
     {
-        return $this->memocache->get($key) ?: $this->getAndMemoize($key, $regenerator, $ttl);
+        $result = $this->memocache->get($key);
+        return $result !== false ? $result : $this->getAndMemoize($key, $regenerator, $ttl);
     }
 
     public function put($key, $value, $ttl = null)
