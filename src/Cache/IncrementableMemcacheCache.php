@@ -11,11 +11,6 @@ class IncrementableMemcacheCache extends MemcacheCache implements IncrementableC
         $this->cache = $cache;
     }
 
-    public function put($key, $value, $ttl = null)
-    {
-        return $this->cache->set($key, $value, null, (int)$ttl);
-    }
-
     public function increment($key, $value = 1)
     {
         if ($value < 0) {
