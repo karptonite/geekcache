@@ -1,12 +1,14 @@
 <?php
-namespace GeekCache\Cache;
+namespace GeekCache\Counter;
+
+use GeekCache\Cache;
 
 class CounterBuilder
 {
     private $cache;
     private $memocache;
 
-    public function __construct(IncrementableCache $cache, IncrementableCache $memocache, array $stack = null)
+    public function __construct(Cache\IncrementableCache $cache, Cache\IncrementableCache $memocache, array $stack = null)
     {
         $this->cache = $cache;
         $this->memocache = $memocache;
@@ -39,7 +41,7 @@ class CounterBuilder
         $memocache = $this->memocache;
 
         $factory = function ($cache) use ($memocache) {
-            return new MemoizedIncrementableCache($cache, $memocache);
+            return new Cache\MemoizedIncrementableCache($cache, $memocache);
         };
 
         return $this->addToStack($factory);

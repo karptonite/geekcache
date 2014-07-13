@@ -1,5 +1,5 @@
 <?php
-namespace GeekCache\Cache;
+namespace GeekCache\Tag;
 
 class TagSet
 {

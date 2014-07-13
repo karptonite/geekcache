@@ -1,5 +1,7 @@
 <?php
-namespace GeekCache\Cache;
+namespace GeekCache\Tag;
+
+use GeekCache\Cache\Cache;
 
 class TagFactory
 {

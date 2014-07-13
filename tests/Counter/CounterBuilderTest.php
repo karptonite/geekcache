@@ -8,14 +8,14 @@ class CounterBuilderTest extends PHPUnit_Framework_TestCase
         $this->cache         = m::mock('GeekCache\Cache\IncrementableCache');
         $this->memocache     = m::mock('GeekCache\Cache\IncrementableCache');
 
-        $this->builder = new GeekCache\Cache\CounterBuilder($this->cache, $this->memocache);
+        $this->builder = new GeekCache\Counter\CounterBuilder($this->cache, $this->memocache);
     }
 
     public function prepareArrayBuilder()
     {
         $this->cache = new GeekCache\Cache\ArrayIncrementableCache();
         $this->memocache = new GeekCache\Cache\ArrayIncrementableCache();
-        $this->builder = new GeekCache\Cache\CounterBuilder($this->cache, $this->memocache);
+        $this->builder = new GeekCache\Counter\CounterBuilder($this->cache, $this->memocache);
     }
 
     public function testBuildBasic()
@@ -37,9 +37,9 @@ class CounterBuilderTest extends PHPUnit_Framework_TestCase
         $counter->get();
     }
 
-    private function assertItemCacheInstanceOf($type, GeekCache\Cache\Counter $counter)
+    private function assertItemCacheInstanceOf($type, GeekCache\Counter\Counter $counter)
     {
-        $class = new ReflectionClass('GeekCache\Cache\NormalCounter');
+        $class = new ReflectionClass('GeekCache\Counter\NormalCounter');
         $property = $class->getProperty('incrementablecache');
         $property->setAccessible(true);
         $this->assertInstanceOf($type, $property->getValue($counter));

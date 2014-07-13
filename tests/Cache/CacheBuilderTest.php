@@ -9,7 +9,7 @@ class CacheBuilderTest extends PHPUnit_Framework_TestCase
     {
         $this->cache         = m::mock('GeekCache\Cache\Cache');
         $this->memocache     = m::mock('GeekCache\Cache\Cache');
-        $this->tagsetfactory = m::mock('GeekCache\Cache\TagSetFactory');
+        $this->tagsetfactory = m::mock('GeekCache\Tag\TagSetFactory');
 
         $this->builder = new GeekCache\Cache\CacheBuilder($this->cache, $this->memocache, $this->tagsetfactory);
     }
@@ -19,8 +19,8 @@ class CacheBuilderTest extends PHPUnit_Framework_TestCase
         $this->cache = new GeekCache\Cache\ArrayCache();
         $this->memocache = new GeekCache\Cache\ArrayCache();
         $this->tagcache = new GeekCache\Cache\Arraycache();
-        $this->tagfactory = new GeekCache\Cache\TagFactory($this->tagcache);
-        $this->tagsetfactory = new GeekCache\Cache\TagSetFactory($this->tagfactory);
+        $this->tagfactory = new GeekCache\Tag\TagFactory($this->tagcache);
+        $this->tagsetfactory = new GeekCache\Tag\TagSetFactory($this->tagfactory);
         $this->builder = new GeekCache\Cache\CacheBuilder($this->cache, $this->memocache, $this->tagsetfactory);
     }
 
@@ -77,7 +77,7 @@ class CacheBuilderTest extends PHPUnit_Framework_TestCase
     {
         $this->prepareFullMockBuilder();
         $this->cache->shouldReceive('get')->with('foo', null, 5)->andReturnNull();
-        $tagset = m::mock('GeekCache\Cache\TagSet');
+        $tagset = m::mock('GeekCache\Tag\TagSet');
         $this->tagsetfactory->shouldReceive('makeTagSet')
             ->once()
             ->with(array('footag', 'bartag'))
@@ -104,7 +104,7 @@ class CacheBuilderTest extends PHPUnit_Framework_TestCase
     public function testAlternateAddTagsInterface()
     {
         $this->prepareFullMockBuilder();
-        $tagset = m::mock('GeekCache\Cache\TagSet');
+        $tagset = m::mock('GeekCache\Tag\TagSet');
         $this->tagsetfactory->shouldReceive('makeTagSet')
             ->once()
             ->with(array('footag', 'bartag'))

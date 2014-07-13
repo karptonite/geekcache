@@ -9,7 +9,7 @@ class TagFactoryTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->cache = new GeekCache\Cache\ArrayCache();
-        $this->factory = new GeekCache\Cache\TagFactory($this->cache);
+        $this->factory = new GeekCache\Tag\TagFactory($this->cache);
     }
 
     public function testTagFactoryReturnsTag()
@@ -29,7 +29,7 @@ class TagFactoryTest extends PHPUnit_Framework_TestCase
             ->with(static::TAGKEY, m::any())
             ->once();
 
-        $factory = new GeekCache\Cache\TagFactory($cache);
+        $factory = new GeekCache\Tag\TagFactory($cache);
 
         $tag = $factory->makeTag(static::TAGNAME);
         $tag->getVersion();

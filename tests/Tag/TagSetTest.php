@@ -16,7 +16,7 @@ class TagSetTest extends PHPUnit_Framework_TestCase
     {
         $tags = array();
         for ($i = 0; $i < $quantity; $i++) {
-            $tags[] = new GeekCache\Cache\Tag($this->cache, 'key' . $i);
+            $tags[] = new GeekCache\Tag\Tag($this->cache, 'key' . $i);
         }
         return $tags;
     }
@@ -24,7 +24,7 @@ class TagSetTest extends PHPUnit_Framework_TestCase
     private function getNewTagSet()
     {
         $tags = $this->getArrayOfTags(2);
-        return new GeekCache\Cache\TagSet($tags);
+        return new GeekCache\Tag\TagSet($tags);
     }
 
     public function testTagSetReturnsConsistentHash()
@@ -42,7 +42,7 @@ class TagSetTest extends PHPUnit_Framework_TestCase
     {
         $tags = $this->getArrayOfTags(2);
         $tags[] = new GeekCache\Cache\ArrayCache();
-        $tagset = new GeekCache\Cache\TagSet($tags);
+        $tagset = new GeekCache\Tag\TagSet($tags);
     }
 
     public function testTagSetHashChangesWhenTagIsCleared()
@@ -63,7 +63,7 @@ class TagSetTest extends PHPUnit_Framework_TestCase
     {
         $hash = $this->tagset->getSignature();
         $tags2 = $this->getArrayOfTags(3);
-        $tagset = new GeekCache\Cache\TagSet($tags2);
+        $tagset = new GeekCache\Tag\TagSet($tags2);
         $hash2 = $tagset->getSignature();
         $this->assertNotEquals($hash, $hash2);
         $this->assertEquals(strlen($hash), strlen($hash2));
@@ -73,12 +73,12 @@ class TagSetTest extends PHPUnit_Framework_TestCase
     {
         $tags = array();
         for ($i = 0; $i < 2; $i++) {
-            $tag = m::mock('GeekCache\Cache\Tag');
+            $tag = m::mock('GeekCache\Tag\Tag');
             $tag->shouldReceive('clear')->once();
             $tags[] = $tag;
         }
 
-        $tagset = new GeekCache\Cache\TagSet($tags);
+        $tagset = new GeekCache\Tag\TagSet($tags);
         $tagset->clearAll();
 
     }

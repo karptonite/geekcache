@@ -1,6 +1,8 @@
 <?php
 namespace GeekCache\Cache;
 
+use GeekCache\Tag\TagSet;
+
 class TaggedFreshnessPolicy extends AbstractFreshnessPolicy
 {
     private $tagset;

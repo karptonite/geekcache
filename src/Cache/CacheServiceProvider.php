@@ -1,6 +1,8 @@
 <?php
 namespace GeekCache\Cache;
 
+use \GeekCache\Tag;
+
 class CacheServiceProvider
 {
     private static $default_maxlocal = array(
@@ -38,11 +40,11 @@ class CacheServiceProvider
 
         $this->container['geekcache.tagfactory'] = $this->container->share(function ($c) {
             $cache = new MemoizedCache($c['geekcache.persistentcache'], $c['geekcache.local.tags']);
-            return new TagFactory($cache);
+            return new Tag\TagFactory($cache);
         });
 
         $this->container['geekcache.tagsetfactory'] = $this->container->share(function ($c) {
-            return new TagSetFactory($c['geekcache.tagfactory']);
+            return new Tag\TagSetFactory($c['geekcache.tagfactory']);
         });
 
         $this->container['geekcache.cachebuilder'] = $this->container->share(function ($c) {
@@ -54,7 +56,7 @@ class CacheServiceProvider
         });
 
         $this->container['geekcache.counterbuilder'] = $this->container->share(function ($c) {
-            return new CounterBuilder(
+            return new \GeekCache\Counter\CounterBuilder(
                 $c['geekcache.persistentincrementablecache'],
                 $c['geekcache.local.incrementablecache']
             );

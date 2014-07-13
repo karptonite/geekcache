@@ -9,7 +9,7 @@ class TaggedCacheTest extends BaseCacheTest
     {
         parent::setUp();
         $this->parentcache = new GeekCache\Cache\ArrayCache;
-        $this->tagset = m::mock('GeekCache\\Cache\\TagSet');
+        $this->tagset = m::mock('GeekCache\\Tag\\TagSet');
         $this->tagset->shouldReceive('getSignature')
             ->andReturn('foo')
             ->byDefault();

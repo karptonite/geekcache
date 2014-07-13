@@ -14,13 +14,13 @@ class CounterTest extends PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $this->cache = new GeekCache\Cache\ArrayIncrementableCache;
-        $this->counter = new GeekCache\Cache\NormalCounter($this->cache, self::KEY, self::TTL);
-        $this->counter2 = new GeekCache\Cache\NormalCounter($this->cache, self::KEY2, self::TTL);
+        $this->counter = new GeekCache\Counter\NormalCounter($this->cache, self::KEY, self::TTL);
+        $this->counter2 = new GeekCache\Counter\NormalCounter($this->cache, self::KEY2, self::TTL);
     }
 
     public function assertImplementsInterface()
     {
-        $this->assertInstanceOf('Geek\Cache\Counter', $this->counter);
+        $this->assertInstanceOf('Geek\Counter\Counter', $this->counter);
     }
 
 

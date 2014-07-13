@@ -69,7 +69,7 @@ abstract class CacheServiceProviderTest extends PHPUnit_Framework_TestCase
         $tagfactory1 = $this->container['geekcache.tagfactory'];
         $tagfactory2 = $this->container['geekcache.tagfactory'];
         $this->assertSame($tagfactory1, $tagfactory2);
-        $this->assertInstanceOf('GeekCache\Cache\TagFactory', $tagfactory1);
+        $this->assertInstanceOf('GeekCache\Tag\TagFactory', $tagfactory1);
     }
 
     public function testTagSetFactoryRegistered()
@@ -77,7 +77,7 @@ abstract class CacheServiceProviderTest extends PHPUnit_Framework_TestCase
         $tagsetfactory1 = $this->container['geekcache.tagsetfactory'];
         $tagsetfactory2 = $this->container['geekcache.tagsetfactory'];
         $this->assertSame($tagsetfactory1, $tagsetfactory2);
-        $this->assertInstanceOf('GeekCache\Cache\TagSetfactory', $tagsetfactory1);
+        $this->assertInstanceOf('GeekCache\Tag\TagSetfactory', $tagsetfactory1);
     }
 
     public function testCacheBuilderRegistered()
@@ -110,8 +110,8 @@ abstract class CacheServiceProviderTest extends PHPUnit_Framework_TestCase
         $builder1 = $this->container['geekcache.counterbuilder'];
         $builder2 = $this->container['geekcache.counterbuilder'];
         $this->assertSame($builder1, $builder2);
-        $this->assertInstanceOf('GeekCache\Cache\CounterBuilder', $builder1);
-        $this->assertInstanceOf('GeekCache\Cache\CounterBuilder', $builder2);
+        $this->assertInstanceOf('GeekCache\Counter\CounterBuilder', $builder1);
+        $this->assertInstanceOf('GeekCache\Counter\CounterBuilder', $builder2);
     }
 
     public function testNamespaceAddedToCacheIfSet()
