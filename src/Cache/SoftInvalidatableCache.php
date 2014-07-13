@@ -47,9 +47,14 @@ class SoftInvalidatableCache extends CacheDecorator
     {
         $policy = $this->policy;
 
-        return is_null($regenerator) ? null : function () use ($policy, $regenerator, $ttl) {
-            $value = $regenerator();
+        return is_null($regenerator) ? null : function ($dataAvailable = null) use ($policy, $regenerator, $ttl) {
+            $value = $dataAvailable ? $regenerator($dataAvailable) : $regenerator();
             return $value === false ? false : $policy->packValueWithPolicy($value, $ttl);
         };
+    }
+
+    protected function callRegenerator(callable $regenerator)
+    {
+        return $regenerator(true);
     }
 }

@@ -17,6 +17,21 @@ class TaggedCacheTest extends BaseCacheTest
         $this->cache = new GeekCache\Cache\SoftInvalidatableCache($this->parentcache, $policy);
     }
 
+    public function testCachePassesTrueIntoRegenerator()
+    {
+        $this->cache->put(static::KEY, static::VALUE);
+        $this->tagset->shouldReceive('getSignature')
+            ->andReturn('bar');
+
+        $regenerator = m::mock('stdClass');
+        $regenerator->shouldReceive('regenerate')
+            ->with(true)
+            ->once()
+            ->andReturn(static::VALUE2);
+
+        $this->cache->get(static::KEY, [$regenerator, 'regenerate']);
+    }
+
     public function testCacheInvalidatesWhenHashChanges()
     {
         $this->cache->put(static::KEY, static::VALUE);

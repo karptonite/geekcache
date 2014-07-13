@@ -8,12 +8,17 @@ abstract class AbstractBaseCache
         $value = false;
 
         if (is_callable($regenerator)) {
-            $value = $regenerator();
+            $value = $this->callRegenerator($regenerator);
             if ($value !== false) {
                 $this->put($key, $value, $ttl);
             }
         }
 
         return $value;
+    }
+
+    protected function callRegenerator(callable $regenerator)
+    {
+        return $regenerator();
     }
 }
