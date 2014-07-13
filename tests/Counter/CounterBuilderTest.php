@@ -13,8 +13,8 @@ class CounterBuilderTest extends PHPUnit_Framework_TestCase
 
     public function prepareArrayBuilder()
     {
-        $this->cache = new GeekCache\Cache\ArrayIncrementableCache();
-        $this->memocache = new GeekCache\Cache\ArrayIncrementableCache();
+        $this->cache = new GeekCache\Cache\IncrementableArrayCache();
+        $this->memocache = new GeekCache\Cache\IncrementableArrayCache();
         $this->builder = new GeekCache\Counter\CounterBuilder($this->cache, $this->memocache);
     }
 
@@ -33,7 +33,7 @@ class CounterBuilderTest extends PHPUnit_Framework_TestCase
         $this->memocache->shouldReceive('put')->with('foo', 2)->once();
         $this->cache->shouldReceive('get')->with('foo', null, null)->once()->andReturn(2);
         $counter = $this->builder->memoize()->make('foo');
-        $this->assertItemCacheInstanceOf('GeekCache\Cache\MemoizedIncrementableCache', $counter);
+        $this->assertItemCacheInstanceOf('GeekCache\Cache\IncrementableMemoizedCache', $counter);
         $counter->get();
     }
 

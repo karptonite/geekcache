@@ -28,14 +28,14 @@ class CacheServiceProvider
 
         $this->container['geekcache.persistentincrementablecache'] = $this->container->share(function ($c) {
             return !empty($c['geekcache.namespace'])
-                ? new NamespacedIncrementableCache(
+                ? new IncrementableNamespacedCache(
                     $c['geekcache.persistentincrementablecache.unnamespaced'],
                     $c['geekcache.namespace']
                 ) : $c['geekcache.persistentincrementablecache.unnamespaced'];
         });
 
         $this->container['geekcache.local.incrementablecache'] = $this->container->share(function ($c) {
-            return !empty($c['geekcache.nolocalcache']) ? new NullCache : new ArrayIncrementableCache();
+            return !empty($c['geekcache.nolocalcache']) ? new NullCache : new IncrementableArrayCache();
         });
 
         $this->container['geekcache.tagfactory'] = $this->container->share(function ($c) {

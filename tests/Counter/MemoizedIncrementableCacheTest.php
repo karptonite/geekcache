@@ -6,9 +6,9 @@ class MemoizedIncrementableCacheTest extends BaseIncrementableCacheTest
     public function setUp()
     {
         parent::setUp();
-        $this->primarycache = new GeekCache\Cache\ArrayIncrementableCache;
+        $this->primarycache = new GeekCache\Cache\IncrementableArrayCache;
         $this->memoizedcache = new GeekCache\Cache\ArrayCache;
-        $this->cache = new GeekCache\Cache\MemoizedIncrementableCache($this->primarycache, $this->memoizedcache);
+        $this->cache = new GeekCache\Cache\IncrementableMemoizedCache($this->primarycache, $this->memoizedcache);
     }
 
     public function testMemoizedIncrementableCacheIncrementsThePrimary()

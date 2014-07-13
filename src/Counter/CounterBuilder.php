@@ -41,7 +41,7 @@ class CounterBuilder
         $memocache = $this->memocache;
 
         $factory = function ($cache) use ($memocache) {
-            return new Cache\MemoizedIncrementableCache($cache, $memocache);
+            return new Cache\IncrementableMemoizedCache($cache, $memocache);
         };
 
         return $this->addToStack($factory);

@@ -4,6 +4,6 @@ class ArrayIncrementableCacheTest extends BaseIncrementableCacheTest
     public function setUp()
     {
         parent::setUp();
-        $this->cache = new GeekCache\Cache\ArrayIncrementableCache;
+        $this->cache = new GeekCache\Cache\IncrementableArrayCache;
     }
 }

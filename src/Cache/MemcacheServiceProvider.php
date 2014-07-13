@@ -31,7 +31,7 @@ class MemcacheServiceProvider
         });
 
         $this->container['geekcache.persistentincrementablecache.unnamespaced'] = $this->container->share(function ($c) {
-            return new MemcacheIncrementableCache($c['geekcache.memcache']);
+            return new IncrementableMemcacheCache($c['geekcache.memcache']);
         });
 
         $this->container['geekcache.persistentcache.unnamespaced'] = $this->container->share(function ($c) {

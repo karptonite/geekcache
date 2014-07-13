@@ -1,7 +1,7 @@
 <?php
 namespace GeekCache\Cache;
 
-class MemcacheIncrementableCache extends MemcacheCache implements IncrementableCache
+class IncrementableMemcacheCache extends MemcacheCache implements IncrementableCache
 {
     private $cache;
 

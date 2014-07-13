@@ -13,7 +13,7 @@ class CounterTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->cache = new GeekCache\Cache\ArrayIncrementableCache;
+        $this->cache = new GeekCache\Cache\IncrementableArrayCache;
         $this->counter = new GeekCache\Counter\NormalCounter($this->cache, self::KEY, self::TTL);
         $this->counter2 = new GeekCache\Counter\NormalCounter($this->cache, self::KEY2, self::TTL);
     }

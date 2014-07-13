@@ -7,6 +7,6 @@ class MemcacheIncrementableCacheTest extends BaseIncrementableCacheTest
         $memcache = new Memcache();
         $memcache->connect('localhost', 11211);
         $memcache->flush();
-        $this->cache = new GeekCache\Cache\MemcacheIncrementableCache($memcache);
+        $this->cache = new GeekCache\Cache\IncrementableMemcacheCache($memcache);
     }
 }

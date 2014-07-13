@@ -61,7 +61,7 @@ abstract class CacheServiceProviderTest extends PHPUnit_Framework_TestCase
         $memcacheincrementablecache1 = $this->container['geekcache.persistentincrementablecache'];
         $memcacheincrementablecache2 = $this->container['geekcache.persistentincrementablecache'];
         $this->assertSame($memcacheincrementablecache1, $memcacheincrementablecache2);
-        $this->assertInstanceOf('GeekCache\Cache\MemcacheIncrementableCache', $memcacheincrementablecache1);
+        $this->assertInstanceOf('GeekCache\Cache\IncrementableMemcacheCache', $memcacheincrementablecache1);
     }
 
     public function testTagFactoryRegistered()
@@ -93,7 +93,7 @@ abstract class CacheServiceProviderTest extends PHPUnit_Framework_TestCase
         $incrementablecache1 = $this->container['geekcache.local.incrementablecache'];
         $incrementablecache2 = $this->container['geekcache.local.incrementablecache'];
         $this->assertSame($incrementablecache1, $incrementablecache2);
-        $this->assertInstanceOf('GeekCache\Cache\ArrayIncrementableCache', $incrementablecache1);
+        $this->assertInstanceOf('GeekCache\Cache\IncrementableArrayCache', $incrementablecache1);
     }
 
     public function testLocalIncrementableCacheNullWhenNoLocalcacheIsSet()
@@ -123,6 +123,6 @@ abstract class CacheServiceProviderTest extends PHPUnit_Framework_TestCase
     public function testNamespaceAddedToCounterIfSet()
     {
         $this->container['geekcache.namespace'] = 'foo';
-        $this->assertInstanceOf('GeekCache\Cache\NamespacedIncrementableCache', $this->container['geekcache.persistentincrementablecache']);
+        $this->assertInstanceOf('GeekCache\Cache\IncrementableNamespacedCache', $this->container['geekcache.persistentincrementablecache']);
     }
 }

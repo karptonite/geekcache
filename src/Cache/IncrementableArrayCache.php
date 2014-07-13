@@ -1,7 +1,7 @@
 <?php
 namespace GeekCache\Cache;
 
-class ArrayIncrementableCache extends ArrayCache implements IncrementableCache
+class IncrementableArrayCache extends ArrayCache implements IncrementableCache
 {
     public function increment($key, $value = 1)
     {

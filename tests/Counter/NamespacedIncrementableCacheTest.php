@@ -8,7 +8,7 @@ class NamespacedIncrementableCacheTest extends BaseIncrementableCacheTest
     public function setUp()
     {
         parent::setUp();
-        $this->primarycache  = new GeekCache\Cache\ArrayIncrementableCache;
-        $this->cache = new GeekCache\Cache\NamespacedIncrementableCache($this->primarycache, self::CACHE_NAMESPACE);
+        $this->primarycache  = new GeekCache\Cache\IncrementableArrayCache;
+        $this->cache = new GeekCache\Cache\IncrementableNamespacedCache($this->primarycache, self::CACHE_NAMESPACE);
     }
 }
