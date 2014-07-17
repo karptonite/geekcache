@@ -19,7 +19,7 @@ class SoftInvalidatableCache extends CacheDecorator
     public function get($key, callable $regenerator = null, $ttl = null)
     {
         $result             = null;
-        $regenerated       = false;
+        $regenerated        = false;
         $wrappedRegenerator = $this->wrapRegenerator($regenerated, $regenerator, $ttl);
         $packedResult       = parent::get($key, $wrappedRegenerator, $this->policy->computeTtl($ttl));
 
@@ -53,8 +53,9 @@ class SoftInvalidatableCache extends CacheDecorator
         $policy = $this->policy;
 
         return function ($dataAvailable = null) use ($policy, $regenerator, $ttl, &$regenerated) {
-            $value = $dataAvailable ? $regenerator($dataAvailable) : $regenerator();
+            $value       = $dataAvailable ? $regenerator($dataAvailable) : $regenerator();
             $regenerated = true;
+
             if ($value === false) {
                 return false;
             } else {
