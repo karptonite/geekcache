@@ -52,8 +52,8 @@ class SoftInvalidatableCache extends CacheDecorator
         //PHP 5.4 won't allow $this to be passed in use statements in closure
         $policy = $this->policy;
 
-        return function ($dataAvailable = null) use ($policy, $regenerator, $ttl, &$regenerated) {
-            $value       = $dataAvailable ? $regenerator($dataAvailable) : $regenerator();
+        return function ($staleDataAvailable = null) use ($policy, $regenerator, $ttl, &$regenerated) {
+            $value       = $staleDataAvailable ? $regenerator($staleDataAvailable) : $regenerator();
             $regenerated = true;
 
             if ($value === false) {
