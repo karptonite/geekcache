@@ -18,10 +18,9 @@ class SoftInvalidatableCache extends CacheDecorator
 
     public function get($key, callable $regenerator = null, $ttl = null)
     {
-        $result             = null;
-        $regenerated        = false;
-        $wrappedRegenerator = $this->wrapRegenerator($regenerated, $regenerator, $ttl);
-        $packedResult       = parent::get($key, $wrappedRegenerator, $this->policy->computeTtl($ttl));
+        $result       = null;
+        $regenerated  = false;
+        $packedResult = $this->getFromParent($regenerated, $key, $regenerator, $ttl);
 
         if ($this->policy->resultIsFresh($packedResult)) {
             $result = $this->policy->unpackValue($packedResult);
@@ -36,6 +35,12 @@ class SoftInvalidatableCache extends CacheDecorator
         }
 
         return isset($result) ? $result : false;
+    }
+
+    private function getFromParent(&$regenerated, $key, callable $regenerator = null, $ttl = null)
+    {
+        $wrappedRegenerator = $this->wrapRegenerator($regenerated, $regenerator, $ttl);
+        return parent::get($key, $wrappedRegenerator, $this->policy->computeTtl($ttl));
     }
 
     private function regeneratedOffline($regenerated, $result, $regenerator)
