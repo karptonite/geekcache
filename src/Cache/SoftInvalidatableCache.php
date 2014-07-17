@@ -18,37 +18,41 @@ class SoftInvalidatableCache extends CacheDecorator
 
     public function get($key, callable $regenerator = null, $ttl = null)
     {
-        $result       = null;
-        $regenerated  = false;
-        $packedResult = $this->getFromParent($regenerated, $key, $regenerator, $ttl);
+        $result              = null;
+        $regeneratedByParent = false;
 
-        if ($this->policy->resultIsFresh($packedResult)) {
-            $result = $this->policy->unpackValue($packedResult);
-        } elseif (!$regenerated) {
+        $packedResult = $this->getFromParent($regeneratedByParent, $key, $regenerator, $ttl);
+
+        if ($this->shouldRegenerate($packedResult, $regeneratedByParent)) {
             $result = $this->regenerate($key, $regenerator, $ttl);
         }
 
-        // if a process has been queued to refesh the data, return whatever
-        // data we have, even if it is not fresh
-        if ($this->regeneratedOffline($regenerated, $result, $regenerator)) {
+        if ($this->shouldReturnCachedData($packedResult, $result, $regeneratedByParent, $regenerator)) {
             $result = $this->policy->unpackValue($packedResult);
         }
 
         return isset($result) ? $result : false;
     }
 
-    private function getFromParent(&$regenerated, $key, callable $regenerator = null, $ttl = null)
+    private function shouldRegenerate($packedResult, $regeneratedByParent)
     {
-        $wrappedRegenerator = $this->wrapRegenerator($regenerated, $regenerator, $ttl);
+        return !$regeneratedByParent && !$this->policy->resultIsFresh($packedResult);
+    }
+
+    private function shouldReturnCachedData($packedResult, $result, $regeneratedByParent, $regenerator)
+    {
+        return $this->policy->resultIsFresh($packedResult) ||
+            $regeneratedByParent ||
+            ($result === false && is_callable($regenerator));
+    }
+
+    private function getFromParent(&$regeneratedByParent, $key, callable $regenerator = null, $ttl = null)
+    {
+        $wrappedRegenerator = $this->wrapRegenerator($regeneratedByParent, $regenerator, $ttl);
         return parent::get($key, $wrappedRegenerator, $this->policy->computeTtl($ttl));
     }
 
-    private function regeneratedOffline($regenerated, $result, $regenerator)
-    {
-        return $regenerated || ($result === false && is_callable($regenerator));
-    }
-
-    private function wrapRegenerator(&$regenerated, callable $regenerator = null, $ttl = null)
+    private function wrapRegenerator(&$regeneratedByParent, callable $regenerator = null, $ttl = null)
     {
         if (is_null($regenerator)) {
             return null;
@@ -57,9 +61,9 @@ class SoftInvalidatableCache extends CacheDecorator
         //PHP 5.4 won't allow $this to be passed in use statements in closure
         $policy = $this->policy;
 
-        return function ($staleDataAvailable = null) use ($policy, $regenerator, $ttl, &$regenerated) {
-            $value       = $staleDataAvailable ? $regenerator($staleDataAvailable) : $regenerator();
-            $regenerated = true;
+        return function ($staleDataAvailable = null) use ($policy, $regenerator, $ttl, &$regeneratedByParent) {
+            $value = $staleDataAvailable ? $regenerator($staleDataAvailable) : $regenerator();
+            $regeneratedByParent = true;
 
             if ($value === false) {
                 return false;
