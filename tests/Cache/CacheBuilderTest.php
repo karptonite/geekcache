@@ -134,12 +134,25 @@ class CacheBuilderTest extends PHPUnit_Framework_TestCase
     {
         $this->prepareArrayBuilder();
         $cache = $this->builder->addTags(array('footag', 'bartag'))->addGracePeriod(0)->make('foo', 1);
-
         $regenMock = m::mock('stdClass');
         $regenMock->shouldReceive('regenerate')->once()->withNoArgs()->andReturn(false);
         $cache->get([$regenMock, 'regenerate']);
     }
 
+    /**
+     * @group slowTests
+     */
+    public function testCombinedCacheCallsRegeneratorOnceAfterInvalidation()
+    {
+        $this->prepareArrayBuilder();
+        $cache = $this->builder->addTags(array('footag', 'bartag'))->addGracePeriod(3)->make('foo', 1);
+        $cache->put('bar');
+        $this->tagsetfactory->makeTagSet('footag')->clearAll();
+        $regenMock = m::mock('stdClass');
+        $regenMock->shouldReceive('regenerate')->once()->with(true)->andReturn(false);
+        usleep(1500000);
+        $cache->get([$regenMock, 'regenerate']);
+    }
     public function testCombinedCache()
     {
         $this->prepareArrayBuilder();
