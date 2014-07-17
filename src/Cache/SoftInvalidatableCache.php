@@ -61,6 +61,8 @@ class SoftInvalidatableCache extends CacheDecorator
         //PHP 5.4 won't allow $this to be passed in use statements in closure
         $policy = $this->policy;
 
+        // Passing information about whether stale data is available allows the regenerator to determine
+        // whether to queue results with high or low priority
         return function ($staleDataAvailable = null) use ($policy, $regenerator, $ttl, &$regeneratedByParent) {
             $value = $staleDataAvailable ? $regenerator($staleDataAvailable) : $regenerator();
             $regeneratedByParent = true;
