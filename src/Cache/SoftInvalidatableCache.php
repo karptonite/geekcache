@@ -5,11 +5,6 @@ class SoftInvalidatableCache extends CacheDecorator
 {
     private $policy;
 
-    // this will be set to true if a parent class calls the regenerator,
-    // and receives "false" as a result, indicating that a process has been
-    // queued to regenerate the value
-    private $regenerating = false;
-
     public function __construct(Cache $cache, FreshnessPolicy $policy)
     {
         parent::__construct($cache);
