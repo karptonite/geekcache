@@ -19,36 +19,31 @@ class SoftInvalidatableCache extends CacheDecorator
     public function get($key, callable $regenerator = null, $ttl = null)
     {
         $result             = null;
-        $regenerating       = false;
-        $wrappedRegenerator = $this->wrapRegenerator($regenerating, $regenerator, $ttl);
+        $regenerated       = false;
+        $wrappedRegenerator = $this->wrapRegenerator($regenerated, $regenerator, $ttl);
         $packedResult       = parent::get($key, $wrappedRegenerator, $this->policy->computeTtl($ttl));
 
         if ($this->policy->resultIsFresh($packedResult)) {
             $result = $this->policy->unpackValue($packedResult);
-        } elseif ($this->shouldRegenerate($regenerating, $packedResult, $regenerator)) {
+        } elseif (!$regenerated) {
             $result = $this->regenerate($key, $regenerator, $ttl);
         }
 
         // if a process has been queued to refesh the data, return whatever
         // data we have, even if it is not fresh
-        if ($this->regeneratingOffline($regenerating, $result, $regenerator)) {
+        if ($this->regeneratedOffline($regenerated, $result, $regenerator)) {
             $result = $this->policy->unpackValue($packedResult);
         }
 
         return isset($result) ? $result : false;
     }
 
-    private function shouldRegenerate($regenerating, $packedResult, $regenerator = null)
+    private function regeneratedOffline($regenerated, $result, $regenerator)
     {
-        return !$regenerating && $packedResult !== false && is_callable($regenerator);
+        return $regenerated || ($result === false && is_callable($regenerator));
     }
 
-    private function regeneratingOffline($regenerating, $result, $regenerator)
-    {
-        return $regenerating || ($result === false && is_callable($regenerator));
-    }
-
-    private function wrapRegenerator(&$regenerating, callable $regenerator = null, $ttl = null)
+    private function wrapRegenerator(&$regenerated, callable $regenerator = null, $ttl = null)
     {
         if (is_null($regenerator)) {
             return null;
@@ -57,10 +52,10 @@ class SoftInvalidatableCache extends CacheDecorator
         //PHP 5.4 won't allow $this to be passed in use statements in closure
         $policy = $this->policy;
 
-        return function ($dataAvailable = null) use ($policy, $regenerator, $ttl, &$regenerating) {
+        return function ($dataAvailable = null) use ($policy, $regenerator, $ttl, &$regenerated) {
             $value = $dataAvailable ? $regenerator($dataAvailable) : $regenerator();
+            $regenerated = true;
             if ($value === false) {
-                $regenerating = true;
                 return false;
             } else {
                 return $policy->packValueWithPolicy($value, $ttl);
