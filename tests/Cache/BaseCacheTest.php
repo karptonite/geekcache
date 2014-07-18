@@ -20,9 +20,6 @@ abstract class BaseCacheTest extends PHPUnit_Framework_TestCase
         $this->assertCachePutsAndGets($this->cache);
     }
 
-    /**
-     * @group excludeTravis
-     */
     public function testPutAndGetZero()
     {
         $this->cache->put(self::KEY, 0);
@@ -112,9 +109,6 @@ abstract class BaseCacheTest extends PHPUnit_Framework_TestCase
         $this->assertNull($result);
     }
 
-    /**
-     * @group excludeTravis
-     */
     public function testCacheCachesRegeneratedZero()
     {
         $regenerator = function () {

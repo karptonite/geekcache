@@ -17,9 +17,6 @@ abstract class BaseIncrementableCacheTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(2, $this->cache->get(static::KEY));
     }
 
-    /**
-     * @group excludeTravis
-     */
     public function testPutAndGetZero()
     {
         $this->cache->put(static::KEY, 0);

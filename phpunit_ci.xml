@@ -10,9 +10,4 @@
             <directory>./tests/</directory>
         </testsuite>
     </testsuites>
-    <groups>
-        <exclude>
-            <group>excludeTravis</group>
-        </exclude>
-    </groups>
 </phpunit>
