@@ -18,32 +18,42 @@ class SoftInvalidatableCache extends CacheDecorator
 
     public function get($key, callable $regenerator = null, $ttl = null)
     {
-        $result              = null;
         $regeneratedByParent = false;
 
         $packedResult = $this->getFromParent($regeneratedByParent, $key, $regenerator, $ttl);
 
-        if ($this->shouldRegenerate($packedResult, $regeneratedByParent)) {
+        if($this->policy->resultIsFresh($packedResult)) {
+            return $this->policy->unpackValue($packedResult);
+        }
+
+        if ($this->shouldRegenerate($regeneratedByParent)) {
             $result = $this->regenerate($key, $regenerator, $ttl);
+
+            // if the results are false, either the data was not regenerated at all,
+            // or it was queued for regeneration, and the data was not available
+            if($result !== false) {
+                return $result;
+            }
         }
 
-        if ($this->shouldReturnCachedData($packedResult, $result, $regeneratedByParent, $regenerator)) {
-            $result = $this->policy->unpackValue($packedResult);
+        if ($this->shouldReturnCachedData($regenerator)) {
+            return $this->policy->unpackValue($packedResult);
         }
 
-        return isset($result) ? $result : false;
+        return false;
     }
 
-    private function shouldRegenerate($packedResult, $regeneratedByParent)
+    private function shouldRegenerate($regeneratedByParent)
     {
-        return !$regeneratedByParent && !$this->policy->resultIsFresh($packedResult);
+        return !$regeneratedByParent;
     }
 
-    private function shouldReturnCachedData($packedResult, $result, $regeneratedByParent, $regenerator)
+    // if a callable regenerator was passed, it must have been called by this point, and it must
+    // have returned false, meaning that the regenerator queued data for refresh. We return the
+    // stale data from cache, if there is any.
+    private function shouldReturnCachedData($regenerator)
     {
-        return $this->policy->resultIsFresh($packedResult) ||
-            $regeneratedByParent ||
-            ($result === false && is_callable($regenerator));
+        return is_callable($regenerator);
     }
 
     private function getFromParent(&$regeneratedByParent, $key, callable $regenerator = null, $ttl = null)

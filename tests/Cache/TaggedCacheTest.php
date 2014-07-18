@@ -68,6 +68,22 @@ class TaggedCacheTest extends BaseCacheTest
 
         $this->assertEquals(static::VALUE2, $this->cache->get(static::KEY, $regenerator));
     }
+
+    public function testRegeneratesNullWhenHashChanges()
+    {
+        $this->cache->put(static::KEY, static::VALUE);
+        $this->tagset->shouldReceive('getSignature')
+            ->andReturn('bar');
+
+
+        $value2 = self::VALUE2;
+        $regenerator = function () use ($value2) {
+            return null;
+        };
+
+        $this->assertNull($this->cache->get(static::KEY, $regenerator));
+    }
+
     public function testGetStaleFromWrappedSoftInvalidatable()
     {
         $policy = new GeekCache\Cache\GracePeriodFreshnessPolicy();

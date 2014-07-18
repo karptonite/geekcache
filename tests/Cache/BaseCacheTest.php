@@ -26,6 +26,12 @@ abstract class BaseCacheTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(0, $this->cache->get(self::KEY));
     }
 
+    public function testPutAndGetNull()
+    {
+        $this->cache->put(self::KEY, null);
+        $this->assertNull($this->cache->get(self::KEY));
+    }
+
     public function testDelete()
     {
         $this->assertCacheDeletes($this->cache);
@@ -89,6 +95,30 @@ abstract class BaseCacheTest extends PHPUnit_Framework_TestCase
         $result = $this->cache->get(self::KEY);
         $this->assertEquals(self::VALUE, $regenResult);
         $this->assertEquals(self::VALUE, $result);
+    }
+
+    public function testCacheCachesRegeneratedNull()
+    {
+        $regenerator = function () {
+            return null;
+        };
+
+        $regenResult = $this->cache->get(self::KEY, $regenerator);
+        $result = $this->cache->get(self::KEY);
+        $this->assertNull($regenResult);
+        $this->assertNull($result);
+    }
+
+    public function testCacheCachesRegeneratedZero()
+    {
+        $regenerator = function () {
+            return 0;
+        };
+
+        $regenResult = $this->cache->get(self::KEY, $regenerator);
+        $result = $this->cache->get(self::KEY);
+        $this->assertSame(0, $regenResult);
+        $this->assertSame(0, $result);
     }
 
     public function assertCachePutsAndGets($cache)
