@@ -6,27 +6,19 @@ abstract class CacheServiceProviderTest extends PHPUnit_Framework_TestCase
         parent::setUp();
         $this->container = $this->getContainer();
         $this->sp = new GeekCache\Cache\CacheServiceProvider($this->container);
-        $this->msp = new GeekCache\Cache\MemcacheServiceProvider($this->container);
+        $this->msp = $this->getPersistentServiceProvider();
         $this->sp->register();
         $this->msp->register();
     }
 
-    public function testAddsMemcacheToContainer()
+    protected function getContainer()
     {
-        $this->assertInstanceOf('Memcache', $this->container['geekcache.memcache']);
+        return new Pimple();
     }
 
-    public function testDefaultServersAdded()
+    protected function getPersistentServiceProvider()
     {
-        $stats = $this->container['geekcache.memcache']->getExtendedStats();
-        $this->assertEquals('localhost:11211', key($stats));
-    }
-
-    public function testDefaultServersOverrideable()
-    {
-        $this->container['geekcache.memcache.servers'] = array('127.0.0.1' =>  array(11211));
-        $stats = $this->container['geekcache.memcache']->getExtendedStats();
-        $this->assertEquals('127.0.0.1:11211', key($stats));
+        return new GeekCache\Cache\MemcacheServiceProvider($this->container);
     }
 
     public function testMemoReturnsArrayCaches()
@@ -54,14 +46,6 @@ abstract class CacheServiceProviderTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals('bar2', $cache->get('foo2'));
         $this->assertFalse($cache->get('foo3'));
-    }
-
-    public function testMemcacheCounterRegistered()
-    {
-        $memcacheincrementablecache1 = $this->container['geekcache.persistentincrementablecache'];
-        $memcacheincrementablecache2 = $this->container['geekcache.persistentincrementablecache'];
-        $this->assertSame($memcacheincrementablecache1, $memcacheincrementablecache2);
-        $this->assertInstanceOf('GeekCache\Cache\IncrementableMemcacheCache', $memcacheincrementablecache1);
     }
 
     public function testTagFactoryRegistered()
@@ -118,6 +102,14 @@ abstract class CacheServiceProviderTest extends PHPUnit_Framework_TestCase
     {
         $this->container['geekcache.namespace'] = 'foo';
         $this->assertInstanceOf('GeekCache\Cache\NamespacedCache', $this->container['geekcache.persistentcache']);
+    }
+
+    public function testPersistentCacheCaches()
+    {
+        $cache = $this->container['geekcache.persistentcache'];
+        $cache->put('foo', 'bar');
+
+        $this->assertEquals('bar', $cache->get('foo'));
     }
 
     public function testNamespaceAddedToCounterIfSet()
