@@ -26,7 +26,7 @@ class SoftInvalidatableCache extends CacheDecorator
             return $this->policy->unpackValue($packedResult);
         }
 
-        if ($this->shouldRegenerate($regeneratedByParent)) {
+        if (!$regeneratedByParent) {
             $result = $this->regenerate($key, $regenerator, $ttl);
 
             // if the results are false, either the data was not regenerated at all,
@@ -36,22 +36,14 @@ class SoftInvalidatableCache extends CacheDecorator
             }
         }
 
-        if ($this->shouldReturnCachedData($regenerator)) {
+        if ($this->wasQueuedForRegeneration($regenerator)) {
             return $this->policy->unpackValue($packedResult);
         }
 
         return false;
     }
 
-    private function shouldRegenerate($regeneratedByParent)
-    {
-        return !$regeneratedByParent;
-    }
-
-    // if a callable regenerator was passed, it must have been called by this point, and it must
-    // have returned false, meaning that the regenerator queued data for refresh. We return the
-    // stale data from cache, if there is any.
-    private function shouldReturnCachedData($regenerator)
+    private function wasQueuedForRegeneration($regenerator)
     {
         return is_callable($regenerator);
     }
