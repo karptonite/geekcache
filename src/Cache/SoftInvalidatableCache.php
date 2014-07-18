@@ -65,8 +65,8 @@ class SoftInvalidatableCache extends CacheDecorator
 
         // Passing information about whether stale data is available allows the regenerator to determine
         // whether to queue results with high or low priority
-        return function ($staleDataAvailable = null) use ($policy, $regenerator, $ttl, &$regeneratedByParent) {
-            $value = $staleDataAvailable ? $regenerator($staleDataAvailable) : $regenerator();
+        return function ($staleDataAvailable) use ($policy, $regenerator, $ttl, &$regeneratedByParent) {
+            $value = $regenerator($staleDataAvailable);
             $regeneratedByParent = true;
 
             if ($value === false) {

@@ -19,6 +19,6 @@ abstract class AbstractBaseCache
 
     protected function callRegenerator(callable $regenerator)
     {
-        return $regenerator();
+        return $regenerator(false);
     }
 }

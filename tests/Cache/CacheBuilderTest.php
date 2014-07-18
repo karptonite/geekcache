@@ -135,7 +135,7 @@ class CacheBuilderTest extends PHPUnit_Framework_TestCase
         $this->prepareArrayBuilder();
         $cache = $this->builder->addTags(array('footag', 'bartag'))->addGracePeriod(0)->make('foo', 1);
         $regenMock = m::mock('stdClass');
-        $regenMock->shouldReceive('regenerate')->once()->withNoArgs()->andReturn(false);
+        $regenMock->shouldReceive('regenerate')->once()->with(false)->andReturn(false);
         $cache->get([$regenMock, 'regenerate']);
     }
 
