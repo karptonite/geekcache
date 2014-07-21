@@ -19,11 +19,11 @@ class MemcachedServiceProvider
 
             foreach ($servers as $ip => $ports) {
                 foreach ($ports as $port) {
-						  $flatServers[] = array($ip, (int)$port);
+                    $flatServers[] = array($ip, (int)$port);
                 }
             };
 
-				$memcached->addServers($flatServers);
+            $memcached->addServers($flatServers);
             return $memcached;
         });
 
