@@ -92,6 +92,7 @@ $cacheitem->put('thevalue');
 $result = $cacheitem->get();
 // $result === 'thevalue'
 
+// FIXME need an easier way to clear tags
 $tagset = $container['tagsetfactory']->makeTagSet('bar');
 $tagset->clearAll();
 
