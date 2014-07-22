@@ -19,7 +19,7 @@ class CacheServiceProviderMemcachedTest extends CacheServiceProviderTest
 
     public function testDefaultServersOverrideable()
     {
-        $this->container['geekcache.memcached.servers'] = array(
+        $this->container['geekcache.memcache.servers'] = array(
             'localhost' => array(11211),
             '127.0.0.1' =>  array(11211),
         );
