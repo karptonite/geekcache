@@ -13,8 +13,8 @@ class MemcachedServiceProvider
         $this->container['geekcache.memcached'] = $this->container->share(function ($c) {
             $memcached = new \Memcached();
 
-            $servers = isset($c['geekcache.memcached.servers'])
-                ? $c['geekcache.memcached.servers']
+            $servers = isset($c['geekcache.memcache.servers'])
+                ? $c['geekcache.memcache.servers']
                 : array('localhost' => array(11211));
 
             foreach ($servers as $ip => $ports) {
