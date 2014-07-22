@@ -248,4 +248,6 @@ regeneration processes may be called multiple times. For this reason, I
 recommmend a queuing system such as Gearman, which has functionality to
 coalesce duplicate processes.
 
-
+Configuration
+-------------
+Coming soon
