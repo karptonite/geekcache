@@ -75,7 +75,9 @@ $result = $cacheitem->get();
 
 ```
 
-The CacheItem has only three methods: get, put, and delete.
+The CacheItem has only three methods: get, put, and delete.  The builder is an
+immutable object, and can be used to make multiple cache items with different
+options.
 
 Tags
 ----
