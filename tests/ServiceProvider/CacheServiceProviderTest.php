@@ -98,6 +98,11 @@ abstract class CacheServiceProviderTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf('GeekCache\Counter\CounterBuilder', $builder2);
     }
 
+    public function testFacadeRegistered()
+    {
+        $this->assertInstanceOf('GeekCache\Facade\CacheFacade', $this->container['geekcache']);
+    }
+
     public function testNamespaceAddedToCacheIfSet()
     {
         $this->container['geekcache.namespace'] = 'foo';

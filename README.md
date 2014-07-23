@@ -27,7 +27,7 @@ to add the builders to the container.
 
 ```php
 <?php
-$container = new Illuminate\Container;
+$container = new Illuminate\Container\Container;
 $msp = new GeekCache\Cache\MemcacheServiceProvider($container);
 //or MemcacahedServiceProvider
 $sp = new GeekCache\Cache\CacheServiceProvider($container);
@@ -224,10 +224,11 @@ Counter
 -------
 
 A counter is a simple cache with the same methods as CacheItem, plus
-```increment()```.  Incrementing is atomic; even if multiple processes increment at the same time,
-the total will remain correct. It can be built similarly to how the CacheItem is built,
-with the caveat that the only option available is memoization--Tags or grace
-periods are not available for counters, in order to maintain atomic incrementing.
+```increment()```.  Incrementing is atomic; even if multiple processes
+increment at the same time, the total will remain correct. It can be built
+similarly to how the CacheItem is built, with the caveat that the only option
+available is memoization--Tags or grace periods are not available for counters,
+in order to more easily maintain atomic incrementing.
 
 ```php
 <?php

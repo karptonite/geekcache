@@ -61,6 +61,14 @@ class CacheServiceProvider
                 $c['geekcache.local.incrementablecache']
             );
         });
+
+        $this->container['geekcache'] = $this->container->share(function ($c) {
+            return new \GeekCache\Facade\CacheFacade(
+                $c['geekcache.cachebuilder'],
+                $c['geekcache.counterbuilder'],
+                $c['geekcache.tagsetfactory']
+            );
+        });
     }
 
     private function registerLocalCache($name)
