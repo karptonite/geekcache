@@ -220,6 +220,34 @@ You can also set a grace period of 0, which indicates that the stale value
 should ALWAYS be available when a $regenerator is passed, similar to setting an
 expire value of 0 for Memcached.
 
+Counter
+-------
+
+A counter is a simple cache with the same methods as CacheItem, plus
+```increment()```.  Incrementing is atomic; even if multiple processes increment at the same time,
+the total will remain correct. It can be built similarly to how the CacheItem is built,
+with the caveat that the only option available is memoization--Tags or grace
+periods are not available for counters, in order to maintain atomic incrementing.
+
+```php
+<?php
+$builder = $container['geekcache.counterbuilder'];
+$counter = $builder->memoize->make('counterkey', 3600);
+
+$counter->put(5);
+$result = $counter->increment(2);
+// $result === 7
+
+$result = $counter->get();
+// $result === 7
+
+$result = $counter->increment(-5);
+// $result === 2
+
+$result = $counter->increment(-5);
+// $result === 0, because counter will not go negative
+```
+
 Usage notes
 -----------
 
