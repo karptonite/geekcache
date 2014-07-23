@@ -48,7 +48,9 @@ $container['geekcache.memcache.servers'] = array(
 
 Once the service is registered, you can resolve the builder from the container.
 The builder is the object you should inject into the constructor of a class
-that will use caching. Its ```make()``` method returns a CacheItem. Here is a
+that will use caching. [But see also the main facade in
+GeekCache\Facade\CacheFacade, which could include all cache functions. not sure
+it is a good idea.] Its ```make()``` method returns a CacheItem. Here is a
 simple usage example:
 
 ```php
