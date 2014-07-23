@@ -3,7 +3,7 @@ class CacheServiceProviderMemcacheTest extends CacheServiceProviderTest
 {
     protected function getPersistentServiceProvider()
     {
-        return new GeekCache\Cache\MemcacheServiceProvider($this->container);
+        return new GeekCache\Provider\MemcacheServiceProvider($this->container);
     }
 
     public function testAddsMemcacheToContainer()

@@ -1,7 +1,9 @@
 <?php
-namespace GeekCache\Cache;
+namespace GeekCache\Provider;
 
-class MemcacheServiceProvider
+use GeekCache\Cache;
+
+class MemcachedServiceProvider
 {
     public function __construct($container)
     {
@@ -10,12 +12,8 @@ class MemcacheServiceProvider
 
     public function register()
     {
-        $this->container['geekcache.memcache'] = $this->container->share(function ($c) {
-            $persistent = isset($c['geekcache.memcache.persistent'])
-                ? $c['geekcache.memcache.persistent']
-                : 1;
-
-            $memcache = new \Memcache();
+        $this->container['geekcache.memcached'] = $this->container->share(function ($c) {
+            $memcached = new \Memcached();
 
             $servers = isset($c['geekcache.memcache.servers'])
                 ? $c['geekcache.memcache.servers']
@@ -23,19 +21,20 @@ class MemcacheServiceProvider
 
             foreach ($servers as $ip => $ports) {
                 foreach ($ports as $port) {
-                    $memcache->addServer($ip, $port, $persistent);
+                    $flatServers[] = array($ip, (int)$port);
                 }
             };
 
-            return $memcache;
+            $memcached->addServers($flatServers);
+            return $memcached;
         });
 
         $this->container['geekcache.persistentincrementablecache.unnamespaced'] = $this->container->share(function ($c) {
-            return new IncrementableMemcacheCache($c['geekcache.memcache']);
+            return new Cache\IncrementableMemcachedCache($c['geekcache.memcached']);
         });
 
         $this->container['geekcache.persistentcache.unnamespaced'] = $this->container->share(function ($c) {
-            return new MemcacheCache($c['geekcache.memcache']);
+            return new Cache\MemcachedCache($c['geekcache.memcached']);
         });
     }
 }

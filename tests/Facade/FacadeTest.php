@@ -14,8 +14,8 @@ class FacadeTest extends PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $container = new Illuminate\Container\Container;
-        $msp = new GeekCache\Cache\MemcacheServiceProvider($container);
-        $sp = new GeekCache\Cache\CacheServiceProvider($container);
+        $msp = new GeekCache\Provider\MemcacheServiceProvider($container);
+        $sp = new GeekCache\Provider\CacheServiceProvider($container);
         $msp->register();
         $sp->register();
 

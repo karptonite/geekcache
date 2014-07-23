@@ -11,11 +11,11 @@ Installation
 GeekCache will be installable via Composer when it is released.
 
 This package has one package dependency: it requires a dependency injection
-container, and will work with either Pimple 1.1, or Laravel's container, which
+container, and will work with **either** Pimple 1.1, or Laravel's container, which
 can be installed separately from the laravel framework by adding
 `"illuminate/container": "4.1.*"` to your composer.json file.
 
-geekcache also requires a key/value storage system for the back end. Currently,
+GeekCache also requires a key/value storage system for the back end. Currently,
 GeekCache is implemented for only one system: Memcached, using either the
 Memcache or Memcached PECL extension.
 
@@ -28,9 +28,9 @@ to add the builders to the container.
 ```php
 <?php
 $container = new Illuminate\Container\Container;
-$msp = new GeekCache\Cache\MemcacheServiceProvider($container);
+$msp = new GeekCache\Provider\MemcacheServiceProvider($container);
 //or MemcacahedServiceProvider
-$sp = new GeekCache\Cache\CacheServiceProvider($container);
+$sp = new GeekCache\Provider\CacheServiceProvider($container);
 $msp->register();
 $sp->register();
 ```

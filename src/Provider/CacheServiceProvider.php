@@ -1,7 +1,8 @@
 <?php
-namespace GeekCache\Cache;
+namespace GeekCache\Provider;
 
 use \GeekCache\Tag;
+use \GeekCache\Cache;
 
 class CacheServiceProvider
 {
@@ -22,24 +23,24 @@ class CacheServiceProvider
 
         $this->container['geekcache.persistentcache'] = $this->container->share(function ($c) {
             return !empty($c['geekcache.namespace'])
-                ? new NamespacedCache($c['geekcache.persistentcache.unnamespaced'], $c['geekcache.namespace'])
+                ? new Cache\NamespacedCache($c['geekcache.persistentcache.unnamespaced'], $c['geekcache.namespace'])
                 : $c['geekcache.persistentcache.unnamespaced'];
         });
 
         $this->container['geekcache.persistentincrementablecache'] = $this->container->share(function ($c) {
             return !empty($c['geekcache.namespace'])
-                ? new IncrementableNamespacedCache(
+                ? new Cache\IncrementableNamespacedCache(
                     $c['geekcache.persistentincrementablecache.unnamespaced'],
                     $c['geekcache.namespace']
                 ) : $c['geekcache.persistentincrementablecache.unnamespaced'];
         });
 
         $this->container['geekcache.local.incrementablecache'] = $this->container->share(function ($c) {
-            return !empty($c['geekcache.nolocalcache']) ? new NullCache : new IncrementableArrayCache();
+            return !empty($c['geekcache.nolocalcache']) ? new Cache\NullCache : new Cache\IncrementableArrayCache();
         });
 
         $this->container['geekcache.tagfactory'] = $this->container->share(function ($c) {
-            $cache = new MemoizedCache($c['geekcache.persistentcache'], $c['geekcache.local.tags']);
+            $cache = new Cache\MemoizedCache($c['geekcache.persistentcache'], $c['geekcache.local.tags']);
             return new Tag\TagFactory($cache);
         });
 
@@ -48,7 +49,7 @@ class CacheServiceProvider
         });
 
         $this->container['geekcache.cachebuilder'] = $this->container->share(function ($c) {
-            return new CacheBuilder(
+            return new Cache\CacheBuilder(
                 $c['geekcache.persistentcache'],
                 $c['geekcache.local.memos'],
                 $c['geekcache.tagsetfactory']
@@ -78,7 +79,7 @@ class CacheServiceProvider
             $max = isset($c['geekcache.maxlocal.' . $name]) ? $c['geekcache.maxlocal.'.$name] : $default_max;
             //If the process will last longer than a page load, make sure to set geekcache.nolocalcache to true
             //to avoid keeping a potentially stale local cache.
-            return !empty($c['geekcache.nolocalcache']) ? new NullCache : new ArrayCache($max);
+            return !empty($c['geekcache.nolocalcache']) ? new Cache\NullCache : new Cache\ArrayCache($max);
         });
     }
 }
