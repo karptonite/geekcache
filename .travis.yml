@@ -11,8 +11,7 @@ services:
 before_script:
   - printf "\n" | pecl install -f memcache-3.0.8
   - composer self-update
-  - php -i
-  - composer install --prefer-source --no-interaction --dev
   - phpenv config-add travisconfig.ini
+  - composer install --prefer-source --no-interaction --dev
 
 script: vendor/bin/phpunit -c phpunit_ci.xml
