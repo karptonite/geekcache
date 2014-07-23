@@ -1,5 +1,8 @@
 {
     "name": "geekcache/geekcache",
+    "type": "library",
+    "keywords": ["cache", "caching"],
+    "homepage": "https://github.com/karptonite/geekcache",
     "description": "A wrapper for key/value storage with soft invalidation and tags",
     "license": "MIT",
     "authors": [
