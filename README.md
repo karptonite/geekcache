@@ -13,7 +13,7 @@ GeekCache will be installable via Composer when it is released.
 This package has one package dependency: it requires a dependency injection
 container, and will work with either Pimple 1.1, or Laravel's container, which
 can be installed separately from the laravel framework by adding
-```"illuminate/container": "4.1.*"``` to your composer.json file.
+`"illuminate/container": "4.1.*"` to your composer.json file.
 
 geekcache also requires a key/value storage system for the back end. Currently,
 GeekCache is implemented for only one system: Memcached, using either the
@@ -36,21 +36,14 @@ $sp->register();
 ```
 
 If your Memcache server or servers are running anywhere other than the
-localhost, port 11211, you can set them as follows:
-
-```php
-<?php
-$container['geekcache.memcache.servers'] = array(
-    '192.168.1.2' => array(11211),
-    //additional servers
-);
-```
+localhost, port 11211, you can set them as described in the Configuration
+section, below.
 
 Once the service is registered, you can resolve the builder from the container.
 The builder is the object you should inject into the constructor of a class
 that will use caching. [But see also the main facade in
 GeekCache\Facade\CacheFacade, which could include all cache functions. not sure
-it is a good idea.] Its ```make()``` method returns a CacheItem. Here is a
+it is a good idea.] Its `make()` method returns a CacheItem. Here is a
 simple usage example:
 
 ```php
@@ -226,7 +219,7 @@ Counter
 -------
 
 A counter is a simple cache with the same methods as CacheItem, plus
-```increment()```.  Incrementing is atomic; even if multiple processes
+`increment()`.  Incrementing is atomic; even if multiple processes
 increment at the same time, the total will remain correct. It can be built
 similarly to how the CacheItem is built, with the caveat that the only option
 available is memoization--Tags or grace periods are not available for counters,
@@ -266,14 +259,14 @@ if you are going to memoize the cache item, call memoize first.
 A grace period is useless unless you plan to pass in a regenerator which queues
 a process for regeneration (and returns false).
 
-A regenerator is guaranteed to be called only once for a given ```get()```. In
+A regenerator is guaranteed to be called only once for a given `get()`. In
 addition, a single parameter is passed to the regenerator: a boolean indicating
 whether stale data is available to be returned. The intended purpose of this
 boolean is so that the $regenerator can set the priority of the queued
 process--high priority if blanks are being returned, low priority if stale data
 is available.
 
-Although a regenerator will be called only once for a ```get()```, if get is
+Although a regenerator will be called only once for a `get()`, if get is
 called multiple times, or in multiple processes, a regenerator that is queuing
 regeneration processes may be called multiple times. For this reason, I
 recommmend a queuing system such as Gearman, which has functionality to
@@ -281,4 +274,43 @@ coalesce duplicate processes.
 
 Configuration
 -------------
-Coming soon
+
+GeekCache is configured via setting variables on the container--they must be
+set before GeekCache is used, but need not be set before
+the providers are registered.
+
+```php
+<?php
+
+// defaults to false. If set to true, Memoization will go to a null cache. This should
+// always be set to true for long-running php processes, such as queue workers, even 
+// if you aren't explicitly using memoization.
+$container['geekcache.nolocalcache'] = false; 
+
+// Defaults to localhost, port 11211. Used by both the Memcached and Memcache service 
+// providers
+$container['geekcache.memcache.servers'] = array(
+    '192.168.1.2' => array(11211),
+    //additional servers
+);
+
+// The maximum number of items to memoize, for tags (which are always memoized
+// internally) and memos. These are the default values.
+$container['geekcache.maxlocal.tags']  = 5000;
+$container['geekcache.maxlocal.memos'] = 1000;
+
+// Defaults to unset. If set, all keys will be prefixed by this namespace.
+// This is useful if more than one application shares the same memcache server.
+// There is a bit of overhead with this, so best not to use a namespace unless
+// you need one.
+$container['geekcache.namespace'] = "key_prefix_";
+
+// Defaults to true. For the Memcache service provider only, if this is true, 
+// Memcache will use persistent connections, as described here:
+// http://php.net/manual/en/memcache.addserver.php
+// Persistent connections are not implemented for the GeekCache Memcached
+// service provider
+$container['geekcache.memcache.persistent'] = true;
+```
+
+
