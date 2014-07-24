@@ -4,7 +4,7 @@ GeekCache
 [![Build Status](https://travis-ci.org/karptonite/geekcache.svg)](https://travis-ci.org/karptonite/geekcache)
 
 GeeKCache is a wrapper for Memcached with tags, soft invalidation, memoization,
-and regeneration through callbacks. It if fully tested and easily extendable.
+and regeneration through callbacks. It is fully tested and easily extendable.
 
 Installation
 ------------
