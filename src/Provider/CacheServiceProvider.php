@@ -63,11 +63,11 @@ class CacheServiceProvider
             );
         });
 
-        $this->container['geekcache'] = $this->container->share(function ($c) {
-            return new \GeekCache\Facade\CacheFacade(
-                $c['geekcache.cachebuilder'],
-                $c['geekcache.counterbuilder'],
-                $c['geekcache.tagsetfactory']
+        $this->container['geekcache.clearer'] = $this->container->share(function ($c) {
+            return new \GeekCache\Cache\CacheClearer(
+                $c['geekcache.tagsetfactory'],
+                $c['geekcache.persistentcache'],
+                array($c['geekcache.local.tags'], $c['geekcache.local.memos'])
             );
         });
     }

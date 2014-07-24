@@ -49,7 +49,10 @@ simple usage example:
 
 ```php
 <?php
+// the builder and/or the clearer should be injected into the constructor
+// of the relevant classes, as needed.
 $builder = $container['geekcache.cachebuilder'];
+$clearer = $container['geekcache.clearer'];
 
 // this cacheitem will expire after 60 seconds
 $cacheitem = $builder->make('cachekey', 60);
@@ -68,6 +71,9 @@ $result = $anothercache->get();
 $cacheitem->delete();
 $result = $cacheitem->get();
 // $result=== false
+
+$clearer->flush();
+// ALL items are removed from cache
 
 ```
 
@@ -90,9 +96,8 @@ $cacheitem->put('thevalue');
 $result = $cacheitem->get();
 // $result === 'thevalue'
 
-// FIXME need an easier way to clear tags
-$tagset = $container['tagsetfactory']->makeTagSet('bar');
-$tagset->clearAll();
+$clearer->clearTags('bar');
+// the clearer can be used to clear all items tagged with a given tag or tags
 
 $result = $cacheitem->get();
 // $result === false
@@ -125,6 +130,12 @@ $cacheitem = $builder->memoize()->make('cachekey');
 $result = $cacheitem->get();
 // the result is immediately available without going to the cache service, 
 // because it has been memoized
+
+$clearer->flushLocal()
+// the contents of all local caches will be removed, but the persistent cache
+// will be unchanged. This can be useful if a cache may have been changed by
+// another process after it was gotten and memoized locally
+
 ```
 
 Regenerators

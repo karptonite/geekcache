@@ -7,6 +7,7 @@ class TagSetTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+        parent::setUp();
         $this->cache = new GeekCache\Cache\ArrayCache;
         $this->tagset = $this->getNewTagSet();
         $this->tags = $this->getArrayOfTags(2);
