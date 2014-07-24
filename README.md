@@ -3,7 +3,7 @@ GeekCache
 
 [![Build Status](https://travis-ci.org/karptonite/geekcache.svg)](https://travis-ci.org/karptonite/geekcache)
 
-A wrapper for key/value storage with some nifty features
+GeeKCache is a wrapper for Memcached with tags, soft invalidation, memoization, and regeneration through callbacks.
 
 Installation
 ------------
