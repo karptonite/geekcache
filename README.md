@@ -12,16 +12,23 @@ is in active use on http://boardgamegeek.com.
 Installation
 ------------
 
-GeekCache will be installable via Composer when it is released.
+GeekCache can be installed via composer.
 
-This package has one package dependency: it requires a dependency injection
-container, and will work with **either** Pimple 1.1, or Laravel's container, which
-can be installed separately from the laravel framework by adding
-`"illuminate/container": "4.1.*"` to your composer.json file.
+    {
+        "require": {
+            "geekcache/geekcache": "0.1.*@beta"
+        }
+    }
+
+This package has one package dependency: the service providers require a
+dependency injection container, and will work with **either** Pimple 1.1, or
+Laravel's container, which can be installed separately from the laravel
+framework by adding `"illuminate/container": "4.1.*"` to your composer.json
+file.
 
 GeekCache also requires a key/value storage system for the back end. Currently,
 GeekCache is implemented for only one system: Memcached, using either the
-Memcache or Memcached PECL extension.
+Memcache or Memcached PECL extension. One of those extensions is required.
 
 Usage
 -----
