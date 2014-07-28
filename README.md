@@ -40,12 +40,11 @@ If your Memcache server or servers are running anywhere other than the
 localhost, port 11211, you can set them as described in the Configuration
 section, below.
 
-Once the service is registered, you can resolve the builder from the container.
-The builder is the object you should inject into the constructor of a class
-that will use caching. [But see also the main facade in
-GeekCache\Facade\CacheFacade, which could include all cache functions. not sure
-it is a good idea.] Its `make()` method returns a CacheItem. Here is a
-simple usage example:
+Once the service is registered, you can resolve the builders and the clearer
+from the container.  The builder is the object you should inject into the
+constructor of a class that will use caching, while the clearer is used for
+clearing multiple cache items at once. 
+Here is a simple usage example:
 
 ```php
 <?php
@@ -103,17 +102,18 @@ $result = $cacheitem->get();
 // $result === false
 ```
 
-When any tag is cleared, all cache items that had that tag added will be cleared as
-well. Note that if you add tags to an item when you store a value, you must add
-the same tags to the cache item when you want to retrieve the value.
+When any tag is cleared, all cache items that had that tag added will be
+cleared as well. Note that if you add tags to an item when you store a value,
+you must add the same tags, in the same order, to the cache item when you want
+to retrieve the value.
 
 Memoization
 -----------
 
 Memoization allows you to tell the cache item to store the value retrieved in a
 local in-memory cache rather than going to the caching service for every
-lookup. Ths can be useful if you have a cache item that may be looked up many times
-on a given pageload. Memoization lasts only as long a a PHP process.
+lookup. Ths can be useful if you have a cache item that may be looked up many
+times on a given pageload. Memoization lasts only as long a a PHP process.
 
 ```php
 <?php
@@ -142,8 +142,9 @@ Regenerators
 ------------
 
 Rather than putting data directly into cache, you can pass a callable into
-```get()```. If the there is no value in the cache, the regenerator will be run,
-and the result of that will be put into cache (and returned) if it does not return ```false```.
+`get()`. If the there is no value in the cache, the regenerator will be run,
+and the result of that will be put into cache (and returned) if it does not
+return `false`.
 
 ```php
 <?php
@@ -170,7 +171,7 @@ $result = $cacheitem->get($regenerator);
 Soft invalidation and queued regeneration
 -----------------------------------------
 
-You can also use a regenerator to trigger some process to queue regeneration at
+You can also use a regenerator to trigger a process to queue regeneration at
 some other time, so that the user does not have to wait for a slow process to
 generate data. If you do so, GeekCache will allow you to return stale data to
 the user while the regenerator executes, as follows.
@@ -195,10 +196,10 @@ $result = $cacheitem->get($regenerator);
 // the new value will be inserted into cache soon.
 ```
 
-While this will get data that has been cleared because a tag has been cleaered,
+While this will get data that has been cleared because a tag has been cleared,
 by default the same is not true of data that has expired due to time. However,
-you can set a grace period for your cache item, so that even data that has gone past
-its expiration time is available when a regenerator that returns false is
+you can set a grace period for your cache item, so that even data that has gone
+past its expiration time is available when a regenerator that returns false is
 passed.
 
 ```php
@@ -231,11 +232,11 @@ Counter
 -------
 
 A counter is a simple cache with the same methods as CacheItem, plus
-`increment()`.  Incrementing is atomic; even if multiple processes
-increment at the same time, the total will remain correct. It can be built
-similarly to how the CacheItem is built, with the caveat that the only option
-available is memoization--Tags or grace periods are not available for counters,
-in order to more easily maintain atomic incrementing.
+`increment()`.  Incrementing is atomic; even if multiple processes increment at
+the same time, the total will remain correct. It can be built similarly to how
+the CacheItem is built (counters have their own builder), with the caveat that
+the only option available is memoization--Tags or grace periods are not
+available for counters, in order to more easily maintain atomic incrementing.
 
 ```php
 <?php
@@ -324,5 +325,3 @@ $container['geekcache.namespace'] = "key_prefix_";
 // service provider
 $container['geekcache.memcache.persistent'] = true;
 ```
-
-
