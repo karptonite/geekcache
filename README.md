@@ -4,7 +4,10 @@ GeekCache
 [![Build Status](https://travis-ci.org/karptonite/geekcache.svg)](https://travis-ci.org/karptonite/geekcache)
 
 GeeKCache is a wrapper for Memcached with tags, soft invalidation, memoization,
-and regeneration through callbacks. It is fully tested and easily extendable.
+and regeneration through callbacks. It is free (MIT licences), fully tested and
+easily extendable. It also beta, so all disclaimers regarding using beta
+software in production apply, especially regarding functional changes, but it
+is in active use on http://boardgamegeek.com. 
 
 Installation
 ------------
@@ -30,15 +33,16 @@ to add the builders to the container.
 <?php
 $container = new Illuminate\Container\Container;
 $msp = new GeekCache\Provider\MemcacheServiceProvider($container);
-//or MemcacahedServiceProvider
 $sp = new GeekCache\Provider\CacheServiceProvider($container);
 $msp->register();
 $sp->register();
 ```
 
-If your Memcache server or servers are running anywhere other than the
-localhost, port 11211, you can set them as described in the Configuration
-section, below.
+Instead of the MemcacheServiceProvider, you can use the
+MemcachedServiceProvider; the first uses the Memcache PECL extension, the
+second, the Memcached extension. They should be functionally identical. If your
+Memcache server or servers are running anywhere other than the localhost, port
+11211, you can set them as described in the Configuration section, below.
 
 Once the service is registered, you can resolve the builders and the clearer
 from the container.  The builder is the object you should inject into the
