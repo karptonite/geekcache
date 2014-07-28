@@ -3,7 +3,7 @@
     "type": "library",
     "keywords": ["cache", "caching"],
     "homepage": "https://github.com/karptonite/geekcache",
-    "description": "A wrapper for key/value storage with soft invalidation and tags",
+    "description": "A wrapper for Memcached with tags, soft invalidation, memoization, and regeneration through callbacks",
     "license": "MIT",
     "authors": [
         {
