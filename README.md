@@ -99,6 +99,14 @@ $cacheitem->put('thevalue');
 $result = $cacheitem->get();
 // $result === 'thevalue'
 
+
+// to retrieve an item from cache, the cache item must be created with the same
+// tags it was stored with
+$anothercacheitem = $builder->addTags('foo', 'bar')->make('cachekey');
+
+$result = $anothercacheitem->get();
+// $result === 'thevalue'
+
 $clearer->clearTags('bar');
 // the clearer can be used to clear all items tagged with a given tag or tags
 
