@@ -125,7 +125,7 @@ Memoization
 Memoization allows you to tell the cache item to store the value retrieved in a
 local in-memory cache rather than going to the caching service for every
 lookup. Ths can be useful if you have a cache item that may be looked up many
-times on a given pageload. Memoization lasts only as long a a PHP process.
+times on a given pageload. Memoization lasts only as long as a PHP process.
 
 ```php
 <?php
@@ -154,7 +154,7 @@ Regenerators
 ------------
 
 Rather than putting data directly into cache, you can pass a callable into
-`get()`. If the there is no value in the cache, the regenerator will be run,
+`get()`. If the there is no value in cache, the regenerator will be run,
 and the result of that will be put into cache (and returned) if it does not
 return `false`.
 
