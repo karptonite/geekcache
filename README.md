@@ -245,7 +245,9 @@ $result = $cacheitem->get($regenerator);
 
 You can also set a grace period of 0, which indicates that the stale value
 should ALWAYS be available when a $regenerator is passed, similar to setting an
-expire value of 0 for Memcached.
+expire value of 0 for Memcached. If you add a grace period when you save an
+item, you must also include the grace period when you get the result. (I hope
+to remove this limitation a future version of GeekCache.)
 
 Counter
 -------
