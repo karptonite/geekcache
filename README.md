@@ -2,6 +2,7 @@ GeekCache
 =========
 
 [![Build Status](https://travis-ci.org/karptonite/geekcache.svg)](https://travis-ci.org/karptonite/geekcache)
+[![Code Climate](https://codeclimate.com/github/karptonite/geekcache/badges/gpa.svg)](https://codeclimate.com/github/karptonite/geekcache)
 
 GeeKCache is a wrapper for Memcached with tags, soft invalidation, memoization,
 and regeneration through callbacks. It is free (MIT license), fully tested and
