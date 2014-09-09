@@ -201,8 +201,7 @@ the user while the regenerator executes, as follows.
 $cacheitem = $builder->addTags('foo','bar')->make('cachekey');
 $cacheitem->put('cachevalue');
 
-$tagset = $container['tagsetfactory']->makeTagSet('bar');
-$tagset->clearAll();
+$clearer->flushTags('foo');
 //at this point, $cacheitem->get() will return false
 
 $regenerator = function () {
