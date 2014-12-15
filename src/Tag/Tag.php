@@ -16,7 +16,8 @@ class Tag
 
     public function getVersion()
     {
-        return $this->cache->get($this->key) ?: $this->clear();
+        $stored = $this->cache->get($this->key);
+        return $stored && is_string($stored) ? $stored : $this->clear();
     }
 
     public function clear()

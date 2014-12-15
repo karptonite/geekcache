@@ -15,6 +15,18 @@ class TagTest extends PHPUnit_Framework_TestCase
         $this->assertNotNull($version);
     }
 
+    public function testGetVersionAlwaysReturnsString()
+    {
+        $version = $this->tag->getVersion();
+
+        $this->cache->put('tag_' . self::KEY, 123);
+
+        $newversion = $this->tag->getVersion();
+
+        $this->assertNotEquals($version, $newversion);
+        $this->assertNotEquals(123, $newversion);
+    }
+
     public function testClearReturnsVersion()
     {
         $version = $this->tag->clear();
