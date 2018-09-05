@@ -26,8 +26,8 @@ class MemoizedCache extends CacheDecorator
 
     public function put($key, $value, $ttl = null)
     {
-        parent::put($key, $value, $ttl);
         $this->memocache->put($key, $value);
+        return parent::put($key, $value, $ttl);
     }
 
     private function getAndMemoize($key, callable $regenerator = null, $ttl = null)

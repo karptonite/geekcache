@@ -27,6 +27,9 @@ class ArrayCache extends AbstractBaseCache implements Cache
         if ($this->putIsPermitted($key)) {
             $this->cache[$key] = $value;
             $this->putcount++;
+            return true;
+        } else {
+            return false;
         }
     }
 

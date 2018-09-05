@@ -13,7 +13,7 @@ class SoftInvalidatableCache extends CacheDecorator
 
     public function put($key, $value, $ttl = null)
     {
-        parent::put($key, $this->policy->packValueWithPolicy($value, $ttl), $this->policy->computeTtl($ttl));
+        return parent::put($key, $this->policy->packValueWithPolicy($value, $ttl), $this->policy->computeTtl($ttl));
     }
 
     public function get($key, callable $regenerator = null, $ttl = null)
