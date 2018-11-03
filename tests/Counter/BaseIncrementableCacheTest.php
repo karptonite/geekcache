@@ -1,6 +1,7 @@
 <?php
 abstract class BaseIncrementableCacheTest extends PHPUnit_Framework_TestCase
 {
+    /** @var GeekCache\Cache\IncrementableCache */
     protected $cache;
 
     const KEY = 'foo';

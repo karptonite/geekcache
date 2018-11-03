@@ -11,7 +11,7 @@ class IncrementableMemcacheCache extends MemcacheCache implements IncrementableC
         $this->cache = $cache;
     }
 
-    public function increment($key, $value = 1)
+    public function increment($key, $value = 1, $ttl = 0)
     {
         if ($value < 0) {
             return $this->decrement($key, abs($value));
@@ -19,7 +19,7 @@ class IncrementableMemcacheCache extends MemcacheCache implements IncrementableC
 
         //calling add before incrementing prevents a race condition when two processes try to increment
         //the same value http://php.net/manual/en/memcache.increment.php#90864
-        $this->cache->add($key, 0);
+        $this->cache->add($key, 0, null, $ttl);
         return $this->cache->increment($key, $value);
     }
 

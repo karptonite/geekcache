@@ -9,4 +9,15 @@ class MemcachedIncrementableCacheTest extends BaseIncrementableCacheTest
         $memcached->flush();
         $this->cache = new GeekCache\Cache\IncrementableMemcachedCache($memcached);
     }
+
+    /**
+     * @group slowTests
+     */
+    public function testTimeout()
+    {
+        $this->cache->increment(static::KEY, 1, 1);
+        usleep(2100000);
+        $this->assertFalse($this->cache->get(static::KEY));
+    }
+
 }

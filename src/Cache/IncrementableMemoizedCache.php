@@ -11,9 +11,9 @@ class IncrementableMemoizedCache extends MemoizedCache implements IncrementableC
         $this->incrementablecache = $incrementablecache;
     }
 
-    public function increment($key, $value = 1)
+    public function increment($key, $value = 1, $ttl = 0)
     {
-        $newvalue = $this->incrementablecache->increment($key, $value);
+        $newvalue = $this->incrementablecache->increment($key, $value, $ttl);
         $this->memoize($key, $newvalue);
         return $newvalue;
     }

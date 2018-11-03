@@ -5,7 +5,7 @@ class NormalCacheItem implements CacheItem
 {
     private $cache;
     protected $key;
-    private $ttl;
+    protected $ttl;
 
     public function __construct(Cache $cache, $key, $ttl = null)
     {

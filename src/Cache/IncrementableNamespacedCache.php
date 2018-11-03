@@ -11,8 +11,8 @@ class IncrementableNamespacedCache extends NamespacedCache implements Incrementa
         $this->incrementablecache = $incrementablecache;
     }
 
-    public function increment($key, $value = 1)
+    public function increment($key, $value = 1, $ttl = 0)
     {
-        return $this->incrementablecache->increment($this->reviseKey($key), $value);
+        return $this->incrementablecache->increment($this->reviseKey($key), $value, $ttl);
     }
 }

@@ -3,7 +3,7 @@ namespace GeekCache\Cache;
 
 class IncrementableArrayCache extends ArrayCache implements IncrementableCache
 {
-    public function increment($key, $value = 1)
+    public function increment($key, $value = 1, $ttl = null)
     {
         if ($this->shouldDecrement($key, $value)) {
             $modifier = [$this, 'decrementNumber'];

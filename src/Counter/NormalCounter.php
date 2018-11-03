@@ -15,6 +15,6 @@ class NormalCounter extends Cache\NormalCacheItem implements Counter
 
     public function increment($value = 1)
     {
-        return $this->incrementablecache->increment($this->key, $value);
+        return $this->incrementablecache->increment($this->key, $value, $this->ttl);
     }
 }

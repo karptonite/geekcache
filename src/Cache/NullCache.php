@@ -23,7 +23,7 @@ class NullCache implements Cache, IncrementableCache
         return true;
     }
 
-    public function increment($key, $value = 1)
+    public function increment($key, $value = 1, $ttl = null)
     {
         return null;
     }
