@@ -10,7 +10,6 @@ services:
   - memcached
 
 before_script:
-  - printf "\n" | pecl install -f memcache-3.0.8
   - composer self-update
   - phpenv config-add travisconfig.ini
   - composer install --prefer-source --no-interaction --dev
