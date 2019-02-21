@@ -9,7 +9,7 @@ class CacheClearerTest extends PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $this->container = new Illuminate\Container\Container;
-        $msp = new GeekCache\Provider\MemcacheServiceProvider($this->container);
+        $msp = new GeekCache\Provider\MemcachedServiceProvider($this->container);
         $sp = new GeekCache\Provider\CacheServiceProvider($this->container);
         $msp->register();
         $sp->register();

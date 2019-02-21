@@ -14,7 +14,7 @@ class CacheServiceProviderMemcachedTest extends CacheServiceProviderTest
     public function testDefaultServersAdded()
     {
         $servers = $this->container['geekcache.memcached']->getServerList();
-        $this->assertEquals([['host' => 'localhost', 'port'=>11211]], $servers);
+        $this->assertEquals([['host' => 'localhost', 'port'=>11211, 'type' => 'TCP']], $servers);
     }
 
     public function testDefaultServersOverrideable()
@@ -26,8 +26,8 @@ class CacheServiceProviderMemcachedTest extends CacheServiceProviderTest
 
         $servers = $this->container['geekcache.memcached']->getServerList();
         $expected = [
-            ['host' => 'localhost', 'port'=>11211],
-            ['host' => '127.0.0.1', 'port'=>11211],
+            ['host' => 'localhost', 'port'=>11211, 'type' => 'TCP'],
+            ['host' => '127.0.0.1', 'port'=>11211, 'type' => 'TCP'],
         ];
 
         $this->assertEquals($expected, $servers);

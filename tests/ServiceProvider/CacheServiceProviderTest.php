@@ -18,7 +18,7 @@ abstract class CacheServiceProviderTest extends PHPUnit_Framework_TestCase
 
     protected function getPersistentServiceProvider()
     {
-        return new GeekCache\Provider\MemcacheServiceProvider($this->container);
+        return new GeekCache\Provider\MemcachedServiceProvider($this->container);
     }
 
     public function testMemoReturnsArrayCaches()

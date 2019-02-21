@@ -28,8 +28,8 @@ framework by adding `"illuminate/container": "4.1.*"` to your composer.json
 file.
 
 GeekCache also requires a key/value storage system for the back end. Currently,
-GeekCache is implemented for only one system: Memcached, using either the
-Memcache or Memcached PECL extension. One of those extensions is required.
+GeekCache is implemented for only one system: Memcached, using the
+Memcached PECL extension.
 
 Usage
 -----
@@ -40,16 +40,13 @@ to add the builders to the container.
 ```php
 <?php
 $container = new Illuminate\Container\Container;
-$msp = new GeekCache\Provider\MemcacheServiceProvider($container);
+$msp = new GeekCache\Provider\MemcachedServiceProvider($container);
 $sp = new GeekCache\Provider\CacheServiceProvider($container);
 $msp->register();
 $sp->register();
 ```
 
-Instead of the MemcacheServiceProvider, you can use the
-MemcachedServiceProvider; the first uses the Memcache PECL extension, the
-second, the Memcached extension. They should be functionally identical. If your
-Memcache server or servers are running anywhere other than the localhost, port
+If your Memcache server or servers are running anywhere other than the localhost, port
 11211, you can set them as described in the Configuration section, below.
 
 Once the service is registered, you can resolve the builders and the clearer
@@ -321,8 +318,7 @@ the providers are registered.
 // if you aren't explicitly using memoization.
 $container['geekcache.nolocalcache'] = false; 
 
-// Defaults to localhost, port 11211. Used by both the Memcached and Memcache service 
-// providers
+// Defaults to localhost, port 11211.
 $container['geekcache.memcache.servers'] = array(
     '192.168.1.2' => array(11211),
     //additional servers
@@ -338,11 +334,4 @@ $container['geekcache.maxlocal.memos'] = 1000;
 // There is a bit of overhead with this, so best not to use a namespace unless
 // you need one.
 $container['geekcache.namespace'] = "key_prefix_";
-
-// Defaults to true. For the Memcache service provider only, if this is true, 
-// Memcache will use persistent connections, as described here:
-// http://php.net/manual/en/memcache.addserver.php
-// Persistent connections are not implemented for the GeekCache Memcached
-// service provider
-$container['geekcache.memcache.persistent'] = true;
 ```
