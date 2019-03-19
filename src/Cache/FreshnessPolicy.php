@@ -7,4 +7,5 @@ interface FreshnessPolicy
     public function unpackValue($result);
     public function resultIsFresh($result);
     public function computeTtl($ttl);
+    public function getNamespace();
 }

@@ -3,7 +3,7 @@ namespace GeekCache\Cache;
 
 /**
  * If PHP supported it, this would be a private class for AbstractFreshnessPolicy
- * It is not intented for use elsewhere.
+ * It is not intended for use elsewhere.
  */
 class CacheData
 {

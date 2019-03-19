@@ -3,6 +3,8 @@ namespace GeekCache\Cache;
 
 abstract class AbstractFreshnessPolicy implements FreshnessPolicy
 {
+    const POLICY_NAMESPACE = '';
+
     public function packValueWithPolicy($value, $ttl = null)
     {
         return new CacheData($value, $this->createFreshnessData($ttl));
@@ -25,5 +27,10 @@ abstract class AbstractFreshnessPolicy implements FreshnessPolicy
 
         $freshnessData = $result->getFreshnessData();
         return $this->isFresh($freshnessData);
+    }
+
+    public function getNamespace()
+    {
+        return static::POLICY_NAMESPACE;
     }
 }

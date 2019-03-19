@@ -76,7 +76,9 @@ class CacheBuilderTest extends PHPUnit_Framework_TestCase
     public function testTaggedBuild()
     {
         $this->prepareFullMockBuilder();
-        $this->cache->shouldReceive('get')->with('foo', null, 5)->andReturnNull();
+        $this->cache->shouldReceive('get')
+            ->with(\GeekCache\Cache\TaggedFreshnessPolicy::POLICY_NAMESPACE . '_' . 'foo', null, 5)
+            ->andReturnNull();
         $tagset = m::mock('GeekCache\Tag\TagSet');
         $this->tagsetfactory->shouldReceive('makeTagSet')
             ->once()
@@ -91,7 +93,7 @@ class CacheBuilderTest extends PHPUnit_Framework_TestCase
         $spy = null;
         $this->cache->shouldReceive('put')
             ->once()
-            ->with('foo', m::any(), 5)
+            ->with(\GeekCache\Cache\TaggedFreshnessPolicy::POLICY_NAMESPACE . '_' . 'foo', m::any(), 5)
             ->andReturnUsing(function ($arg1, $arg2, $arg3) use (&$spy) {
                 $spy = $arg2;
             });

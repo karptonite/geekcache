@@ -3,6 +3,7 @@ namespace GeekCache\Cache;
 
 class GracePeriodFreshnessPolicy extends AbstractFreshnessPolicy
 {
+    const POLICY_NAMESPACE = 'gp';
     private $gracePeriod;
 
     public function __construct($gracePeriod = null)

@@ -3,11 +3,12 @@ namespace GeekCache\Cache;
 
 class SoftInvalidatableCache extends CacheDecorator
 {
+    const DECORATOR_NAMESPACE = '';
     private $policy;
 
     public function __construct(Cache $cache, FreshnessPolicy $policy)
     {
-        parent::__construct($cache);
+        parent::__construct(new NamespacedCache($cache, $policy->getNamespace()));
         $this->policy = $policy;
     }
 

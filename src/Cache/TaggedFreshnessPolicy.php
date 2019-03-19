@@ -5,6 +5,7 @@ use GeekCache\Tag\TagSet;
 
 class TaggedFreshnessPolicy extends AbstractFreshnessPolicy
 {
+    const POLICY_NAMESPACE = 'tg';
     private $tagset;
 
     public function __construct(TagSet $tagset)

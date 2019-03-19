@@ -3,8 +3,6 @@ use Mockery as m;
 
 class TaggedCacheTest extends BaseCacheTest
 {
-    private $arraycache;
-
     public function setUp()
     {
         parent::setUp();
@@ -39,6 +37,12 @@ class TaggedCacheTest extends BaseCacheTest
             ->andReturn('bar');
 
         $this->assertFalse($this->cache->get(static::KEY));
+    }
+
+    public function testSameLookupWithoutTagsDoesNotCollide()
+    {
+        $this->cache->put(static::KEY, static::VALUE);
+        $this->assertFalse($this->parentcache->get(static::KEY));
     }
 
     public function testGetStaleWhenHashChanges()
@@ -87,7 +91,7 @@ class TaggedCacheTest extends BaseCacheTest
     public function testGetStaleFromWrappedSoftInvalidatable()
     {
         $policy = new GeekCache\Cache\GracePeriodFreshnessPolicy();
-        $cache = new GeekCache\Cache\SoftInvalidatableCache($this->cache, $policy, $this->cache);
+        $this->cache = new GeekCache\Cache\SoftInvalidatableCache($this->cache, $policy, $this->cache);
 
         $this->cache->put(static::KEY, static::VALUE, 1);
         $this->tagset->shouldReceive('getSignature')
