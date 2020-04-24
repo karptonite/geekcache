@@ -21,10 +21,41 @@ class MemcachedCounterTest extends PHPUnit_Framework_TestCase
     public function testCounterExpires()
     {
         $counter = new GeekCache\Counter\NormalCounter($this->cache, self::KEY, 1);
-        $counter->increment(1);
+        $result = $counter->increment(1);
+        $this->assertEquals(1, $result);
         $this->assertEquals(1, $counter->get());
 
         usleep(2100000);
         $this->assertFalse($counter->get());
+    }
+
+    /**
+     * @group slowTests
+     */
+    public function testCounterExpiresWithBuilder()
+    {
+        $builder = new GeekCache\Counter\CounterBuilder($this->cache, $this->cache);
+        $counter = $builder->make(self::KEY, 1);
+        $result = $counter->increment(1);
+        $this->assertEquals(1, $result);
+        $this->assertEquals(1, $counter->get());
+
+        usleep(2100000);
+        $this->assertFalse($counter->get());
+    }
+
+    /**
+     * @group slowTests
+     */
+    public function testCounterExpiresOnIncrement()
+    {
+        $counter = new GeekCache\Counter\NormalCounter($this->cache, self::KEY, 1);
+        $counter->increment(1);
+        $this->assertEquals(1, $counter->get());
+        $counter->increment(1);
+        $this->assertEquals(2, $counter->get());
+
+        usleep(2100000);
+        $this->assertEquals(1, $counter->increment(1));
     }
 }
