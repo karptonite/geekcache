@@ -39,13 +39,9 @@ class CacheServiceProvider
             return !empty($c['geekcache.nolocalcache']) ? new Cache\NullCache : new Cache\IncrementableArrayCache();
         });
 
-        $this->container['geekcache.tagfactory'] = $this->container->share(function ($c) {
-            $cache = new Cache\MemoizedCache($c['geekcache.persistentcache'], $c['geekcache.local.tags']);
-            return new Tag\TagFactory($cache);
-        });
-
         $this->container['geekcache.tagsetfactory'] = $this->container->share(function ($c) {
-            return new Tag\TagSetFactory($c['geekcache.tagfactory']);
+            $cache = new Cache\MemoizedCache($c['geekcache.persistentcache'], $c['geekcache.local.tags']);
+            return new Tag\TagSetFactory($cache);
         });
 
         $this->container['geekcache.cachebuilder'] = $this->container->share(function ($c) {

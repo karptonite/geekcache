@@ -3,11 +3,13 @@ use Mockery as m;
 
 class TagSetFactoryTest extends PHPUnit_Framework_TestCase
 {
+    const TAGNAME = 'TheTag';
+    const TAGKEY = 'tag_TheTag';
+    
     public function setUp()
     {
         $this->cache      = new GeekCache\Cache\ArrayCache();
-        $tagFactory = new GeekCache\Tag\TagFactory($this->cache);
-        $this->factory    = new GeekCache\Tag\TagSetFactory($tagFactory);
+        $this->factory    = new GeekCache\Tag\TagSetFactory($this->cache);
     }
 
     public function testTagSetFactoryMakesTagSet()
@@ -21,15 +23,39 @@ class TagSetFactoryTest extends PHPUnit_Framework_TestCase
         $this->assertNotEmpty($this->cache->get('tag_bar'));
     }
 
+    public function testTagSetFactoryReturnsTagSetWithCorrectProperties()
+    {
+        $cache = m::mock('GeekCache\Cache\Cache');
+        $cache->shouldReceive('getMulti')
+            ->with([static::TAGKEY])
+            ->once()
+            ->andReturn([static::TAGKEY => false]);
+
+        $cache->shouldReceive('put')
+            ->with(static::TAGKEY, m::any())
+            ->once();
+
+        $factory = new GeekCache\Tag\TagSetFactory($cache);
+
+        $tag = $factory->makeTagSet([static::TAGNAME]);
+        $tag->getSignature();
+    }
+
     public function testTagSetFactoryCollapsesDuplicates()
     {
-        $tagmock = m::mock('GeekCache\Tag\Tag');
-        $tagFactoryMock = m::mock('GeekCache\Tag\TagFactory');
-        $tagFactoryMock->shouldReceive('makeTag')->with('foo')->once()->andReturn($tagmock);
-        $tagFactoryMock->shouldReceive('makeTag')->with('bar')->once()->andReturn($tagmock);
-
-        $factory = new GeekCache\Tag\TagSetFactory($tagFactoryMock);
-        $factory->makeTagSet('foo', 'bar', 'foo');
+        $cache = m::mock('GeekCache\Cache\Cache');
+        $cache->shouldReceive('getMulti')
+            ->with(['tag_foo', 'tag_bar'])
+            ->once()
+            ->andReturn(['tag_foo' => false, 'tag_bar' => false ]);
+        
+        $cache->shouldReceive('put')
+            ->with(m::any(), m::any())
+            ->times(2);
+        
+        $factory = new GeekCache\Tag\TagSetFactory($cache);
+        $tagset = $factory->makeTagSet(['foo', 'bar', 'foo']);
+        $tagset->getSignature();
     }
 
     public function testAlternateMakeInterface()

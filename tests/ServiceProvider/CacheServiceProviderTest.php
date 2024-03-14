@@ -48,14 +48,6 @@ abstract class CacheServiceProviderTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($cache->get('foo3'));
     }
 
-    public function testTagFactoryRegistered()
-    {
-        $tagfactory1 = $this->container['geekcache.tagfactory'];
-        $tagfactory2 = $this->container['geekcache.tagfactory'];
-        $this->assertSame($tagfactory1, $tagfactory2);
-        $this->assertInstanceOf('GeekCache\Tag\TagFactory', $tagfactory1);
-    }
-
     public function testTagSetFactoryRegistered()
     {
         $tagsetfactory1 = $this->container['geekcache.tagsetfactory'];

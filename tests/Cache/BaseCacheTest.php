@@ -127,6 +127,42 @@ abstract class BaseCacheTest extends PHPUnit_Framework_TestCase
         $this->assertSame(0, $result);
     }
 
+
+    public function testGetMultiWithCacheMiss()
+    {
+        $this->assertEquals( [
+            static::KEY => false, 
+            static::KEY2 => false
+        ], $this->cache->getMulti([ static::KEY, static::KEY2]));
+    }
+
+    public function testGetMultiWithFirstHit()
+    {
+        $this->cache->put(self::KEY, self::VALUE);
+        $this->assertEquals( [
+            static::KEY => static::VALUE, 
+            static::KEY2 => false
+        ], $this->cache->getMulti([ static::KEY, static::KEY2]));
+    }
+
+    public function testGetMultiWithSecondHit()
+    {
+        $this->cache->put(self::KEY2, self::VALUE2);
+        $this->assertEquals( [
+            static::KEY => false, 
+            static::KEY2 => static::VALUE2
+        ], $this->cache->getMulti([ static::KEY, static::KEY2]));
+    }
+
+    public function testGetMultiWithBothHits()
+    {
+        $this->cache->put(self::KEY, self::VALUE);
+        $this->cache->put(self::KEY2, self::VALUE2);
+        $this->assertEquals( [
+            static::KEY => self::VALUE, 
+            static::KEY2 => static::VALUE2
+        ], $this->cache->getMulti([ static::KEY, static::KEY2]));
+    }
     public function assertCachePutsAndGets($cache)
     {
         $cache->put(self::KEY, self::VALUE);

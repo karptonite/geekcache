@@ -4,7 +4,7 @@ namespace GeekCache\Cache;
 class IncrementableMemcachedCache extends MemcachedCache implements IncrementableCache
 {
     /** @var \Memcached  */
-    private $cache;
+    protected $cache;
 
     public function __construct(\Memcached $cache)
     {

@@ -19,8 +19,8 @@ class CacheBuilderTest extends PHPUnit_Framework_TestCase
         $this->cache = new GeekCache\Cache\ArrayCache();
         $this->memocache = new GeekCache\Cache\ArrayCache();
         $this->tagcache = new GeekCache\Cache\Arraycache();
-        $this->tagfactory = new GeekCache\Tag\TagFactory($this->tagcache);
-        $this->tagsetfactory = new GeekCache\Tag\TagSetFactory($this->tagfactory);
+//        $this->tagfactory = new GeekCache\Tag\TagFactory($this->tagcache);
+        $this->tagsetfactory = new GeekCache\Tag\TagSetFactory($this->tagcache);
         $this->builder = new GeekCache\Cache\CacheBuilder($this->cache, $this->memocache, $this->tagsetfactory);
     }
 
@@ -160,7 +160,7 @@ class CacheBuilderTest extends PHPUnit_Framework_TestCase
         $this->prepareArrayBuilder();
         $cache = $this->builder->addTags(array('footag', 'bartag'))->addGracePeriod(0)->make('foo', 1);
         $cache->put('bar');
-        $this->tagfactory->makeTag('bartag')->clear();
+        $this->tagsetfactory->makeTagSet(['bartag'])->clearAll();
         $this->assertFalse($cache->get());
         $regenerator = function () {
             return false;

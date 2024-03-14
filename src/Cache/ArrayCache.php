@@ -17,6 +17,16 @@ class ArrayCache extends AbstractBaseCache implements Cache
         return $this->cacheExists($key) ? $this->cache[$key] : $this->regenerate($key, $regenerator, $ttl);
     }
 
+    public function getMulti(array $keys)
+    {
+        $results = [];
+        foreach ($keys as $key)
+        {
+            $results[$key] = $this->get($key);
+        }
+        return $results;
+    }
+
     protected function cacheExists($key)
     {
         return array_key_exists($key, $this->cache);

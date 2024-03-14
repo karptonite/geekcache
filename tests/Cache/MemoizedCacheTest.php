@@ -23,6 +23,27 @@ class MemoizedCacheTest extends BaseCacheTest
         $this->memoizedcache->put(self::KEY, self::VALUE2);
         $this->assertEquals(self::VALUE2, $this->cache->get(self::KEY));
     }
+    
+    public function testMemoizedCacheReadsFromPrimarySecond()
+    {
+        $this->cache->put(self::KEY, self::VALUE);
+        $this->memoizedcache->delete(self::KEY);
+        $this->assertEquals(self::VALUE, $this->cache->get(self::KEY));
+    }
+    
+    public function testMemoizedCacheReadsMultiFromPrimarySecond()
+    {
+        $this->cache->put(self::KEY, self::VALUE);
+        $this->memoizedcache->delete(self::KEY);
+        $this->assertEquals([self::KEY => self::VALUE], $this->cache->getMulti([self::KEY]));
+    }
+    
+    public function testMemoizedCacheReadsFromMemoizedFirstMulti()
+    {
+        $this->cache->put(self::KEY, self::VALUE);
+        $this->memoizedcache->put(self::KEY, self::VALUE2);
+        $this->assertEquals([self::KEY => self::VALUE2], $this->cache->getMulti([self::KEY]));
+    }
 
     public function testMemoizedCacheWritesToTheMemoizedOnRead()
     {
@@ -30,6 +51,14 @@ class MemoizedCacheTest extends BaseCacheTest
         $this->cache->get(self::KEY);
         $this->primarycache->delete(self::KEY);
         $this->assertEquals(self::VALUE, $this->cache->get(self::KEY));
+    }
+    
+    public function testMemoizedCacheWritesToTheMemoizedOnMultiRead()
+    {
+        $this->cache->put(self::KEY, self::VALUE);
+        $this->cache->getMulti([self::KEY]);
+        $this->primarycache->delete(self::KEY);
+        $this->assertEquals([self::KEY => self::VALUE], $this->cache->getMulti([self::KEY]));
     }
 
     public function testMemoizedCacheDeletesFromMemoizedOnDelete()

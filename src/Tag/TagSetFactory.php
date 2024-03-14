@@ -1,25 +1,21 @@
 <?php
 namespace GeekCache\Tag;
+use GeekCache\Cache\Cache;
 
 class TagSetFactory
 {
-    private $tagFactory;
+    private $cache;
 
-    public function __construct(TagFactory $tagFactory)
+    public function __construct(Cache $cache)
     {
-        $this->tagFactory = $tagFactory;
+        $this->cache = $cache;
     }
 
     public function makeTagSet($names)
     {
-        $tags = array();
         $names = is_array($names) ? $names : func_get_args();
         $names = array_unique($names);
 
-        foreach ($names as $name) {
-            $tags[] = $this->tagFactory->makeTag($name);
-        }
-
-        return new TagSet($tags);
+        return new TagSet($this->cache, $names);
     }
 }

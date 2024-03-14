@@ -18,6 +18,24 @@ class MemoizedCache extends CacheDecorator
         $this->memocache = $memocache;
     }
 
+    public function getMulti(array $keys)
+    {
+        $results = $this->memocache->getMulti($keys);
+        $missingKeys = [];
+        foreach( $results as $key => $result) {
+            if($result === false) {
+                $missingKeys[] = $key;
+            }
+        }
+        
+        $primaryResults = $this->getMultiAndMemoize($missingKeys);
+        // FIXME test that this preserves the order
+        foreach($primaryResults as $key => $value) {
+            $results[$key] = $value;
+        }
+        return $results;
+    }
+    
     public function get($key, callable $regenerator = null, $ttl = null)
     {
         $result = $this->memocache->get($key);
@@ -28,6 +46,16 @@ class MemoizedCache extends CacheDecorator
     {
         $this->memocache->put($key, $value);
         return parent::put($key, $value, $ttl);
+    }
+    
+    private function getMultiAndMemoize($keys)
+    {
+        $values = parent::getMulti($keys);
+        foreach($values as $key => $value)
+        {
+            $this->memoize($key, $value);
+        }
+        return $values;
     }
 
     private function getAndMemoize($key, callable $regenerator = null, $ttl = null)

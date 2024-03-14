@@ -3,7 +3,7 @@ namespace GeekCache\Cache;
 
 class MemcachedCache extends AbstractBaseCache implements Cache
 {
-    private $cache;
+    protected $cache;
 
     public function __construct(\Memcached $cache)
     {
@@ -14,6 +14,10 @@ class MemcachedCache extends AbstractBaseCache implements Cache
     {
         $result = $this->cache->get($key);
         return $result !== false ? $result : $this->regenerate($key, $regenerator, $ttl);
+    }
+    public function getMulti( array $keys )
+    {
+        return $this->cache->getMulti( $keys, \Memcached::GET_PRESERVE_ORDER );
     }
 
     public function put($key, $value, $ttl = null)

@@ -12,6 +12,19 @@ class SoftInvalidatableCache extends CacheDecorator
         $this->policy = $policy;
     }
 
+    /**
+     * There are no performance benefits for getMulti once you add a Soft Invalidatable cache
+     * (i.e., any tag or a grace period
+     */
+    public function getMulti(array $keys)
+    {
+        $results = [];
+        foreach($keys as $key) {
+            $results[$key] = $this->get($key);
+        }
+        return $results;
+    }
+
     public function put($key, $value, $ttl = null)
     {
         return parent::put($key, $this->policy->packValueWithPolicy($value, $ttl), $this->policy->computeTtl($ttl));

@@ -7,6 +7,15 @@ class NullCache implements Cache, IncrementableCache
     {
         return false;
     }
+    
+    public function getMulti(array $keys)
+    {
+        $result = [];
+        foreach( $keys as $key) {
+            $result[$key] = false;
+        }
+        return $result;
+    }
 
     public function put($key, $value, $ttl = null)
     {
