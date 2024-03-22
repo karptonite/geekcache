@@ -1,4 +1,5 @@
 <?php
+
 namespace GeekCache\Tag;
 
 use GeekCache\Cache\Cache;

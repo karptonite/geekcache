@@ -1,4 +1,5 @@
 <?php
+
 namespace GeekCache\Cache;
 
 use GeekCache\Tag\TagSetFactory;

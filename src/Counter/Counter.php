@@ -1,4 +1,5 @@
 <?php
+
 namespace GeekCache\Counter;
 
 interface Counter extends \GeekCache\Cache\CacheItem

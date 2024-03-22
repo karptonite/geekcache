@@ -1,4 +1,5 @@
 <?php
+
 namespace GeekCache\Cache;
 
 class CacheBuilder
@@ -57,7 +58,7 @@ class CacheBuilder
     public function addTags($names)
     {
         $tagsetfactory = $this->tagsetfactory;
-        $tagset        = $tagsetfactory->makeTagSet(is_array($names) ? $names: func_get_args());
+        $tagset        = $tagsetfactory->makeTagSet(is_array($names) ? $names : func_get_args());
         $policy        = new TaggedFreshnessPolicy($tagset);
         $factory       = $this->getSoftInvalidatableFactory($policy);
         return $this->addToStack($factory);

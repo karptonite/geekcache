@@ -1,4 +1,5 @@
 <?php
+
 namespace GeekCache\Counter;
 
 use GeekCache\Cache;

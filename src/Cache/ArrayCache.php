@@ -1,4 +1,5 @@
 <?php
+
 namespace GeekCache\Cache;
 
 class ArrayCache extends AbstractBaseCache implements Cache

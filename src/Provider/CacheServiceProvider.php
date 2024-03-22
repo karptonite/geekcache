@@ -1,8 +1,9 @@
 <?php
+
 namespace GeekCache\Provider;
 
-use \GeekCache\Tag;
-use \GeekCache\Cache;
+use GeekCache\Tag;
+use GeekCache\Cache;
 
 class CacheServiceProvider
 {
@@ -36,7 +37,7 @@ class CacheServiceProvider
         }, true);
 
         $this->container->bind('geekcache.local.incrementablecache', function ($c) {
-            return !empty($c['geekcache.nolocalcache']) ? new Cache\NullCache : new Cache\IncrementableArrayCache();
+            return !empty($c['geekcache.nolocalcache']) ? new Cache\NullCache() : new Cache\IncrementableArrayCache();
         }, true);
 
         $this->container->bind('geekcache.tagfactory', function ($c) {
@@ -46,7 +47,7 @@ class CacheServiceProvider
 
         $this->container->bind('geekcache.tagsetfactory', function ($c) {
             return new Tag\TagSetFactory($c['geekcache.tagfactory']);
-        } ,true);
+        }, true);
 
         $this->container->bind('geekcache.cachebuilder', function ($c) {
             return new Cache\CacheBuilder(
@@ -63,7 +64,7 @@ class CacheServiceProvider
             );
         }, true);
 
-        $this->container->bind('geekcache.clearer',function ($c) {
+        $this->container->bind('geekcache.clearer', function ($c) {
             return new \GeekCache\Cache\CacheClearer(
                 $c['geekcache.tagsetfactory'],
                 $c['geekcache.persistentcache'],
@@ -75,11 +76,11 @@ class CacheServiceProvider
     private function registerLocalCache($name)
     {
         $default_max = self::$default_maxlocal[$name];
-        $this->container->bind('geekcache.local.'.$name,  function ($c) use ($name, $default_max) {
+        $this->container->bind('geekcache.local.'.$name, function ($c) use ($name, $default_max) {
             $max = isset($c['geekcache.maxlocal.' . $name]) ? $c['geekcache.maxlocal.'.$name] : $default_max;
             //If the process will last longer than a page load, make sure to set geekcache.nolocalcache to true
             //to avoid keeping a potentially stale local cache.
-            return !empty($c['geekcache.nolocalcache']) ? new Cache\NullCache : new Cache\ArrayCache($max);
+            return !empty($c['geekcache.nolocalcache']) ? new Cache\NullCache() : new Cache\ArrayCache($max);
         }, true);
     }
 }

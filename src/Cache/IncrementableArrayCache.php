@@ -1,4 +1,5 @@
 <?php
+
 namespace GeekCache\Cache;
 
 class IncrementableArrayCache extends ArrayCache implements IncrementableCache
@@ -16,7 +17,8 @@ class IncrementableArrayCache extends ArrayCache implements IncrementableCache
         return $this->modify($key, $value, $modifier);
     }
 
-    private function shouldIncrement($value){
+    private function shouldIncrement($value)
+    {
         return $value >= 0;
     }
 

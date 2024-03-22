@@ -1,9 +1,10 @@
 <?php
+
 namespace GeekCache\Cache;
 
 class SoftInvalidatableCache extends CacheDecorator
 {
-    const DECORATOR_NAMESPACE = '';
+    public const DECORATOR_NAMESPACE = '';
     private $policy;
 
     public function __construct(Cache $cache, FreshnessPolicy $policy)

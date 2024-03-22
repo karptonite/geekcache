@@ -1,4 +1,5 @@
 <?php
+
 namespace GeekCache\Cache;
 
 abstract class CacheDecorator extends AbstractBaseCache implements Cache

@@ -1,4 +1,5 @@
 <?php
+
 namespace GeekCache\Cache;
 
 class NullCache implements Cache, IncrementableCache

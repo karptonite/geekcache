@@ -1,4 +1,5 @@
 <?php
+
 namespace GeekCache\Cache;
 
 /**
@@ -36,7 +37,7 @@ class MemoizedCache extends CacheDecorator
         $this->memoize($key, $value);
         return $value;
     }
-    
+
     protected function memoize($key, $value)
     {
         $this->memocache->put($key, $value);

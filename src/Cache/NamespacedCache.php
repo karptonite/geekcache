@@ -1,4 +1,5 @@
 <?php
+
 namespace GeekCache\Cache;
 
 class NamespacedCache extends CacheDecorator

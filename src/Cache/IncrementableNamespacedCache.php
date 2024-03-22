@@ -1,4 +1,5 @@
 <?php
+
 namespace GeekCache\Cache;
 
 class IncrementableNamespacedCache extends NamespacedCache implements IncrementableCache

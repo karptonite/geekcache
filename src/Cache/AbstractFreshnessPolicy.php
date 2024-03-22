@@ -1,9 +1,10 @@
 <?php
+
 namespace GeekCache\Cache;
 
 abstract class AbstractFreshnessPolicy implements FreshnessPolicy
 {
-    const POLICY_NAMESPACE = '';
+    public const POLICY_NAMESPACE = '';
 
     public function packValueWithPolicy($value, $ttl = null)
     {
