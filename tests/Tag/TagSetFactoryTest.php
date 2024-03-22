@@ -1,15 +1,21 @@
 <?php
 use Mockery as m;
 
-class TagSetFactoryTest extends PHPUnit_Framework_TestCase
+class TagSetFactoryTest extends PHPUnit\Framework\TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         $this->cache      = new GeekCache\Cache\ArrayCache();
         $tagFactory = new GeekCache\Tag\TagFactory($this->cache);
         $this->factory    = new GeekCache\Tag\TagSetFactory($tagFactory);
     }
 
+    public function tearDown(): void
+    {
+        m::close();
+        parent::tearDown();
+    }
+    
     public function testTagSetFactoryMakesTagSet()
     {
         $tagset = $this->factory->makeTagSet(array('foo', 'bar'));

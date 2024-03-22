@@ -1,8 +1,15 @@
 <?php
 use Mockery as m;
 
-class CounterBuilderTest extends PHPUnit_Framework_TestCase
+class CounterBuilderTest extends PHPUnit\Framework\TestCase
 {
+    
+    public function tearDown(): void
+    {
+        m::close();
+        parent::tearDown();
+    }
+
     public function prepareFullMockBuilder()
     {
         $this->cache         = m::mock('GeekCache\Cache\IncrementableCache');

@@ -4,7 +4,7 @@ class SoftExpiringTest extends BaseCacheTest
     private $arraycache;
     const GRACEPERIOD = 10;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->parentcache = new GeekCache\Cache\ArrayCache;

@@ -1,11 +1,11 @@
 <?php
-class NullCacheTest extends PHPUnit_Framework_TestCase
+class NullCacheTest extends PHPUnit\Framework\TestCase
 {
     protected $cache;
     const KEY = 'key';
     const VALUE = 'value';
 
-    public function setUp()
+    public function setUp():void
     {
         $this->cache = new GeekCache\Cache\NullCache;
     }

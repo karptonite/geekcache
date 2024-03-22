@@ -1,11 +1,11 @@
 <?php
 use Mockery as m;
 
-class CacheClearerTest extends PHPUnit_Framework_TestCase
+class CacheClearerTest extends PHPUnit\Framework\TestCase
 {
     const KEY = 'theTag';
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->container = new Illuminate\Container\Container;
@@ -19,6 +19,12 @@ class CacheClearerTest extends PHPUnit_Framework_TestCase
             $this->container['geekcache.persistentcache'],
             array($this->container['geekcache.local.memos'], $this->container['geekcache.local.tags'])
         );
+    }
+
+    public function tearDown(): void
+    {
+        m::close();
+        parent::tearDown();
     }
 
 

@@ -1,11 +1,11 @@
 <?php
 use Mockery as m;
 
-class TagSetTest extends PHPUnit_Framework_TestCase
+class TagSetTest extends PHPUnit\Framework\TestCase
 {
     const KEY = 'theTag';
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->cache = new GeekCache\Cache\ArrayCache;
@@ -13,6 +13,12 @@ class TagSetTest extends PHPUnit_Framework_TestCase
         $this->tags = $this->getArrayOfTags(2);
     }
 
+    public function tearDown(): void
+    {
+        m::close();
+        parent::tearDown();
+    }
+    
     private function getArrayOfTags($quantity)
     {
         $tags = array();
@@ -36,11 +42,9 @@ class TagSetTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($hash, $tagset2->getSignature());
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testTagSetEnforcesType()
     {
+        $this->expectException(InvalidArgumentException::class);
         $tags = $this->getArrayOfTags(2);
         $tags[] = new GeekCache\Cache\ArrayCache();
         $tagset = new GeekCache\Tag\TagSet($tags);

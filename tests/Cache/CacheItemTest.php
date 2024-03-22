@@ -1,7 +1,7 @@
 <?php
 use Mockery as m;
 
-class CacheItemTest extends PHPUnit_Framework_TestCase
+class CacheItemTest extends PHPUnit\Framework\TestCase
 {
     const KEY   = 'thekey';
     const VALUE = 'foobar';
@@ -11,8 +11,13 @@ class CacheItemTest extends PHPUnit_Framework_TestCase
 
     private $cache;
 
+    public function tearDown(): void
+    {
+        m::close();
+        parent::tearDown();
+    }
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->cache = new GeekCache\Cache\ArrayCache;

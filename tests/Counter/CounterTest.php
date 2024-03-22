@@ -1,7 +1,7 @@
 <?php
 use Mockery as m;
 
-class CounterTest extends PHPUnit_Framework_TestCase
+class CounterTest extends PHPUnit\Framework\TestCase
 {
     const KEY   = 'thekey';
     const KEY2   = 'thekey2';
@@ -10,7 +10,7 @@ class CounterTest extends PHPUnit_Framework_TestCase
     const TTL = 20;
     private $cache;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->cache = new GeekCache\Cache\IncrementableArrayCache;
@@ -18,6 +18,11 @@ class CounterTest extends PHPUnit_Framework_TestCase
         $this->counter2 = new GeekCache\Counter\NormalCounter($this->cache, self::KEY2, self::TTL);
     }
 
+    public function tearDown(): void
+    {
+        m::close();
+        parent::tearDown();
+    }
     public function assertImplementsInterface()
     {
         $this->assertInstanceOf('Geek\Counter\Counter', $this->counter);

@@ -1,7 +1,7 @@
 <?php
-abstract class CacheServiceProviderTest extends PHPUnit_Framework_TestCase
+abstract class CacheServiceProviderTest extends PHPUnit\Framework\TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->container = $this->getContainer();
@@ -13,7 +13,7 @@ abstract class CacheServiceProviderTest extends PHPUnit_Framework_TestCase
 
     protected function getContainer()
     {
-        return new Pimple();
+        return new Illuminate\Container\Container();
     }
 
     protected function getPersistentServiceProvider()

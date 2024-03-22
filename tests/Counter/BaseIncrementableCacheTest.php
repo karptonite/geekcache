@@ -1,5 +1,5 @@
 <?php
-abstract class BaseIncrementableCacheTest extends PHPUnit_Framework_TestCase
+abstract class BaseIncrementableCacheTest extends PHPUnit\Framework\TestCase
 {
     /** @var GeekCache\Cache\IncrementableCache */
     protected $cache;

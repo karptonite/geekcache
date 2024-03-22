@@ -3,7 +3,7 @@ class MemoizedCacheTest extends BaseCacheTest
 {
     private $parentcache;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->primarycache = new GeekCache\Cache\ArrayCache;

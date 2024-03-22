@@ -1,6 +1,7 @@
 <?php
 class CacheServiceProviderMemcachedTest extends CacheServiceProviderTest
 {
+    use \DMS\PHPUnitExtensions\ArraySubset\ArraySubsetAsserts;
     protected function getPersistentServiceProvider()
     {
         return new GeekCache\Provider\MemcachedServiceProvider($this->container);

@@ -1,12 +1,12 @@
 <?php
 use Mockery as m;
 
-class MemcachedCounterTest extends PHPUnit_Framework_TestCase
+class MemcachedCounterTest extends PHPUnit\Framework\TestCase
 {
     const KEY   = 'thekey';
     private $cache;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $memcached = new Memcached();
@@ -15,6 +15,11 @@ class MemcachedCounterTest extends PHPUnit_Framework_TestCase
         $this->cache = new GeekCache\Cache\IncrementableMemcachedCache($memcached);
     }
 
+    public function tearDown(): void
+    {
+        m::close();
+        parent::tearDown();
+    }
     /**
      * @group slowTests
      */

@@ -21,65 +21,65 @@ class CacheServiceProvider
         $this->registerLocalCache('memos');
         $this->registerLocalCache('tags');
 
-        $this->container['geekcache.persistentcache'] = $this->container->share(function ($c) {
+        $this->container->bind('geekcache.persistentcache', function ($c) {
             return !empty($c['geekcache.namespace'])
                 ? new Cache\NamespacedCache($c['geekcache.persistentcache.unnamespaced'], $c['geekcache.namespace'])
                 : $c['geekcache.persistentcache.unnamespaced'];
-        });
+        }, true);
 
-        $this->container['geekcache.persistentincrementablecache'] = $this->container->share(function ($c) {
+        $this->container->bind('geekcache.persistentincrementablecache', function ($c) {
             return !empty($c['geekcache.namespace'])
                 ? new Cache\IncrementableNamespacedCache(
                     $c['geekcache.persistentincrementablecache.unnamespaced'],
                     $c['geekcache.namespace']
                 ) : $c['geekcache.persistentincrementablecache.unnamespaced'];
-        });
+        }, true);
 
-        $this->container['geekcache.local.incrementablecache'] = $this->container->share(function ($c) {
+        $this->container->bind('geekcache.local.incrementablecache', function ($c) {
             return !empty($c['geekcache.nolocalcache']) ? new Cache\NullCache : new Cache\IncrementableArrayCache();
-        });
+        }, true);
 
-        $this->container['geekcache.tagfactory'] = $this->container->share(function ($c) {
+        $this->container->bind('geekcache.tagfactory', function ($c) {
             $cache = new Cache\MemoizedCache($c['geekcache.persistentcache'], $c['geekcache.local.tags']);
             return new Tag\TagFactory($cache);
-        });
+        }, true);
 
-        $this->container['geekcache.tagsetfactory'] = $this->container->share(function ($c) {
+        $this->container->bind('geekcache.tagsetfactory', function ($c) {
             return new Tag\TagSetFactory($c['geekcache.tagfactory']);
-        });
+        } ,true);
 
-        $this->container['geekcache.cachebuilder'] = $this->container->share(function ($c) {
+        $this->container->bind('geekcache.cachebuilder', function ($c) {
             return new Cache\CacheBuilder(
                 $c['geekcache.persistentcache'],
                 $c['geekcache.local.memos'],
                 $c['geekcache.tagsetfactory']
             );
-        });
+        }, true);
 
-        $this->container['geekcache.counterbuilder'] = $this->container->share(function ($c) {
+        $this->container->bind('geekcache.counterbuilder', function ($c) {
             return new \GeekCache\Counter\CounterBuilder(
                 $c['geekcache.persistentincrementablecache'],
                 $c['geekcache.local.incrementablecache']
             );
-        });
+        }, true);
 
-        $this->container['geekcache.clearer'] = $this->container->share(function ($c) {
+        $this->container->bind('geekcache.clearer',function ($c) {
             return new \GeekCache\Cache\CacheClearer(
                 $c['geekcache.tagsetfactory'],
                 $c['geekcache.persistentcache'],
                 array($c['geekcache.local.tags'], $c['geekcache.local.memos'])
             );
-        });
+        }, true);
     }
 
     private function registerLocalCache($name)
     {
         $default_max = self::$default_maxlocal[$name];
-        $this->container['geekcache.local.'.$name] = $this->container->share(function ($c) use ($name, $default_max) {
+        $this->container->bind('geekcache.local.'.$name,  function ($c) use ($name, $default_max) {
             $max = isset($c['geekcache.maxlocal.' . $name]) ? $c['geekcache.maxlocal.'.$name] : $default_max;
             //If the process will last longer than a page load, make sure to set geekcache.nolocalcache to true
             //to avoid keeping a potentially stale local cache.
             return !empty($c['geekcache.nolocalcache']) ? new Cache\NullCache : new Cache\ArrayCache($max);
-        });
+        }, true);
     }
 }

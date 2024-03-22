@@ -12,7 +12,7 @@ class MemcachedServiceProvider
 
     public function register()
     {
-        $this->container['geekcache.memcached'] = $this->container->share(function ($c) {
+        $this->container->bind('geekcache.memcached', function ($c) {
             $memcached = new \Memcached();
 
             $servers = isset($c['geekcache.memcache.servers'])
@@ -27,14 +27,14 @@ class MemcachedServiceProvider
 
             $memcached->addServers($flatServers);
             return $memcached;
-        });
+        }, true);
 
-        $this->container['geekcache.persistentincrementablecache.unnamespaced'] = $this->container->share(function ($c) {
+        $this->container->bind('geekcache.persistentincrementablecache.unnamespaced', function ($c) {
             return new Cache\IncrementableMemcachedCache($c['geekcache.memcached']);
-        });
+        }, true);
 
-        $this->container['geekcache.persistentcache.unnamespaced'] = $this->container->share(function ($c) {
+        $this->container->bind('geekcache.persistentcache.unnamespaced', function ($c) {
             return new Cache\MemcachedCache($c['geekcache.memcached']);
-        });
+        }, true);
     }
 }

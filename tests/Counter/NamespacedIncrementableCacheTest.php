@@ -5,7 +5,7 @@ class NamespacedIncrementableCacheTest extends BaseIncrementableCacheTest
 
     const CACHE_NAMESPACE = 'ns';
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->primarycache  = new GeekCache\Cache\IncrementableArrayCache;

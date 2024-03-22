@@ -3,7 +3,7 @@ use Mockery as m;
 
 class TaggedCacheTest extends BaseCacheTest
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->parentcache = new GeekCache\Cache\ArrayCache;
@@ -15,6 +15,11 @@ class TaggedCacheTest extends BaseCacheTest
         $this->cache = new GeekCache\Cache\SoftInvalidatableCache($this->parentcache, $policy);
     }
 
+    public function tearDown(): void
+    {
+        m::close();
+        parent::tearDown();
+    }
     public function testCachePassesTrueIntoRegenerator()
     {
         $this->cache->put(static::KEY, static::VALUE);

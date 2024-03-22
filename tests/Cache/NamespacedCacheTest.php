@@ -8,13 +8,18 @@ class NamespacedCacheTest extends BaseCacheTest
     const CACHE_NAMESPACE = "ns";
     const TTL = 5;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->parentcache = new GeekCache\Cache\ArrayCache;
         $this->cache = new GeekCache\Cache\NamespacedCache($this->parentcache, self::CACHE_NAMESPACE);
     }
 
+    public function tearDown(): void
+    {
+        m::close();
+        parent::tearDown();
+    }
     public function testNamespaceAdded()
     {
         $this->cache->put('foo', 'bar');

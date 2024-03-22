@@ -1,9 +1,9 @@
 <?php
-class TagTest extends PHPUnit_Framework_TestCase
+class TagTest extends PHPUnit\Framework\TestCase
 {
     const KEY = 'theTag';
 
-    public function setUp()
+    public function setUp():void
     {
         $this->cache = new GeekCache\Cache\ArrayCache;
         $this->tag = new GeekCache\Tag\Tag($this->cache, self::KEY);

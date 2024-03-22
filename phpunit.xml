@@ -1,9 +1,9 @@
 <phpunit
-    boostrap="phpunit.php"
     colors="true"
     convertErrorsToExceptions="true"
     convertNoticesToExceptions="true"
     convertWarningsToExceptions="true"
+    beStrictAboutTestsThatDoNotTestAnything="false"
     >
     <listeners>
         <listener class="\Mockery\Adapter\Phpunit\TestListener"></listener>

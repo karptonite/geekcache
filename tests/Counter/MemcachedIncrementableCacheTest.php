@@ -1,7 +1,7 @@
 <?php
 class MemcachedIncrementableCacheTest extends BaseIncrementableCacheTest
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $memcached = new Memcached();

@@ -1,7 +1,7 @@
 <?php
 class MemcacheCachedLiveTest extends BaseCacheTest
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $memcached = new Memcached();
