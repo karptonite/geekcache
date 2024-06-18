@@ -12,12 +12,12 @@ class NamespacedCache extends CacheDecorator
         $this->namespace = $namespace;
     }
 
-    public function get($key, callable $regenerator = null, $ttl = null)
+    public function get($key, callable $regenerator = null, $ttl = 0)
     {
         return parent::get($this->reviseKey($key), $regenerator, $ttl);
     }
 
-    public function put($key, $value, $ttl = null)
+    public function put($key, $value, $ttl = 0)
     {
         return parent::put($this->reviseKey($key), $value, $ttl);
     }

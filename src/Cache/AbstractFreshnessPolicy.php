@@ -6,7 +6,7 @@ abstract class AbstractFreshnessPolicy implements FreshnessPolicy
 {
     public const POLICY_NAMESPACE = '';
 
-    public function packValueWithPolicy($value, $ttl = null)
+    public function packValueWithPolicy($value, $ttl = 0)
     {
         return new CacheData($value, $this->createFreshnessData($ttl));
     }

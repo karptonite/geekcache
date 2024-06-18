@@ -63,7 +63,7 @@ class ArrayCacheTtlSpy extends GeekCache\Cache\ArrayCache
 {
     public $ttl;
 
-    public function put($key, $value, $ttl = null)
+    public function put($key, $value, $ttl = 0)
     {
         $this->ttl = $ttl;
         parent::put($key, $value, $ttl);

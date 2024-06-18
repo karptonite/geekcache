@@ -33,6 +33,13 @@ class MemcachedCounterTest extends PHPUnit\Framework\TestCase
         usleep(2100000);
         $this->assertFalse($counter->get());
     }
+    
+    public function testMakeCounterWithoutTttl()
+    {
+        $counter = new GeekCache\Counter\NormalCounter($this->cache, self::KEY);
+        $counter->increment(1);
+    }
+
 
     /**
      * @group slowTests

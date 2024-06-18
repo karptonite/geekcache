@@ -13,7 +13,7 @@ class ArrayCache extends AbstractBaseCache implements Cache
         $this->maxputs = (int)$maxputs;
     }
 
-    public function get($key, callable $regenerator = null, $ttl = null)
+    public function get($key, callable $regenerator = null, $ttl = 0)
     {
         return $this->cacheExists($key) ? $this->cache[$key] : $this->regenerate($key, $regenerator, $ttl);
     }
@@ -23,7 +23,7 @@ class ArrayCache extends AbstractBaseCache implements Cache
         return array_key_exists($key, $this->cache);
     }
 
-    public function put($key, $value, $ttl = null)
+    public function put($key, $value, $ttl = 0)
     {
         if ($this->putIsPermitted($key)) {
             $this->cache[$key] = $value;

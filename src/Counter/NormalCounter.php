@@ -8,7 +8,7 @@ class NormalCounter extends Cache\NormalCacheItem implements Counter
 {
     private $incrementablecache;
 
-    public function __construct(Cache\IncrementableCache $incrementablecache, $key, $ttl = null)
+    public function __construct(Cache\IncrementableCache $incrementablecache, $key, $ttl = 0)
     {
         parent::__construct($incrementablecache, $key, $ttl);
         $this->incrementablecache = $incrementablecache;

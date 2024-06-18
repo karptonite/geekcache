@@ -19,19 +19,19 @@ class MemoizedCache extends CacheDecorator
         $this->memocache = $memocache;
     }
 
-    public function get($key, callable $regenerator = null, $ttl = null)
+    public function get($key, callable $regenerator = null, $ttl = 0)
     {
         $result = $this->memocache->get($key);
         return $result !== false ? $result : $this->getAndMemoize($key, $regenerator, $ttl);
     }
 
-    public function put($key, $value, $ttl = null)
+    public function put($key, $value, $ttl = 0)
     {
         $this->memocache->put($key, $value);
         return parent::put($key, $value, $ttl);
     }
 
-    private function getAndMemoize($key, callable $regenerator = null, $ttl = null)
+    private function getAndMemoize($key, callable $regenerator = null, $ttl = 0)
     {
         $value = parent::get($key, $regenerator, $ttl);
         $this->memoize($key, $value);

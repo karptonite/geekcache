@@ -18,7 +18,7 @@ class CounterBuilder
         });
     }
 
-    public function make($key, $ttl = null)
+    public function make($key, $ttl = 0)
     {
         $stack = $this->stack;
         $cache = $this->cache;
