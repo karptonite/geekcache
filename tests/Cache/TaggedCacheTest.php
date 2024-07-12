@@ -3,6 +3,9 @@ use Mockery as m;
 
 class TaggedCacheTest extends BaseCacheTest
 {
+    private $parentcache;
+    private $tagset;
+    
     public function setUp(): void
     {
         parent::setUp();

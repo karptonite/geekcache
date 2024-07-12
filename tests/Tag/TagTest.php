@@ -2,6 +2,8 @@
 class TagTest extends PHPUnit\Framework\TestCase
 {
     const KEY = 'theTag';
+    private $cache;
+    private $tag;
 
     public function setUp():void
     {

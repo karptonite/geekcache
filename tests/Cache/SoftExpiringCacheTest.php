@@ -1,7 +1,7 @@
 <?php
 class SoftExpiringTest extends BaseCacheTest
 {
-    private $arraycache;
+    private $parentcache;
     const GRACEPERIOD = 10;
 
     public function setUp(): void

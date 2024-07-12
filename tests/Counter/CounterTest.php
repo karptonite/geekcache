@@ -9,6 +9,8 @@ class CounterTest extends PHPUnit\Framework\TestCase
     const VALUE2 = 5;
     const TTL = 20;
     private $cache;
+    private $counter;
+    private $counter2;
 
     public function setUp(): void
     {

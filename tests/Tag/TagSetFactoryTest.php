@@ -3,6 +3,8 @@ use Mockery as m;
 
 class TagSetFactoryTest extends PHPUnit\Framework\TestCase
 {
+    private $cache;
+    private $factory;
     public function setUp(): void
     {
         $this->cache      = new GeekCache\Cache\ArrayCache();

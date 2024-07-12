@@ -4,6 +4,12 @@ use Mockery as m;
 class CacheBuilderTest extends PHPUnit\Framework\TestCase
 {
     const KEY = 'TheKey';
+    private $cache;
+    private $memocache;
+    private $tagcache;
+    private $tagsetfactory;
+    private $tagfactory;
+    private $builder;
     
     
     public function tearDown(): void

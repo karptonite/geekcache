@@ -4,6 +4,9 @@ use Mockery as m;
 class TagSetTest extends PHPUnit\Framework\TestCase
 {
     const KEY = 'theTag';
+    private $tags;
+    private $cache;
+    private $tagset;
 
     public function setUp(): void
     {

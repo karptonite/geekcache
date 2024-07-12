@@ -1,6 +1,9 @@
 <?php
 abstract class CacheServiceProviderTest extends PHPUnit\Framework\TestCase
 {
+    protected $sp;
+    protected $msp;
+    protected $container;
     public function setUp(): void
     {
         parent::setUp();

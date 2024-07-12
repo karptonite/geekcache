@@ -2,6 +2,7 @@
 class MemoizedIncrementableCacheTest extends BaseIncrementableCacheTest
 {
     private $primarycache;
+    private $memoizedcache;
 
     public function setUp(): void
     {

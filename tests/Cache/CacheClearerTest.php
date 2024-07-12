@@ -4,6 +4,8 @@ use Mockery as m;
 class CacheClearerTest extends PHPUnit\Framework\TestCase
 {
     const KEY = 'theTag';
+    private $container;
+    private $clearer;
 
     public function setUp(): void
     {

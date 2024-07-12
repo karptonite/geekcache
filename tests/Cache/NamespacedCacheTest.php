@@ -3,7 +3,7 @@ use Mockery as m;
 
 class NamespacedCacheTest extends BaseCacheTest
 {
-    private $arraycache;
+    private $parentcache;
 
     const CACHE_NAMESPACE = "ns";
     const TTL = 5;

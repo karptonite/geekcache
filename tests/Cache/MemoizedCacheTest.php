@@ -1,7 +1,8 @@
 <?php
 class MemoizedCacheTest extends BaseCacheTest
 {
-    private $parentcache;
+    private $primarycache;
+    private $memoizedcache;
 
     public function setUp(): void
     {

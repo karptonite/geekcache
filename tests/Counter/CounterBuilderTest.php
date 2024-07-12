@@ -3,6 +3,9 @@ use Mockery as m;
 
 class CounterBuilderTest extends PHPUnit\Framework\TestCase
 {
+    private $cache;
+    private $memocache;
+    private $builder;
     
     public function tearDown(): void
     {

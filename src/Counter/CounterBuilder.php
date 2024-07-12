@@ -8,6 +8,8 @@ class CounterBuilder
 {
     private $cache;
     private $memocache;
+    
+    private $stack;
 
     public function __construct(Cache\IncrementableCache $cache, Cache\IncrementableCache $memocache, array $stack = null)
     {

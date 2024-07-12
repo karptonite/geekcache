@@ -10,6 +10,8 @@ class CacheItemTest extends PHPUnit\Framework\TestCase
     const TTL = 5;
 
     private $cache;
+    private $cacheitem;
+    private $cacheitem2;
 
     public function tearDown(): void
     {

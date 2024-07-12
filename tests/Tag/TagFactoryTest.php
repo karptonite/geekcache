@@ -5,6 +5,8 @@ class TagFactoryTest extends PHPUnit\Framework\TestCase
 {
     const TAGNAME = 'TheTag';
     const TAGKEY = 'tag_TheTag';
+    private $cache;
+    private $factory;
 
     public function setUp(): void
     {
