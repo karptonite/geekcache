@@ -28,4 +28,8 @@ class NullCache implements Cache, IncrementableCache
     {
         return null;
     }
+
+    public function stage(string  $key): void
+    {
+    }
 }

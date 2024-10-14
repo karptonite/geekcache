@@ -32,7 +32,7 @@ class CacheClearer
 
     public function flushLocal()
     {
-        foreach($this->localCaches as $localCache) {
+        foreach ($this->localCaches as $localCache) {
             $localCache->clear();
         }
     }

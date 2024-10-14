@@ -12,6 +12,11 @@ class NamespacedCache extends CacheDecorator
         $this->namespace = $namespace;
     }
 
+    public function stage(string $key): void
+    {
+        parent::stage($this->reviseKey($key));
+    }
+
     public function get($key, callable $regenerator = null, $ttl = 0)
     {
         return parent::get($this->reviseKey($key), $regenerator, $ttl);

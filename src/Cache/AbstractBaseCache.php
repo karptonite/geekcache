@@ -22,4 +22,8 @@ abstract class AbstractBaseCache
     {
         return $regenerator(false);
     }
+
+    public function stage(string $key): void
+    {
+    }
 }

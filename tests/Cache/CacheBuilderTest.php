@@ -93,6 +93,7 @@ class CacheBuilderTest extends PHPUnit\Framework\TestCase
             ->with(\GeekCache\Cache\TaggedFreshnessPolicy::POLICY_NAMESPACE . '_' . 'foo', null, 5)
             ->andReturnNull();
         $tagset = m::mock('GeekCache\Tag\TagSet');
+        $tagset->shouldReceive('stage');
         $this->tagsetfactory->shouldReceive('makeTagSet')
             ->once()
             ->with(array('footag', 'bartag'))

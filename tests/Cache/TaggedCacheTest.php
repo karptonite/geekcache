@@ -14,6 +14,7 @@ class TaggedCacheTest extends BaseCacheTest
         $this->tagset->shouldReceive('getSignature')
             ->andReturn('foo')
             ->byDefault();
+        $this->tagset->shouldReceive('stage');
         $policy = new GeekCache\Cache\TaggedFreshnessPolicy($this->tagset);
         $this->cache = new GeekCache\Cache\SoftInvalidatableCache($this->parentcache, $policy);
     }
@@ -59,7 +60,7 @@ class TaggedCacheTest extends BaseCacheTest
         $this->tagset->shouldReceive('getSignature')
             ->andReturn('bar');
 
-        $regenerator = function() {
+        $regenerator = function () {
             return false;
         };
 

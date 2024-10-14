@@ -6,8 +6,8 @@ use GeekCache\Cache;
 
 class MemcachedServiceProvider
 {
-    private $container; 
-    
+    private $container;
+
     public function __construct($container)
     {
         $this->container = $container;

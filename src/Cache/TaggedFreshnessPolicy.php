@@ -14,6 +14,11 @@ class TaggedFreshnessPolicy extends AbstractFreshnessPolicy
         $this->tagset = $tagset;
     }
 
+    public function stage()
+    {
+        $this->tagset->stage();
+    }
+
     public function computeTtl($ttl)
     {
         return $ttl;

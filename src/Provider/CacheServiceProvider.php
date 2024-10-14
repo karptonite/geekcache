@@ -8,7 +8,7 @@ use GeekCache\Cache;
 class CacheServiceProvider
 {
     private $container;
-    
+
     private static $default_maxlocal = array(
         'memos' => 1000,
         'tags'  => 5000

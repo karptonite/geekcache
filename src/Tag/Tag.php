@@ -8,6 +8,7 @@ class Tag
 {
     private $key;
     private $cache;
+    private $staged = false;
 
     public function __construct(Cache $cache, $name)
     {
@@ -15,8 +16,17 @@ class Tag
         $this->key = 'tag_' . $name;
     }
 
+    public function stage()
+    {
+        if (!$this->staged) {
+            $this->cache->stage($this->key);
+        }
+        $this->staged = true;
+    }
+
     public function getVersion()
     {
+        $this->staged = false;
         $stored = $this->cache->get($this->key);
         return $stored && is_string($stored) ? $stored : $this->clear();
     }

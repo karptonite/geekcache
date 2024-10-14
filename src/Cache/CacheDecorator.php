@@ -16,6 +16,11 @@ abstract class CacheDecorator extends AbstractBaseCache implements Cache
         return $this->cache->get($key, $regenerator, $ttl);
     }
 
+    public function stage(string $key): void
+    {
+        $this->cache->stage($key);
+    }
+
     public function put($key, $value, $ttl = 0)
     {
         return $this->cache->put($key, $value, $ttl);

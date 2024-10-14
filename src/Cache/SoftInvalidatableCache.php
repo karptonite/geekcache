@@ -4,7 +4,6 @@ namespace GeekCache\Cache;
 
 class SoftInvalidatableCache extends CacheDecorator
 {
-    public const DECORATOR_NAMESPACE = '';
     private $policy;
 
     public function __construct(Cache $cache, FreshnessPolicy $policy)
@@ -18,13 +17,20 @@ class SoftInvalidatableCache extends CacheDecorator
         return parent::put($key, $this->policy->packValueWithPolicy($value, $ttl), $this->policy->computeTtl($ttl));
     }
 
+    public function stage(string $key): void
+    {
+        $this->policy->stage();
+        parent::stage($key);
+    }
+
+
     public function get($key, callable $regenerator = null, $ttl = 0)
     {
         $regeneratedByParent = false;
 
         $packedResult = $this->getFromParent($regeneratedByParent, $key, $regenerator, $ttl);
 
-        if($this->policy->resultIsFresh($packedResult)) {
+        if ($this->policy->resultIsFresh($packedResult)) {
             return $this->policy->unpackValue($packedResult);
         }
 
@@ -33,7 +39,7 @@ class SoftInvalidatableCache extends CacheDecorator
 
             // if the results are false, either the data was not regenerated at all,
             // or it was queued for regeneration, and the data was not available
-            if($result !== false) {
+            if ($result !== false) {
                 return $result;
             }
         }
@@ -52,6 +58,7 @@ class SoftInvalidatableCache extends CacheDecorator
 
     private function getFromParent(&$regeneratedByParent, $key, callable $regenerator = null, $ttl = 0)
     {
+        $this->policy->stage();
         $wrappedRegenerator = $this->wrapRegenerator($regeneratedByParent, $regenerator, $ttl);
         return parent::get($key, $wrappedRegenerator, $this->policy->computeTtl($ttl));
     }

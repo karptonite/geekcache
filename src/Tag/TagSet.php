@@ -21,6 +21,12 @@ class TagSet
     {
         $versions = array();
 
+        if (count($this->tags) > 1) {
+            foreach ($this->tags as $tag) {
+                $tag->stage();
+            }
+        }
+
         foreach ($this->tags as $tag) {
             $versions[] = $tag->getVersion();
         }
@@ -32,6 +38,13 @@ class TagSet
     {
         array_walk($this->tags, function ($tag) {
             $tag->clear();
+        });
+    }
+
+    public function stage()
+    {
+        array_walk($this->tags, function ($tag) {
+            $tag->stage();
         });
     }
 }

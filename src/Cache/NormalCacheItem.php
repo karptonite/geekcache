@@ -14,6 +14,11 @@ class NormalCacheItem implements CacheItem
         $this->key = $key;
         $this->ttl = $ttl;
     }
+    
+    public function stage()
+    {
+        $this->cache->stage($this->key);
+    }
 
     public function get($regenerator = null)
     {
