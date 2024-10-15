@@ -33,11 +33,11 @@ class MemcachedServiceProvider
         }, true);
 
         $this->container->bind('geekcache.persistentincrementablecache.unnamespaced', function ($c) {
-            return new Cache\IncrementableMemcachedCache($c['geekcache.memcached']);
+            return new Cache\IncrementableMultiGetCache($c['geekcache.memcached']);
         }, true);
 
         $this->container->bind('geekcache.persistentcache.unnamespaced', function ($c) {
-            return new Cache\MemcachedCache($c['geekcache.memcached']);
+            return new Cache\MultiGetCache($c['geekcache.memcached']);
         }, true);
     }
 }

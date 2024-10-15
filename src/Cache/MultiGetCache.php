@@ -2,7 +2,7 @@
 
 namespace GeekCache\Cache;
 
-class MemcachedCache extends AbstractBaseCache implements Cache
+class MultiGetCache extends AbstractBaseCache implements Cache
 {
     private $cache;
     private int $getCount = 0;

@@ -2,7 +2,7 @@
 
 namespace GeekCache\Cache;
 
-class IncrementableMemcachedCache extends MemcachedCache implements IncrementableCache
+class IncrementableMultiGetCache extends MultiGetCache implements IncrementableCache
 {
     /** @var \Memcached  */
     private $cache;

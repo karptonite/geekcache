@@ -15,7 +15,7 @@ class TaggedCacheMemcachedTest extends BaseCacheTest
         $memcached = new Memcached();
         $memcached->addServer('localhost', 11211);
         $memcached->flush();
-        $this->parentcache = new GeekCache\Cache\MemcachedCache($memcached);
+        $this->parentcache = new GeekCache\Cache\MultiGetCache($memcached);
         $tagFactory = new GeekCache\Tag\TagFactory($this->parentcache);
         $this->factory    = new GeekCache\Tag\TagSetFactory($tagFactory);
         $tagSet = $this->factory->makeTagSet(self::TAG_NAMES);

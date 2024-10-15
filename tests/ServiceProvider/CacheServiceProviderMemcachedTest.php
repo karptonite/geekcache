@@ -39,6 +39,6 @@ class CacheServiceProviderMemcachedTest extends CacheServiceProviderTest
         $memcacheincrementablecache1 = $this->container['geekcache.persistentincrementablecache'];
         $memcacheincrementablecache2 = $this->container['geekcache.persistentincrementablecache'];
         $this->assertSame($memcacheincrementablecache1, $memcacheincrementablecache2);
-        $this->assertInstanceOf('GeekCache\Cache\IncrementableMemcachedCache', $memcacheincrementablecache1);
+        $this->assertInstanceOf('GeekCache\Cache\IncrementableMultiGetCache', $memcacheincrementablecache1);
     }
 }
