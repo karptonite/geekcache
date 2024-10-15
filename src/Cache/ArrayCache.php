@@ -49,4 +49,8 @@ class ArrayCache extends AbstractBaseCache implements Cache
         $this->cache = array();
         return true;
     }
+    
+    public function stage(string $key):void
+    {
+    }
 }

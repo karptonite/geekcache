@@ -28,6 +28,11 @@ class NullCache implements Cache, IncrementableCache
     {
         return null;
     }
+    
+    public function getGetCount():int
+    {
+        return 0;
+    }
 
     public function stage(string  $key): void
     {

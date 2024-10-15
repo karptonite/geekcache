@@ -2,7 +2,7 @@
 
 namespace GeekCache\Cache;
 
-class MemcachedCache extends AbstractBaseCache implements MultiGetCache, IncrementableCacheBackend
+class MemcachedCache implements MultiGetCache, IncrementableCacheBackend
 {
     private \Memcached $cache;
     public function __construct(\Memcached $cache)
@@ -41,12 +41,12 @@ class MemcachedCache extends AbstractBaseCache implements MultiGetCache, Increme
         $this->cache->add($key, $value, $ttl);
     }
 
-    public function increment($key, $value)
+    public function increment($key, $value):false|int
     {
         return $this->cache->increment($key, $value);
     }
 
-    public function decrement($key, $value)
+    public function decrement($key, $value):false|int
     {
         return $this->cache->decrement($key, $value);
     }

@@ -9,4 +9,5 @@ interface Cache
     public function put($key, $value, $ttl = 0);
     public function delete($key);
     public function clear();
+    public function getGetCount(): int;
 }

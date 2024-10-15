@@ -23,7 +23,8 @@ abstract class AbstractBaseCache
         return $regenerator(false);
     }
 
-    public function stage(string $key): void
+    public function getGetCount():int
     {
+        return 0;
     }
 }
