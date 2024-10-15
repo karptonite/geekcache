@@ -12,7 +12,7 @@ class MemcachedCounterTest extends PHPUnit\Framework\TestCase
         $memcached = new Memcached();
         $memcached->addServer('localhost', 11211);
         $memcached->flush();
-        $this->cache = new GeekCache\Cache\IncrementableMultiGetCache($memcached);
+        $this->cache = new GeekCache\Cache\IncrementableStageableCache($memcached);
     }
 
     public function tearDown(): void
