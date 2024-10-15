@@ -2,35 +2,33 @@
 
 namespace GeekCache\Cache;
 
+use GeekCache\Cache\MultiGetCache;
+
 class StageableCache extends AbstractBaseCache implements Cache
 {
-    private $cache;
+    private MultiGetCache $cache;
     private int $getCount = 0;
-    private array $stagedRequests = [];
-    private array $stagedResults = [];
+    private StagingCache $stagingCache;
 
-    public function __construct(\Memcached $cache)
+    public function __construct(MultiGetCache $cache)
     {
         $this->cache = $cache;
+        $this->stagingCache = new StagingCache();
     }
 
     public function stage(string $key): void
     {
-        $this->stagedRequests[$key] = ($this->stagedRequests[$key] ?? null) ? $this->stagedRequests[$key] + 1 : 1;
+        $this->stagingCache->stage($key);
     }
 
     public function get($key, callable $regenerator = null, $ttl = 0)
     {
         // if we have a pending result, use that
-        if (array_key_exists($key, $this->stagedResults)) {
-            $result = $this->stagedResults[$key]['value'];
-            $this->stagedResults[$key]['remainingReads']--;
-            if (!$this->stagedResults[$key]['remainingReads']) {
-                unset($this->stagedResults[$key]);
-            }
+        if ($this->stagingCache->resultIsStaged($key)) {
+            $result = $this->stagingCache->readResult($key);
             // if we do not have a pending result, go to the database
         } else {
-            if (count($this->stagedRequests)) {
+            if ($this->stagingCache->anyRequestsStaged()) {
                 $result = $this->getWithStaged($key);
             } else {
                 $result = $this->cache->get($key);
@@ -43,38 +41,23 @@ class StageableCache extends AbstractBaseCache implements Cache
 
     private function getWithStaged($key)
     {
-        $results = $this->multiGet(array_unique(array_merge([$key], array_keys($this->stagedRequests))));
-        $result = false;
-        if (array_key_first($results) === $key) {
-            $result = $results[$key];
-        }
-
-        // if the result we are getting was also staged, we have to handle it
-        if (array_key_exists($key, $this->stagedRequests)) {
-            $this->stagedRequests[$key]--;
-            if ($this->stagedRequests[$key] <= 0) {
-                unset($this->stagedRequests[$key]);
-            }
-        }
-
-        foreach ($this->stagedRequests as $key => $stageCount) {
-            $this->stagedResults[$key] = [
-              'value' => $results[$key] ?? false,
-                'remainingReads' => $stageCount
-            ];
-        }
-        $this->stagedRequests = [];
+        $results = $this->cache->getMulti(
+            array_unique(array_merge(
+                [$key],
+                $this->stagingCache->getStagedRequests()
+            ))
+        );
+        
+        $result = array_key_first($results) === $key ? $results[$key] : false;
+        
+        $this->stagingCache->stageResults($key, $results);
         return $result;
     }
 
-    private function multiGet(array $keys)
-    {
-        return $this->cache->getMulti($keys);
-    }
 
     public function put($key, $value, $ttl = 0)
     {
-        return $this->cache->set($key, $value, (int)$ttl);
+        return $this->cache->put($key, $value, (int)$ttl);
     }
 
     public function delete($key)
@@ -84,7 +67,7 @@ class StageableCache extends AbstractBaseCache implements Cache
 
     public function clear()
     {
-        return $this->cache->flush();
+        return $this->cache->clear();
     }
 
     // functions below here are used only as test spys
@@ -94,10 +77,10 @@ class StageableCache extends AbstractBaseCache implements Cache
     }
     public function getStagedRequestsCount(): int
     {
-        return count($this->stagedRequests);
+        return $this->stagingCache->getStagedRequestsCount();
     }
     public function getStagedResultsCount(): int
     {
-        return count($this->stagedResults);
+        return $this->stagingCache->getStagedResultsCount();
     }
 }

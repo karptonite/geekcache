@@ -1,4 +1,7 @@
 <?php
+
+use GeekCache\Cache\MemcachedCache;
+
 class MemcachedIncrementableCacheTest extends BaseIncrementableCacheTest
 {
     public function setUp(): void
@@ -7,7 +10,8 @@ class MemcachedIncrementableCacheTest extends BaseIncrementableCacheTest
         $memcached = new Memcached();
         $memcached->addServer('localhost', 11211);
         $memcached->flush();
-        $this->cache = new GeekCache\Cache\IncrementableStageableCache($memcached);
+        $memcachedCache = new MemcachedCache($memcached);
+        $this->cache = new GeekCache\Cache\IncrementableStageableCache($memcachedCache);
     }
 
     /**

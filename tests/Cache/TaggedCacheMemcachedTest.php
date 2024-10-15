@@ -1,5 +1,6 @@
 <?php
 
+use GeekCache\Cache\MemcachedCache;
 use GeekCache\Cache\SoftInvalidatableCache;
 use GeekCache\Cache\TaggedFreshnessPolicy;
 
@@ -15,12 +16,24 @@ class TaggedCacheMemcachedTest extends BaseCacheTest
         $memcached = new Memcached();
         $memcached->addServer('localhost', 11211);
         $memcached->flush();
-        $this->parentcache = new GeekCache\Cache\StageableCache($memcached);
+        $memcachedCache = new MemcachedCache($memcached);
+        $this->parentcache = new GeekCache\Cache\StageableCache($memcachedCache);
         $tagFactory = new GeekCache\Tag\TagFactory($this->parentcache);
         $this->factory    = new GeekCache\Tag\TagSetFactory($tagFactory);
         $tagSet = $this->factory->makeTagSet(self::TAG_NAMES);
         $policy = new TaggedFreshnessPolicy($tagSet);
         $this->cache =  new SoftInvalidatableCache($this->parentcache, $policy);
+    }
+    
+    public function testTaggedCacheInvalidates()
+    {
+        $tagSet = $this->factory->makeTagSet(self::TAG_NAMES);
+        $policy = new TaggedFreshnessPolicy($tagSet);
+        $cache =  new SoftInvalidatableCache($this->parentcache, $policy);
+        $cache->put(self::KEY, self::VALUE);
+        $this->assertEquals(self::VALUE, $cache->get(self::KEY));
+        $tagSet->clearAll();
+        $this->assertFalse($cache->get(self::KEY));
     }
     
     public function testTaggedCacheLookupHitsCacheOnce()

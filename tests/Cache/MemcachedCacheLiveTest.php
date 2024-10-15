@@ -1,6 +1,6 @@
 <?php
 
-use GeekCache\Cache\StageableCache;
+use GeekCache\Cache\MemcachedCache;
 use GeekCache\Cache\NormalCacheItem;
 
 class MemcacheCachedLiveTest extends BaseCacheTest
@@ -11,7 +11,8 @@ class MemcacheCachedLiveTest extends BaseCacheTest
         $memcached = new Memcached();
         $memcached->addServer('localhost', 11211);
         $memcached->flush();
-        $this->cache = new GeekCache\Cache\StageableCache($memcached);
+        $memcachedCache = new MemcachedCache($memcached);
+        $this->cache = new GeekCache\Cache\StageableCache($memcachedCache);
     }
 
     /**

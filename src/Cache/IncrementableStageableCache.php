@@ -2,12 +2,13 @@
 
 namespace GeekCache\Cache;
 
+use GeekCache\Cache\IncrementableCacheBackend;
+
 class IncrementableStageableCache extends StageableCache implements IncrementableCache
 {
-    /** @var \Memcached  */
-    private $cache;
+    private IncrementableCacheBackend $cache;
 
-    public function __construct(\Memcached $cache)
+    public function __construct(IncrementableCacheBackend $cache)
     {
         parent::__construct($cache);
         $this->cache = $cache;

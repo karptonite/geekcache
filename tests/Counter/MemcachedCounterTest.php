@@ -1,4 +1,6 @@
 <?php
+
+use GeekCache\Cache\MemcachedCache;
 use Mockery as m;
 
 class MemcachedCounterTest extends PHPUnit\Framework\TestCase
@@ -12,7 +14,8 @@ class MemcachedCounterTest extends PHPUnit\Framework\TestCase
         $memcached = new Memcached();
         $memcached->addServer('localhost', 11211);
         $memcached->flush();
-        $this->cache = new GeekCache\Cache\IncrementableStageableCache($memcached);
+        $memcachedCache = new MemcachedCache($memcached);
+        $this->cache = new GeekCache\Cache\IncrementableStageableCache($memcachedCache);
     }
 
     public function tearDown(): void
