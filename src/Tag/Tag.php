@@ -30,6 +30,14 @@ class Tag
         $stored = $this->cache->get($this->key);
         return $stored && is_string($stored) ? $stored : $this->clear();
     }
+    
+    public function unstage()
+    {
+        if ($this->staged) {
+            $this->cache->get($this->key);
+        }
+    }
+    
 
     public function clear()
     {

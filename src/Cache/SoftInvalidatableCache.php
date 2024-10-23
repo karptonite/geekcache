@@ -23,7 +23,6 @@ class SoftInvalidatableCache extends CacheDecorator
         parent::stage($key);
     }
 
-
     public function get($key, callable $regenerator = null, $ttl = 0)
     {
         $regeneratedByParent = false;

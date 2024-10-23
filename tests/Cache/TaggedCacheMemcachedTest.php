@@ -34,6 +34,15 @@ class TaggedCacheMemcachedTest extends BaseCacheTest
         $this->assertEquals(self::VALUE, $cache->get(self::KEY));
         $tagSet->clearAll();
         $this->assertFalse($cache->get(self::KEY));
+        $this->assertStageEmpty();
+    }
+    
+    public function testTaggedCacheLookupMiss()
+    {
+        $getCount = $this->parentcache->getGetCount();
+        $this->cache->get(self::KEY);
+        $this->assertEquals($getCount + 1, $this->parentcache->getGetCount());
+        $this->assertStageEmpty();
     }
     
     public function testTaggedCacheLookupHitsCacheOnce()

@@ -23,6 +23,15 @@ class TaggedFreshnessPolicy extends AbstractFreshnessPolicy
     {
         return $ttl;
     }
+    
+    public function resultIsFresh($result)
+    {
+        if (!($result instanceof CacheData)) {
+            $this->tagset->unstage();
+            return false;
+        }
+        return parent::resultIsFresh($result);
+    }
 
     protected function isFresh($freshnessData)
     {

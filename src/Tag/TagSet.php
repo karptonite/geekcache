@@ -47,4 +47,11 @@ class TagSet
             $tag->stage();
         });
     }
+    
+    public function unstage()
+    {
+        array_walk($this->tags, function ($tag) {
+            $tag->unstage();
+        });
+    }
 }
