@@ -20,7 +20,12 @@ class StageableCache extends AbstractBaseCache implements Cache
     {
         $this->stagingCache->stage($key);
     }
-
+    
+    public function unstage(string $key): void
+    {
+        $this->stagingCache->unstage($key);
+    }
+    
     public function get($key, callable $regenerator = null, $ttl = 0)
     {
         // if we have a pending result, use that

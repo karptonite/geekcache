@@ -2,9 +2,14 @@
 
 namespace GeekCache\Cache;
 
-class NullCache implements Cache, IncrementableCache
+class NullCache implements IncrementableCheckableCache
 {
     public function get($key, callable $regenerator = null, $ttl = 0)
+    {
+        return false;
+    }
+    
+    public function has($key): bool
     {
         return false;
     }
@@ -35,6 +40,10 @@ class NullCache implements Cache, IncrementableCache
     }
 
     public function stage(string  $key): void
+    {
+    }
+    
+    public function unstage(string  $key): void
     {
     }
 }

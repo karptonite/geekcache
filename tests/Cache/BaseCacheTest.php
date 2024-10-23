@@ -14,7 +14,7 @@ abstract class BaseCacheTest extends PHPUnit\Framework\TestCase
     {
         $this->assertCacheReturnsFalseOnCacheMiss($this->cache);
     }
-
+    
     public function testPutAndGet()
     {
         $this->assertCachePutsAndGets($this->cache);
@@ -22,8 +22,8 @@ abstract class BaseCacheTest extends PHPUnit\Framework\TestCase
 
     public function testPutReturnsTrueOnSuccess()
     {
-        $result = $this->cache->put( self::KEY, self::VALUE );
-        $this->assertTrue( $result );
+        $result = $this->cache->put(self::KEY, self::VALUE);
+        $this->assertTrue($result);
     }
 
     public function testPutAndGetZero()

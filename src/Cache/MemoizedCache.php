@@ -13,16 +13,27 @@ class MemoizedCache extends CacheDecorator
 {
     private $memocache;
 
-    public function __construct(Cache $primaryCache, Cache $memocache)
+    public function __construct(Cache $primaryCache, CheckableCache $memocache)
     {
         parent::__construct($primaryCache);
         $this->memocache = $memocache;
+    }
+    
+    public function stage($key):void
+    {
+        if (!$this->memocache->has($key)) {
+            parent::stage($key);
+        }
     }
 
     public function get($key, callable $regenerator = null, $ttl = 0)
     {
         $result = $this->memocache->get($key);
-        return $result !== false ? $result : $this->getAndMemoize($key, $regenerator, $ttl);
+        if ($result !== false) {
+            parent::unstage($key);
+            return $result;
+        }
+        return $this->getAndMemoize($key, $regenerator, $ttl);
     }
 
     public function put($key, $value, $ttl = 0)

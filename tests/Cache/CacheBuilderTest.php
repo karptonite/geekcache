@@ -21,7 +21,7 @@ class CacheBuilderTest extends PHPUnit\Framework\TestCase
     public function prepareFullMockBuilder()
     {
         $this->cache         = m::mock('GeekCache\Cache\Cache');
-        $this->memocache     = m::mock('GeekCache\Cache\Cache');
+        $this->memocache     = m::mock('GeekCache\Cache\CheckableCache');
         $this->tagsetfactory = m::mock('GeekCache\Tag\TagSetFactory');
 
         $this->builder = new GeekCache\Cache\CacheBuilder($this->cache, $this->memocache, $this->tagsetfactory);

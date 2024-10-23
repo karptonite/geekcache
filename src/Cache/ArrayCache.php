@@ -2,7 +2,7 @@
 
 namespace GeekCache\Cache;
 
-class ArrayCache extends AbstractBaseCache implements Cache
+class ArrayCache extends AbstractBaseCache implements CheckableCache
 {
     private $cache = array();
     private $maxputs;
@@ -15,10 +15,10 @@ class ArrayCache extends AbstractBaseCache implements Cache
 
     public function get($key, callable $regenerator = null, $ttl = 0)
     {
-        return $this->cacheExists($key) ? $this->cache[$key] : $this->regenerate($key, $regenerator, $ttl);
+        return $this->has($key) ? $this->cache[$key] : $this->regenerate($key, $regenerator, $ttl);
     }
 
-    protected function cacheExists($key)
+    public function has($key): bool
     {
         return array_key_exists($key, $this->cache);
     }
@@ -36,7 +36,7 @@ class ArrayCache extends AbstractBaseCache implements Cache
 
     private function putIsPermitted($key)
     {
-        return !$this->maxputs || $this->putcount < $this->maxputs || $this->cacheExists($key);
+        return !$this->maxputs || $this->putcount < $this->maxputs || $this->has($key);
     }
 
     public function delete($key)
@@ -52,5 +52,14 @@ class ArrayCache extends AbstractBaseCache implements Cache
     
     public function stage(string $key):void
     {
+    }
+
+    public function unstage(string $key):void
+    {
+    }
+    
+    public function getGetCount():int
+    {
+        return 0;
     }
 }

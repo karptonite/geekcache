@@ -11,6 +11,13 @@ class StagingCache
         $this->stagedRequests[$key] = ($this->stagedRequests[$key] ?? null) ? $this->stagedRequests[$key] + 1 : 1;
     }
     
+    //fully unstage all counts for key
+    public function unstage(string $key): void
+    {
+        unset($this->stagedRequests[$key]);
+        unset($this->stagedResults[$key]);
+    }
+    
     public function resultIsStaged(string $key): bool
     {
         return array_key_exists($key, $this->stagedResults);

@@ -2,7 +2,7 @@
 
 namespace GeekCache\Cache;
 
-class IncrementableArrayCache extends ArrayCache implements IncrementableCache
+class IncrementableArrayCache extends ArrayCache implements IncrementableCheckableCache
 {
     public function increment($key, $value = 1, $ttl = 0)
     {
@@ -24,7 +24,7 @@ class IncrementableArrayCache extends ArrayCache implements IncrementableCache
 
     private function shouldDecrement($key, $value)
     {
-        return $value < 0 && $this->cacheExists($key);
+        return $value < 0 && $this->has($key);
     }
 
     private function decrementNumber($current, $value)

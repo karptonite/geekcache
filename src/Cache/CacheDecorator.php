@@ -20,6 +20,11 @@ abstract class CacheDecorator extends AbstractBaseCache implements Cache
     {
         $this->cache->stage($key);
     }
+    
+    public function unstage(string $key): void
+    {
+        $this->cache->unstage($key);
+    }
 
     public function put($key, $value, $ttl = 0)
     {
@@ -34,5 +39,10 @@ abstract class CacheDecorator extends AbstractBaseCache implements Cache
     public function clear()
     {
         return $this->cache->clear();
+    }
+    
+    public function getGetCount(): int
+    {
+        return $this->cache->getGetCount();
     }
 }

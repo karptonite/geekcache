@@ -16,7 +16,7 @@ class CounterBuilderTest extends PHPUnit\Framework\TestCase
     public function prepareFullMockBuilder()
     {
         $this->cache         = m::mock('GeekCache\Cache\IncrementableCache');
-        $this->memocache     = m::mock('GeekCache\Cache\IncrementableCache');
+        $this->memocache     = m::mock('GeekCache\Cache\IncrementableCheckableCache');
 
         $this->builder = new GeekCache\Counter\CounterBuilder($this->cache, $this->memocache);
     }

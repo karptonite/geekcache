@@ -22,9 +22,4 @@ abstract class AbstractBaseCache
     {
         return $regenerator(false);
     }
-
-    public function getGetCount():int
-    {
-        return 0;
-    }
 }
