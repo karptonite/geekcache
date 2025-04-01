@@ -1,5 +1,5 @@
 <?php
-class SoftExpiringTest extends BaseCacheTest
+class SoftExpiringCacheTest extends BaseCacheTestAbstract
 {
     private $parentcache;
     const GRACEPERIOD = 10;

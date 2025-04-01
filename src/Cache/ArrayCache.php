@@ -13,7 +13,7 @@ class ArrayCache extends AbstractBaseCache implements CheckableCache
         $this->maxputs = (int)$maxputs;
     }
 
-    public function get($key, callable $regenerator = null, $ttl = 0)
+    public function get($key, ?callable $regenerator = null, $ttl = 0)
     {
         return $this->has($key) ? $this->cache[$key] : $this->regenerate($key, $regenerator, $ttl);
     }

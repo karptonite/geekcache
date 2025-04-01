@@ -26,7 +26,7 @@ class MemoizedCache extends CacheDecorator
         }
     }
 
-    public function get($key, callable $regenerator = null, $ttl = 0)
+    public function get($key, ?callable $regenerator = null, $ttl = 0)
     {
         $result = $this->memocache->get($key);
         if ($result !== false) {
@@ -42,7 +42,7 @@ class MemoizedCache extends CacheDecorator
         return parent::put($key, $value, $ttl);
     }
 
-    private function getAndMemoize($key, callable $regenerator = null, $ttl = 0)
+    private function getAndMemoize($key, ?callable $regenerator = null, $ttl = 0)
     {
         $value = parent::get($key, $regenerator, $ttl);
         $this->memoize($key, $value);

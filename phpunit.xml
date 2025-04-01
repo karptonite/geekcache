@@ -1,13 +1,11 @@
 <phpunit
     colors="true"
-    convertErrorsToExceptions="true"
-    convertNoticesToExceptions="true"
-    convertWarningsToExceptions="true"
     beStrictAboutTestsThatDoNotTestAnything="false"
-    >
-    <listeners>
-        <listener class="\Mockery\Adapter\Phpunit\TestListener"></listener>
-    </listeners>
+    displayDetailsOnTestsThatTriggerDeprecations="true"
+    stopOnFailure="true" stopOnError="true"
+    stopOnDeprecation="true"
+    displayDetailsOnPhpunitDeprecations="true"
+>
     <testsuites>
         <testsuite name="GeekCache test suite">
             <directory>./tests/</directory>

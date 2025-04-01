@@ -1,5 +1,5 @@
 <?php
-class ArrayIncrementableCacheTest extends BaseIncrementableCacheTest
+class ArrayIncrementableCacheTest extends BaseIncrementableCacheTestAbstract
 {
     public function setUp(): void
     {

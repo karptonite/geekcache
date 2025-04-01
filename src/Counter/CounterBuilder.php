@@ -11,7 +11,7 @@ class CounterBuilder
 
     private $stack;
 
-    public function __construct(Cache\IncrementableCache $cache, Cache\IncrementableCheckableCache $memocache, array $stack = null)
+    public function __construct(Cache\IncrementableCache $cache, Cache\IncrementableCheckableCache $memocache, ?array $stack = null)
     {
         $this->cache = $cache;
         $this->memocache = $memocache;

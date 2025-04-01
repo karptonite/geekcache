@@ -1,5 +1,5 @@
 <?php
-class CacheServiceProviderIlluminateTest extends CacheServiceProviderTest
+class CacheServiceProviderIlluminateTest extends CacheServiceProviderTestAbstract
 {
     public function getContainer()
     {

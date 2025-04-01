@@ -4,7 +4,7 @@ namespace GeekCache\Cache;
 
 abstract class AbstractBaseCache
 {
-    protected function regenerate($key, callable $regenerator = null, $ttl = 0)
+    protected function regenerate($key, ?callable $regenerator = null, $ttl = 0)
     {
         $value = false;
 

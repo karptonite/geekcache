@@ -11,7 +11,7 @@ abstract class CacheDecorator extends AbstractBaseCache implements Cache
         $this->cache = $cache;
     }
 
-    public function get($key, callable $regenerator = null, $ttl = 0)
+    public function get($key, ?callable $regenerator = null, $ttl = 0)
     {
         return $this->cache->get($key, $regenerator, $ttl);
     }

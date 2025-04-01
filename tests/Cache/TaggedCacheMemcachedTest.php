@@ -4,12 +4,13 @@ use GeekCache\Cache\MemcachedCache;
 use GeekCache\Cache\SoftInvalidatableCache;
 use GeekCache\Cache\TaggedFreshnessPolicy;
 
-class TaggedCacheMemcachedTest extends BaseCacheTest
+class TaggedCacheMemcachedTest extends BaseCacheTestAbstract
 {
     
     const TAG_NAMES = ['TAG_1', 'TAG_2'];
     const TAG_NAMES2 = ['TAG_3', 'TAG_4'];
     private $parentcache;
+    private $factory;
 
     public function setUp(): void
     {

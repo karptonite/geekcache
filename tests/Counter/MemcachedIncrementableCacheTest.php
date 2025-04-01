@@ -2,7 +2,7 @@
 
 use GeekCache\Cache\MemcachedCache;
 
-class MemcachedIncrementableCacheTest extends BaseIncrementableCacheTest
+class MemcachedIncrementableCacheTest extends BaseIncrementableCacheTestAbstract
 {
     public function setUp(): void
     {

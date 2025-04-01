@@ -4,7 +4,7 @@ namespace GeekCache\Cache;
 
 class NullCache implements IncrementableCheckableCache
 {
-    public function get($key, callable $regenerator = null, $ttl = 0)
+    public function get($key, ?callable $regenerator = null, $ttl = 0)
     {
         return false;
     }

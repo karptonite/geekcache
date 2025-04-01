@@ -10,7 +10,7 @@ class MemcachedCache implements MultiGetCache, IncrementableCacheBackend
         $this->cache = $cache;
     }
 
-    public function get($key, callable $regenerator = null, $ttl = 0)
+    public function get($key, ?callable $regenerator = null, $ttl = 0)
     {
         return $this->cache->get($key);
         // if we have a pending result, use that

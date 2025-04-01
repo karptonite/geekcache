@@ -3,7 +3,7 @@
 use GeekCache\Cache\MemcachedCache;
 use GeekCache\Cache\NormalCacheItem;
 
-class MemcacheCachedLiveTest extends BaseCacheTest
+class MemcachedCacheLiveTest extends BaseCacheTestAbstract
 {
     public function setUp(): void
     {

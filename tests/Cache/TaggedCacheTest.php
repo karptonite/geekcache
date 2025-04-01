@@ -1,7 +1,7 @@
 <?php
 use Mockery as m;
 
-class TaggedCacheTest extends BaseCacheTest
+class TaggedCacheTest extends BaseCacheTestAbstract
 {
     private $parentcache;
     private $tagset;

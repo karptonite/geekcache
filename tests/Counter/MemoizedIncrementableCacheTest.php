@@ -1,5 +1,5 @@
 <?php
-class MemoizedIncrementableCacheTest extends BaseIncrementableCacheTest
+class MemoizedIncrementableCacheTest extends BaseIncrementableCacheTestAbstract
 {
     private $primarycache;
     private $memoizedcache;

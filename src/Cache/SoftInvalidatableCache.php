@@ -23,7 +23,7 @@ class SoftInvalidatableCache extends CacheDecorator
         parent::stage($key);
     }
 
-    public function get($key, callable $regenerator = null, $ttl = 0)
+    public function get($key, ?callable $regenerator = null, $ttl = 0)
     {
         $regeneratedByParent = false;
 
@@ -55,14 +55,14 @@ class SoftInvalidatableCache extends CacheDecorator
         return is_callable($regenerator);
     }
 
-    private function getFromParent(&$regeneratedByParent, $key, callable $regenerator = null, $ttl = 0)
+    private function getFromParent(&$regeneratedByParent, $key, ?callable $regenerator = null, $ttl = 0)
     {
         $this->policy->stage();
         $wrappedRegenerator = $this->wrapRegenerator($regeneratedByParent, $regenerator, $ttl);
         return parent::get($key, $wrappedRegenerator, $this->policy->computeTtl($ttl));
     }
 
-    private function wrapRegenerator(&$regeneratedByParent, callable $regenerator = null, $ttl = 0)
+    private function wrapRegenerator(&$regeneratedByParent, ?callable $regenerator = null, $ttl = 0)
     {
         if (is_null($regenerator)) {
             return null;

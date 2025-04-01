@@ -9,7 +9,7 @@ class CacheBuilder
     private $tagsetfactory;
     private $stack;
 
-    public function __construct(Cache $cache, Cache $memocache, \GeekCache\Tag\TagSetFactory $tagsetfactory, array $stack = null)
+    public function __construct(Cache $cache, Cache $memocache, \GeekCache\Tag\TagSetFactory $tagsetfactory, ?array $stack = null)
     {
         $this->cache = $cache;
         $this->memocache = $memocache;

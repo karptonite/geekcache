@@ -1,5 +1,5 @@
 <?php
-abstract class CacheServiceProviderTest extends PHPUnit\Framework\TestCase
+abstract class CacheServiceProviderTestAbstract extends PHPUnit\Framework\TestCase
 {
     protected $sp;
     protected $msp;

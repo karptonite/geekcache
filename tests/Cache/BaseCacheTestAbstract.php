@@ -1,5 +1,5 @@
 <?php
-abstract class BaseCacheTest extends PHPUnit\Framework\TestCase
+abstract class BaseCacheTestAbstract extends PHPUnit\Framework\TestCase
 {
     const KEY   = 'thekey';
     const VALUE = 'foobar';

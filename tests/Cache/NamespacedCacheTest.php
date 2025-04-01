@@ -1,7 +1,7 @@
 <?php
 use Mockery as m;
 
-class NamespacedCacheTest extends BaseCacheTest
+class NamespacedCacheTest extends BaseCacheTestAbstract
 {
     private $parentcache;
 

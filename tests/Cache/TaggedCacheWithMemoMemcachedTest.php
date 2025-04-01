@@ -4,7 +4,7 @@ use GeekCache\Cache\MemcachedCache;
 use GeekCache\Cache\SoftInvalidatableCache;
 use GeekCache\Cache\TaggedFreshnessPolicy;
 
-class TaggedCacheWithMemoMemcachedTest extends BaseCacheTest
+class TaggedCacheWithMemoMemcachedTest extends BaseCacheTestAbstract
 {
 
     const TAG_NAMES = ['TAG_1', 'TAG_2'];

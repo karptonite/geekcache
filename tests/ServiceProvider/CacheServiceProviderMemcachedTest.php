@@ -1,5 +1,5 @@
 <?php
-class CacheServiceProviderMemcachedTest extends CacheServiceProviderTest
+class CacheServiceProviderMemcachedTest extends CacheServiceProviderTestAbstract
 {
     use \DMS\PHPUnitExtensions\ArraySubset\ArraySubsetAsserts;
     protected function getPersistentServiceProvider()
