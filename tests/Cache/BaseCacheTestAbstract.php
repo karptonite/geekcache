@@ -126,6 +126,25 @@ abstract class BaseCacheTestAbstract extends PHPUnit\Framework\TestCase
         $this->assertSame(0, $regenResult);
         $this->assertSame(0, $result);
     }
+    
+    public function testStaleDataNotReturnedFromStageAfterPut()
+    {
+        $this->cache->stage(self::KEY);
+        $this->cache->stage(self::KEY2);
+        $this->cache->get(self::KEY);
+        $this->cache->put(self::KEY2, self::VALUE2);
+        $this->assertSame(self::VALUE2, $this->cache->get(self::KEY2));
+    }
+    
+    public function testStaleDataNotReturnedFromStageAfterDelete()
+    {
+        $this->cache->put(self::KEY2, self::VALUE2);
+        $this->cache->stage(self::KEY);
+        $this->cache->stage(self::KEY2);
+        $this->cache->get(self::KEY);
+        $this->cache->delete(self::KEY2);
+        $this->assertFalse($this->cache->get(self::KEY2));
+    }
 
     public function assertCachePutsAndGets($cache)
     {
@@ -150,4 +169,5 @@ abstract class BaseCacheTestAbstract extends PHPUnit\Framework\TestCase
     {
         $this->assertFalse($cache->get(self::KEY));
     }
+
 }

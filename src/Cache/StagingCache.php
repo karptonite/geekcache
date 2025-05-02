@@ -8,7 +8,11 @@ class StagingCache
     
     public function stage(string $key): void
     {
-        $this->stagedRequests[$key] = ($this->stagedRequests[$key] ?? null) ? $this->stagedRequests[$key] + 1 : 1;
+        if ($this->resultIsStaged($key)) {
+            $this->stagedResults[$key]['remainingReads']++;
+        } else {
+            $this->stagedRequests[$key] = ($this->stagedRequests[$key] ?? null) ? $this->stagedRequests[$key] + 1 : 1;
+        }
     }
     
     //fully unstage all counts for key
@@ -22,7 +26,21 @@ class StagingCache
     {
         return array_key_exists($key, $this->stagedResults);
     }
+
+    public function updateResultIfStaged(string $key, $result)
+    {
+        if ($this->resultIsStaged($key)) {
+            $this->stagedResults[$key]['value'] = $result;
+        }
+    }
     
+    public function deleteResultIfStaged(string $key)
+    {
+        if ($this->resultIsStaged($key)) {
+            $this->stagedResults[$key]['value'] = false;
+        }
+    }
+
     public function readResult($key)
     {
         $result = $this->stagedResults[$key]['value'];

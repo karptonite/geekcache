@@ -62,11 +62,13 @@ class StageableCache extends AbstractBaseCache implements Cache
 
     public function put($key, $value, $ttl = 0)
     {
+        $this->stagingCache->updateResultIfStaged($key, $value);
         return $this->cache->put($key, $value, (int)$ttl);
     }
 
     public function delete($key)
     {
+        $this->stagingCache->deleteResultIfStaged($key);
         return $this->cache->delete($key);
     }
 

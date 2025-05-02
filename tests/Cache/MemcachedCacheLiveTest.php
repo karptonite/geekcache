@@ -139,6 +139,23 @@ class MemcachedCacheLiveTest extends BaseCacheTestAbstract
         $this->assertStageEmpty();
     }
     
+    public function testStageAfterRead()
+    {
+        $getCount = $this->cache->getGetCount();
+        $this->cache->put(self::KEY, self::VALUE, 1);
+        $this->cache->put(self::KEY2, self::VALUE2, 1);
+        $this->cache->stage(self::KEY);
+        $this->cache->stage(self::KEY);
+        $this->cache->stage(self::KEY2);
+        $this->assertEquals(self::VALUE, $this->cache->get(self::KEY));
+        $this->cache->stage(self::KEY);
+        $this->assertEquals(self::VALUE, $this->cache->get(self::KEY));
+        $this->assertEquals(self::VALUE, $this->cache->get(self::KEY));
+        $this->assertEquals(self::VALUE2, $this->cache->get(self::KEY2));
+        $this->assertEquals($getCount + 1, $this->cache->getGetCount());
+        $this->assertStageEmpty();
+    }
+    
     public function testCacheItemStaging()
     {
         $cacheItem1 = new NormalCacheItem($this->cache, self::KEY);

@@ -37,7 +37,6 @@ class Tag
             $this->cache->get($this->key);
         }
     }
-    
 
     public function clear()
     {
