@@ -35,7 +35,7 @@ abstract class AbstractFreshnessPolicy implements FreshnessPolicy
         return static::POLICY_NAMESPACE;
     }
 
-    public function stage()
+    public function stage(?string $skipIfStaged = null)
     {
     }
 }

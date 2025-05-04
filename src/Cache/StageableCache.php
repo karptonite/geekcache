@@ -16,14 +16,14 @@ class StageableCache extends AbstractBaseCache implements Cache
         $this->stagingCache = new StagingCache();
     }
 
-    public function stage(string $key): void
+    public function stage(string $key, ?string $skipIfStaged = null): void
     {
-        $this->stagingCache->stage($key);
+        $this->stagingCache->stage($key, $skipIfStaged);
     }
     
-    public function unstage(string $key): void
+    public function decrementStagedCount(string $key): void
     {
-        $this->stagingCache->unstage($key);
+        $this->stagingCache->decrementStagedCount($key);
     }
     
     public function get($key, ?callable $regenerator = null, $ttl = 0)

@@ -19,10 +19,10 @@ class MemoizedCache extends CacheDecorator
         $this->memocache = $memocache;
     }
     
-    public function stage($key):void
+    public function stage($key, ?string $skipIfStaged = null):void
     {
         if (!$this->memocache->has($key)) {
-            parent::stage($key);
+            parent::stage($key, $skipIfStaged);
         }
     }
 
@@ -30,7 +30,11 @@ class MemoizedCache extends CacheDecorator
     {
         $result = $this->memocache->get($key);
         if ($result !== false) {
-            parent::unstage($key);
+            // decrementing the staged result count, if any to indicate it was read from the memoized cache
+            // FIXME we could probable just clear the staged results here,
+            // but for other purposes, we need to be able to decrement,
+            // and decrement works as well as clearing for our purposes.
+            parent::decrementStagedCount($key);
             return $result;
         }
         return $this->getAndMemoize($key, $regenerator, $ttl);

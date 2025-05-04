@@ -17,10 +17,15 @@ class TagSet
         $this->tags = $tags;
     }
 
+    // FIXME consider splitting this into getSignature and readSignature.
+    // the former would be used when we need a signature for writing, and it will create
+    // the tags if they do not exist. The later is used when reading only. We don't need to
+    // create the tag in this case.
     public function getSignature()
     {
         $versions = array();
 
+        // make sure all of the tags are staged before getting, so that we only do one get.
         if (count($this->tags) > 1) {
             foreach ($this->tags as $tag) {
                 $tag->stage();
@@ -41,17 +46,17 @@ class TagSet
         });
     }
 
-    public function stage()
+    public function stage(?string $skipIfStaged = null)
     {
-        array_walk($this->tags, function ($tag) {
-            $tag->stage();
-        });
+        foreach ($this->tags as $tag) {
+            $tag->stage($skipIfStaged);
+        }
     }
     
-    public function unstage()
+    public function decrementStagedCounts()
     {
         array_walk($this->tags, function ($tag) {
-            $tag->unstage();
+            $tag->decrementStagedCount();
         });
     }
 }

@@ -8,7 +8,7 @@ class TaggedCacheWithMemoMemcachedTest extends BaseCacheTestAbstract
 {
 
     const TAG_NAMES = ['TAG_1', 'TAG_2'];
-    const TAG_NAMES2 = ['TAG_3', 'TAG_4'];
+    const TAG_NAMES2 = ['TAG_3', 'TAG_2'];
 
     private $secondaryCache;
     private $parentcache;
@@ -54,6 +54,19 @@ class TaggedCacheWithMemoMemcachedTest extends BaseCacheTestAbstract
         $this->cache->get(self::KEY);
         $this->assertStageEmpty();
     }
+
+    public function testMemoizationHandlesStagedItemCorrectly()
+    {
+        $this->getCache()->put(self::KEY, self::VALUE);
+        $this->secondaryCache->clear();
+        $this->assertStageEmpty();
+
+        //        echo "\n\nSTAGE IS EMPTY\n\n";
+        
+        $this->getCache()->stage(self::KEY);
+        $this->getCache()->get(self::KEY);
+        $this->assertStageEmpty();
+    }
     
     public function testMemoizationHandlesMultipleStagedItemsCorrectly()
     {
@@ -63,9 +76,11 @@ class TaggedCacheWithMemoMemcachedTest extends BaseCacheTestAbstract
         
         $this->getCache()->stage(self::KEY);
         $this->getCache()->stage(self::KEY);
-
+        $this->getCache()->stage(self::KEY);
+        
         $this->getCache()->get(self::KEY);
         // this should get the item from cache
+        $this->getCache()->get(self::KEY);
         $this->getCache()->get(self::KEY);
         $this->assertStageEmpty();
     }
@@ -139,6 +154,39 @@ class TaggedCacheWithMemoMemcachedTest extends BaseCacheTestAbstract
         $this->assertStageEmpty();
         $getCount = $this->parentcache->getGetCount();
         $this->cache->stage(self::KEY);
+        $otherCache->get(self::KEY2);
+        $this->cache->get(self::KEY);
+        $this->assertStageEmpty();
+        $this->assertEquals($getCount + 1, $this->parentcache->getGetCount());
+    }
+
+    public function testPurgingForOneTagsetDoesntCauseASecondToFailForStaging()
+    {
+        $tagSet = $this->factory->makeTagSet(self::TAG_NAMES2);
+        $policy = new TaggedFreshnessPolicy($tagSet);
+        $otherCache =  new SoftInvalidatableCache($this->parentcache, $policy);
+
+        $this->cache->put(self::KEY, self::VALUE);
+        $this->assertStageEmpty();
+        $getCount = $this->parentcache->getGetCount();
+        $this->cache->stage(self::KEY);
+        $otherCache->get(self::KEY2);
+        $this->cache->get(self::KEY);
+        $this->assertStageEmpty();
+        $this->assertEquals($getCount + 1, $this->parentcache->getGetCount());
+    }
+
+    public function testPurgingForOneTagsetDoesntCauseASecondToFailForStagingWhenBothAreStaged()
+    {
+        $tagSet = $this->factory->makeTagSet(self::TAG_NAMES2);
+        $policy = new TaggedFreshnessPolicy($tagSet);
+        $otherCache =  new SoftInvalidatableCache($this->parentcache, $policy);
+
+        $this->cache->put(self::KEY, self::VALUE);
+        $this->assertStageEmpty();
+        $getCount = $this->parentcache->getGetCount();
+        $this->cache->stage(self::KEY);
+        $otherCache->stage(self::KEY2);
         $otherCache->get(self::KEY2);
         $this->cache->get(self::KEY);
         $this->assertStageEmpty();

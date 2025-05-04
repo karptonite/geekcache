@@ -15,7 +15,7 @@ class TaggedCacheTest extends BaseCacheTestAbstract
             ->andReturn('foo')
             ->byDefault();
         $this->tagset->shouldReceive('stage');
-        $this->tagset->shouldReceive('unstage');
+        $this->tagset->shouldReceive('decrementStagedCounts');
         $policy = new GeekCache\Cache\TaggedFreshnessPolicy($this->tagset);
         $this->cache = new GeekCache\Cache\SoftInvalidatableCache($this->parentcache, $policy);
     }

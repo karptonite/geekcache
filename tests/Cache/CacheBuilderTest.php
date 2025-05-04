@@ -94,7 +94,7 @@ class CacheBuilderTest extends PHPUnit\Framework\TestCase
             ->andReturnNull();
         $tagset = m::mock('GeekCache\Tag\TagSet');
         $tagset->shouldReceive('stage');
-        $tagset->shouldReceive('unstage')->once();
+        $tagset->shouldReceive('decrementStagedCounts')->once();
         $this->tagsetfactory->shouldReceive('makeTagSet')
             ->once()
             ->with(array('footag', 'bartag'))

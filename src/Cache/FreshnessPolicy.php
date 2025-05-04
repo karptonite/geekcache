@@ -11,5 +11,5 @@ interface FreshnessPolicy
     public function getNamespace();
     // this can be called before get() ing the underlying cache, to stage any additional
     // caches
-    public function stage();
+    public function stage(?string $skipIfStaged = null);
 }

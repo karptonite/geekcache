@@ -39,11 +39,11 @@ class NullCache implements IncrementableCheckableCache
         return 0;
     }
 
-    public function stage(string  $key): void
+    public function stage(string $key, ?string $skipIfStaged = null): void
     {
     }
     
-    public function unstage(string  $key): void
+    public function decrementStagedCount(string $key): void
     {
     }
 }

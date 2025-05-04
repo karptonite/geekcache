@@ -12,9 +12,9 @@ class NamespacedCache extends CacheDecorator
         $this->namespace = $namespace;
     }
 
-    public function stage(string $key): void
+    public function stage(string $key, ?string $skipIfStaged = null): void
     {
-        parent::stage($this->reviseKey($key));
+        parent::stage($this->reviseKey($key), $skipIfStaged);
     }
 
     public function get($key, ?callable $regenerator = null, $ttl = 0)
@@ -37,8 +37,8 @@ class NamespacedCache extends CacheDecorator
         return parent::clear();
     }
 
-    protected function reviseKey($key)
+    protected function reviseKey(string $key): string
     {
-        return $this->namespace . '_' . $key;
+        return KeyReviser::reviseKey($this->namespace, $key);
     }
 }

@@ -8,7 +8,7 @@ class TaggedCacheMemcachedTest extends BaseCacheTestAbstract
 {
     
     const TAG_NAMES = ['TAG_1', 'TAG_2'];
-    const TAG_NAMES2 = ['TAG_3', 'TAG_4'];
+    const TAG_NAMES2 = ['TAG_3', 'TAG_2'];
     private $parentcache;
     private $factory;
 
@@ -33,7 +33,9 @@ class TaggedCacheMemcachedTest extends BaseCacheTestAbstract
         $policy = new TaggedFreshnessPolicy($tagSet);
         $cache =  new SoftInvalidatableCache($this->parentcache, $policy);
         $cache->put(self::KEY, self::VALUE);
+        $this->assertStageEmpty();
         $this->assertEquals(self::VALUE, $cache->get(self::KEY));
+        $this->assertStageEmpty();
         $tagSet->clearAll();
         $this->assertFalse($cache->get(self::KEY));
         $this->assertStageEmpty();
@@ -91,6 +93,39 @@ class TaggedCacheMemcachedTest extends BaseCacheTestAbstract
         $this->assertEquals($getCount + 1, $this->parentcache->getGetCount());
     }
     
+    public function testPurgingForOneTagsetDoesntCauseASecondToFailForStaging()
+    {
+        $tagSet = $this->factory->makeTagSet(self::TAG_NAMES2);
+        $policy = new TaggedFreshnessPolicy($tagSet);
+        $otherCache =  new SoftInvalidatableCache($this->parentcache, $policy);
+
+        $this->cache->put(self::KEY, self::VALUE);
+        $this->assertStageEmpty();
+        $getCount = $this->parentcache->getGetCount();
+        $this->cache->stage(self::KEY);
+        $otherCache->get(self::KEY2);
+        $this->cache->get(self::KEY);
+        $this->assertStageEmpty();
+        $this->assertEquals($getCount + 1, $this->parentcache->getGetCount());
+    }
+
+    public function testPurgingForOneTagsetDoesntCauseASecondToFailForStagingWhenBothAreStagedNoMemo()
+    {
+        $tagSet = $this->factory->makeTagSet(self::TAG_NAMES2);
+        $policy = new TaggedFreshnessPolicy($tagSet);
+        $otherCache =  new SoftInvalidatableCache($this->parentcache, $policy);
+
+        $this->cache->put(self::KEY, self::VALUE);
+        $this->assertStageEmpty();
+        $getCount = $this->parentcache->getGetCount();
+        $this->cache->stage(self::KEY);
+        $otherCache->stage(self::KEY2);
+        $otherCache->get(self::KEY2);
+        $this->cache->get(self::KEY);
+        $this->assertStageEmpty();
+        $this->assertEquals($getCount + 1, $this->parentcache->getGetCount());
+    }
+
     public function testGettingTagSignatureUsesOnlyOneGet()
     {
         $getCount = $this->parentcache->getGetCount();
@@ -105,4 +140,10 @@ class TaggedCacheMemcachedTest extends BaseCacheTestAbstract
         $this->assertEquals(0, $this->parentcache->getStagedRequestsCount());
         $this->assertEquals(0, $this->parentcache->getStagedResultsCount());
     }
+    public function dumpCounts()
+    {
+        echo "\nrequest count: " . $this->parentcache->getStagedRequestsCount() . "\n";
+        echo "results count: " . $this->parentcache->getStagedResultsCount() . "\n";
+    }
+
 }

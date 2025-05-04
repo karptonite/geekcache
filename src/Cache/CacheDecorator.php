@@ -15,15 +15,15 @@ abstract class CacheDecorator extends AbstractBaseCache implements Cache
     {
         return $this->cache->get($key, $regenerator, $ttl);
     }
-
-    public function stage(string $key): void
+ 
+    public function stage(string $key, ?string $skipIfStaged = null): void
     {
-        $this->cache->stage($key);
+        $this->cache->stage($key, $skipIfStaged);
     }
     
-    public function unstage(string $key): void
+    public function decrementStagedCount(string $key): void
     {
-        $this->cache->unstage($key);
+        $this->cache->decrementStagedCount($key);
     }
 
     public function put($key, $value, $ttl = 0)

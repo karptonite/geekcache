@@ -14,9 +14,13 @@ class TaggedFreshnessPolicy extends AbstractFreshnessPolicy
         $this->tagset = $tagset;
     }
 
-    public function stage()
+    public function stage(?string $skipIfStaged = null)
     {
-        $this->tagset->stage();
+        if (is_null($skipIfStaged)) {
+            $this->tagset->stage();
+        } else {
+            $this->tagset->stage(KeyReviser::reviseKey($this->getNamespace(), $skipIfStaged));
+        }
     }
 
     public function computeTtl($ttl)
@@ -27,7 +31,7 @@ class TaggedFreshnessPolicy extends AbstractFreshnessPolicy
     public function resultIsFresh($result)
     {
         if (!($result instanceof CacheData)) {
-            $this->tagset->unstage();
+            $this->tagset->decrementStagedCounts();
             return false;
         }
         return parent::resultIsFresh($result);

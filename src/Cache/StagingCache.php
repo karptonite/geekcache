@@ -6,8 +6,11 @@ class StagingCache
     private array $stagedRequests = [];
     private array $stagedResults = [];
     
-    public function stage(string $key): void
+    public function stage(string $key, ?string $skipIfStaged = null): void
     {
+        if ($skipIfStaged && ($this->resultIsStaged($skipIfStaged) || $this->requestIsStaged($skipIfStaged))) {
+            return;
+        }
         if ($this->resultIsStaged($key)) {
             $this->stagedResults[$key]['remainingReads']++;
         } else {
@@ -15,11 +18,15 @@ class StagingCache
         }
     }
     
-    //fully unstage all counts for key
-    public function unstage(string $key): void
+    //reduce by one the number of reads left for a result
+    public function decrementStagedCount(string $key): void
     {
-        unset($this->stagedRequests[$key]);
-        unset($this->stagedResults[$key]);
+        $this->decrementResultRemainingReads($key);
+    }
+    
+    private function requestIsStaged(string $key): bool
+    {
+        return array_key_exists($key, $this->stagedRequests);
     }
     
     public function resultIsStaged(string $key): bool
@@ -43,12 +50,23 @@ class StagingCache
 
     public function readResult($key)
     {
+        if (!$this->resultIsStaged($key)) {
+            return null;
+        }
         $result = $this->stagedResults[$key]['value'];
+        $this->decrementResultRemainingReads($key);
+        return $result;
+    }
+    
+    private function decrementResultRemainingReads(string $key): void
+    {
+        if (!$this->resultIsStaged($key)) {
+            return;
+        }
         $this->stagedResults[$key]['remainingReads']--;
-        if (!$this->stagedResults[$key]['remainingReads']) {
+        if ($this->stagedResults[$key]['remainingReads'] <= 0) {
             unset($this->stagedResults[$key]);
         }
-        return $result;
     }
     
     // the key is for the primary item for the multiGet. This item may or may  not be staged

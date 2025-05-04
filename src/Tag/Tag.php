@@ -16,10 +16,18 @@ class Tag
         $this->key = 'tag_' . $name;
     }
 
-    public function stage()
+    public function stage(?string $skipIfStaged = null)
     {
+        // ensure that any given Tag object is only staged once (although the tag key may be staged multiple times).
+        // There are three times a tag might be staged: First, if an entire
+        // request (data and tag) are being staged, it will staged at that time.
+        // Second, Any time a Tagged Cache is read, we stage the tags right before
+        // reading.
+        // Third, when a TagSet is read, we stage all of its tags before reading.
+        //  But we only read once. This helps ensure that we don't "double stage" for
+        // pre-staged Tagged caches.
         if (!$this->staged) {
-            $this->cache->stage($this->key);
+            $this->cache->stage($this->key, $skipIfStaged);
         }
         $this->staged = true;
     }
@@ -31,10 +39,10 @@ class Tag
         return $stored && is_string($stored) ? $stored : $this->clear();
     }
     
-    public function unstage()
+    public function decrementStagedCount()
     {
         if ($this->staged) {
-            $this->cache->get($this->key);
+            $this->cache->decrementStagedCount($this->key);
         }
     }
 
