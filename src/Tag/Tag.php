@@ -28,15 +28,27 @@ class Tag
         // pre-staged Tagged caches.
         if (!$this->staged) {
             $this->cache->stage($this->key, $skipIfStaged);
+            $this->staged = true;
         }
-        $this->staged = true;
     }
 
     public function getVersion()
     {
+        return $this->readStoredVersion() ?? $this->clear();
+    }
+    
+    // Read version returns a new (unsaved) uniqid if there is nothing stored.
+    // this will always be invalid, because the stored version will always be different.
+    public function readVersion()
+    {
+        return $this->readStoredVersion() ?? uniqid();
+    }
+    
+    private function readStoredVersion()
+    {
         $this->staged = false;
         $stored = $this->cache->get($this->key);
-        return $stored && is_string($stored) ? $stored : $this->clear();
+        return is_string($stored) ? $stored: null;
     }
     
     public function decrementStagedCount()

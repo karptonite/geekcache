@@ -58,8 +58,10 @@ class SoftInvalidatableCache extends CacheDecorator
     private function getFromParent(&$regeneratedByParent, $key, ?callable $regenerator = null, $ttl = 0)
     {
         // Staging now (for tagged caches) ensures that the tags are gotten in the same request as the
-        // main cache
+        // main cache, in the event that their are other gets staged.
         // If the parent key is already staged, we assume that the tags are staged as well, and skip staging
+        // This duty might be better handled by the policy directly, but this is the level at which we know
+        // which key to pass into skipIfStaged.
         $this->policy->stage(skipIfStaged: $key);
         $wrappedRegenerator = $this->wrapRegenerator($regeneratedByParent, $regenerator, $ttl);
         return parent::get($key, $wrappedRegenerator, $this->policy->computeTtl($ttl));

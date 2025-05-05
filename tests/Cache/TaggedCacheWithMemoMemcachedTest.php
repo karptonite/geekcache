@@ -123,7 +123,26 @@ class TaggedCacheWithMemoMemcachedTest extends BaseCacheTestAbstract
         $this->assertEquals($getCount + 1, $this->parentcache->getGetCount());
         $this->assertStageEmpty();
     }
+    
+    public function testTaggedCacheLookupHitsCacheOnceReverseReadPutMemo()
+    {
+        // this will pull both tags before getting them
+        $this->cache->put(self::KEY, self::VALUE);
 
+        $getCount = $this->parentcache->getGetCount();
+        $tagSet = $this->factory->makeTagSet(self::TAG_NAMES);
+        $policy = new TaggedFreshnessPolicy($tagSet);
+        $otherCache =  new SoftInvalidatableCache($this->parentcache, $policy);
+        $otherCache->get(self::KEY);
+        $this->assertStageEmpty();
+        $this->assertEquals($getCount + 1, $this->parentcache->getGetCount());
+        // because the cache is memoized, we should not have to get the key again from cache.
+        $otherCache->put(self::KEY, self::VALUE);
+        $this->assertStageEmpty();
+        $this->assertEquals($getCount + 1, $this->parentcache->getGetCount());
+        $this->assertStageEmpty();
+    }
+    
     public function testMultipleTaggedCacheLookupHitsCacheOnce()
     {
         // this will pull both tags before getting them
@@ -201,6 +220,18 @@ class TaggedCacheWithMemoMemcachedTest extends BaseCacheTestAbstract
         $this->assertEquals($getCount + 1, $this->parentcache->getGetCount());
     }
 
+    public function testOnlyCreatesTagCacheWhenNecessaryMemo()
+    {
+        $tagKey = "tag_" . self::TAG_NAMES[0];
+        $this->assertFalse($this->parentcache->get($tagKey));
+        $this->cache->put(self::KEY, self::VALUE);
+        $this->assertNotEmpty($this->memoizedcache->get($tagKey));
+        $this->memoizedcache->delete($tagKey);
+        $this->assertFalse($this->memoizedcache->get($tagKey));
+        $result = $this->cache->get(self::KEY);
+        $this->assertFalse($result);
+        $this->assertFalse($this->memoizedcache->get($tagKey));
+    }
 
     public function assertStageEmpty()
     {

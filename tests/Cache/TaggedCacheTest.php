@@ -14,6 +14,9 @@ class TaggedCacheTest extends BaseCacheTestAbstract
         $this->tagset->shouldReceive('getSignature')
             ->andReturn('foo')
             ->byDefault();
+        $this->tagset->shouldReceive('readSignature')
+            ->andReturn('foo')
+            ->byDefault();
         $this->tagset->shouldReceive('stage');
         $this->tagset->shouldReceive('decrementStagedCounts');
         $policy = new GeekCache\Cache\TaggedFreshnessPolicy($this->tagset);
@@ -28,7 +31,7 @@ class TaggedCacheTest extends BaseCacheTestAbstract
     public function testCachePassesTrueIntoRegenerator()
     {
         $this->cache->put(static::KEY, static::VALUE);
-        $this->tagset->shouldReceive('getSignature')
+        $this->tagset->shouldReceive('readSignature')
             ->andReturn('bar');
 
         $regenerator = m::mock('stdClass');
@@ -43,7 +46,7 @@ class TaggedCacheTest extends BaseCacheTestAbstract
     public function testCacheInvalidatesWhenHashChanges()
     {
         $this->cache->put(static::KEY, static::VALUE);
-        $this->tagset->shouldReceive('getSignature')
+        $this->tagset->shouldReceive('readSignature')
             ->andReturn('bar');
 
         $this->assertFalse($this->cache->get(static::KEY));
@@ -67,11 +70,11 @@ class TaggedCacheTest extends BaseCacheTestAbstract
 
         $this->assertEquals(static::VALUE, $this->cache->get(static::KEY, $regenerator));
     }
-
+    
     public function testRegeneratesWhenHashChanges()
     {
         $this->cache->put(static::KEY, static::VALUE);
-        $this->tagset->shouldReceive('getSignature')
+        $this->tagset->shouldReceive('readSignature')
             ->andReturn('bar');
 
 
@@ -86,7 +89,7 @@ class TaggedCacheTest extends BaseCacheTestAbstract
     public function testRegeneratesNullWhenHashChanges()
     {
         $this->cache->put(static::KEY, static::VALUE);
-        $this->tagset->shouldReceive('getSignature')
+        $this->tagset->shouldReceive('readSignature')
             ->andReturn('bar');
 
 
@@ -104,7 +107,7 @@ class TaggedCacheTest extends BaseCacheTestAbstract
         $this->cache = new GeekCache\Cache\SoftInvalidatableCache($this->cache, $policy, $this->cache);
 
         $this->cache->put(static::KEY, static::VALUE, 1);
-        $this->tagset->shouldReceive('getSignature')
+        $this->tagset->shouldReceive('readSignature')
             ->andReturn('bar');
 
         $value      = $this->cache->get(static::KEY);

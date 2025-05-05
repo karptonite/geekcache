@@ -17,23 +17,27 @@ class TagSet
         $this->tags = $tags;
     }
 
-    // FIXME consider splitting this into getSignature and readSignature.
-    // the former would be used when we need a signature for writing, and it will create
-    // the tags if they do not exist. The later is used when reading only. We don't need to
-    // create the tag in this case.
     public function getSignature()
     {
-        $versions = array();
-
-        // make sure all of the tags are staged before getting, so that we only do one get.
+        // we don't need to stage if we are getting only a single tag for writing
         if (count($this->tags) > 1) {
-            foreach ($this->tags as $tag) {
-                $tag->stage();
-            }
+            $this->stage();
         }
+        return $this->fetchSignature(true);
+    }
 
+    public function readSignature()
+    {
+        // we don't have to stage for reading (without regenerating),
+        // because it will already be staged in the FreshnessPolicy.
+        return $this->fetchSignature(false);
+    }
+    
+    private function fetchSignature(bool $andGenerate)
+    {
+        $versions = [];
         foreach ($this->tags as $tag) {
-            $versions[] = $tag->getVersion();
+            $versions[] = $andGenerate ? $tag->getVersion() :  $tag->readVersion();
         }
 
         return sha1(implode($versions));

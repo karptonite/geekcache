@@ -39,7 +39,7 @@ class TaggedFreshnessPolicy extends AbstractFreshnessPolicy
 
     protected function isFresh($freshnessData)
     {
-        return isset($freshnessData['signature']) && $freshnessData['signature'] == $this->tagset->getSignature();
+        return isset($freshnessData['signature']) && $freshnessData['signature'] == $this->tagset->readSignature();
     }
 
     protected function createFreshnessData($ttl)
