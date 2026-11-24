@@ -20,12 +20,12 @@ class StageableCache extends AbstractBaseCache implements Cache
     {
         $this->stagingCache->stage($key, $skipIfStaged);
     }
-    
+
     public function decrementStagedCount(string $key): void
     {
         $this->stagingCache->decrementStagedCount($key);
     }
-    
+
     public function get($key, ?callable $regenerator = null, $ttl = 0)
     {
         // if we have a pending result, use that
@@ -52,9 +52,9 @@ class StageableCache extends AbstractBaseCache implements Cache
                 $this->stagingCache->getStagedRequests()
             ))
         );
-        
-        $result = array_key_first($results) === $key ? $results[$key] : false;
-        
+
+        $result = array_key_exists($key, $results) ? $results[$key] : false;
+
         $this->stagingCache->stageResults($key, $results);
         return $result;
     }
