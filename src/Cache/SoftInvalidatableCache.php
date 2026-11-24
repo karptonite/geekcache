@@ -4,7 +4,7 @@ namespace GeekCache\Cache;
 
 class SoftInvalidatableCache extends CacheDecorator
 {
-    private $policy;
+    private FreshnessPolicy $policy;
 
     public function __construct(Cache $cache, FreshnessPolicy $policy)
     {
@@ -34,7 +34,7 @@ class SoftInvalidatableCache extends CacheDecorator
         }
 
         if (!$regeneratedByParent) {
-            $result = $this->regenerate($key, $regenerator, $ttl);
+            $result = $this->regenerateStale($key, $regenerator, $ttl);
 
             // if the results are false, either the data was not regenerated at all,
             // or it was queued for regeneration, and the data was not available
@@ -73,25 +73,36 @@ class SoftInvalidatableCache extends CacheDecorator
             return null;
         }
 
-        //PHP 5.4 won't allow $this to be passed in use statements in closure
-        $policy = $this->policy;
-
         // Passing information about whether stale data is available allows the regenerator to determine
         // whether to queue results with high or low priority
-        return function ($staleDataAvailable) use ($policy, $regenerator, $ttl, &$regeneratedByParent) {
-            $value = $regenerator($staleDataAvailable);
+        return function ($staleDataAvailable) use ($regenerator, $ttl, &$regeneratedByParent) {
+            $packedValue = $this->regenerateAndPack($regenerator, $staleDataAvailable, $ttl);
             $regeneratedByParent = true;
-
-            if ($value === false) {
-                return false;
-            } else {
-                return $policy->packValueWithPolicy($value, $ttl);
-            }
+            return $packedValue;
         };
     }
 
-    protected function callRegenerator(callable $regenerator)
+    private function regenerateStale($key, ?callable $regenerator, $ttl)
     {
-        return $regenerator(true);
+        if (is_null($regenerator)) {
+            return false;
+        }
+
+        $packedValue = $this->regenerateAndPack($regenerator, true, $ttl);
+        if ($packedValue === false) {
+            return false;
+        }
+
+        parent::put($key, $packedValue, $this->policy->computeTtl($ttl));
+        return $this->policy->unpackValue($packedValue);
+    }
+
+    // The packer is made before the regenerator runs, so a policy can take freshness data
+    // from before the regenerator's reads.
+    private function regenerateAndPack(callable $regenerator, bool $staleDataAvailable, $ttl)
+    {
+        $pack = $this->policy->packer($ttl);
+        $value = $regenerator($staleDataAvailable);
+        return $value === false ? false : $pack($value);
     }
 }

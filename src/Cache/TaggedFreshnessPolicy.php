@@ -27,7 +27,7 @@ class TaggedFreshnessPolicy extends AbstractFreshnessPolicy
     {
         return $ttl;
     }
-    
+
     public function resultIsFresh($result)
     {
         if (!($result instanceof CacheData)) {
@@ -40,6 +40,15 @@ class TaggedFreshnessPolicy extends AbstractFreshnessPolicy
     protected function isFresh($freshnessData)
     {
         return isset($freshnessData['signature']) && $freshnessData['signature'] == $this->tagset->readSignature();
+    }
+
+    // The signature is read when the packer is made, before the regenerator runs: read when
+    // packing, it would mark the value fresh against an invalidation that landed while the
+    // regenerator was reading.
+    public function packer($ttl = 0): callable
+    {
+        $freshnessData = $this->createFreshnessData($ttl);
+        return fn ($value) => new CacheData($value, $freshnessData);
     }
 
     protected function createFreshnessData($ttl)

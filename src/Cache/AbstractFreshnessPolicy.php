@@ -11,6 +11,11 @@ abstract class AbstractFreshnessPolicy implements FreshnessPolicy
         return new CacheData($value, $this->createFreshnessData($ttl));
     }
 
+    public function packer($ttl = 0): callable
+    {
+        return fn ($value) => $this->packValueWithPolicy($value, $ttl);
+    }
+
     public function unpackValue($result)
     {
         if (!($result instanceof CacheData)) {

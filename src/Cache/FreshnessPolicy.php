@@ -5,6 +5,8 @@ namespace GeekCache\Cache;
 interface FreshnessPolicy
 {
     public function packValueWithPolicy($value, $ttl);
+    // called before regenerating; the policy may take its freshness data then or when packing
+    public function packer($ttl): callable;
     public function unpackValue($result);
     public function resultIsFresh($result);
     public function computeTtl($ttl);

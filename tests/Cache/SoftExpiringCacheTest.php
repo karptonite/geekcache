@@ -1,14 +1,15 @@
 <?php
+
 class SoftExpiringCacheTest extends BaseCacheTestAbstract
 {
     private $parentcache;
-    const GRACEPERIOD = 10;
+    public const GRACEPERIOD = 10;
 
     public function setUp(): void
     {
         parent::setUp();
-        $this->parentcache = new GeekCache\Cache\ArrayCache;
-        $policy = new GeekCache\Cache\GracePeriodFreshnessPolicy;
+        $this->parentcache = new GeekCache\Cache\ArrayCache();
+        $policy = new GeekCache\Cache\GracePeriodFreshnessPolicy();
         $this->cache = new GeekCache\Cache\SoftInvalidatableCache($this->parentcache, $policy);
     }
 
@@ -56,6 +57,33 @@ class SoftExpiringCacheTest extends BaseCacheTestAbstract
         $this->cache->put(self::KEY, self::VALUE, 1);
 
         $this->assertEquals(self::GRACEPERIOD + 1, $parentcache->ttl);
+    }
+
+    public function testColdRegenerationExpiryCountsFromWhenTheValueIsStored()
+    {
+        $this->assertRegeneratedExpiryCountsFromWhenTheValueIsStored();
+    }
+
+    public function testStaleRegenerationExpiryCountsFromWhenTheValueIsStored()
+    {
+        $this->cache->put(self::KEY, self::VALUE, 0.001);
+        usleep(2000);
+
+        $this->assertRegeneratedExpiryCountsFromWhenTheValueIsStored();
+    }
+
+    private function assertRegeneratedExpiryCountsFromWhenTheValueIsStored(): void
+    {
+        $regeneratorFinished = null;
+        $this->cache->get(self::KEY, function () use (&$regeneratorFinished) {
+            usleep(2000);
+            $regeneratorFinished = microtime(true);
+            return self::VALUE2;
+        }, 60);
+
+        $stored = $this->parentcache->get('gp_' . self::KEY);
+        $this->assertSame(self::VALUE2, $stored->getValue());
+        $this->assertGreaterThanOrEqual($regeneratorFinished + 60, $stored->getFreshnessData()['expiry']);
     }
 }
 

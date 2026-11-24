@@ -2,7 +2,7 @@
 
 namespace GeekCache\Cache;
 
-abstract class CacheDecorator extends AbstractBaseCache implements Cache
+abstract class CacheDecorator implements Cache
 {
     private Cache $cache;
 
@@ -15,12 +15,12 @@ abstract class CacheDecorator extends AbstractBaseCache implements Cache
     {
         return $this->cache->get($key, $regenerator, $ttl);
     }
- 
+
     public function stage(string $key, ?string $skipIfStaged = null): void
     {
         $this->cache->stage($key, $skipIfStaged);
     }
-    
+
     public function decrementStagedCount(string $key): void
     {
         $this->cache->decrementStagedCount($key);
@@ -40,7 +40,7 @@ abstract class CacheDecorator extends AbstractBaseCache implements Cache
     {
         return $this->cache->clear();
     }
-    
+
     public function getGetCount(): int
     {
         return $this->cache->getGetCount();
